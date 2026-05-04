@@ -10,208 +10,161 @@
 
   <style>
     :root {
-      --bg-main: #f1f5f9; 
-      --bg-surface: #ffffff; 
-      --primary: #3b82f6; 
-      --accent: #10B981; 
-      --danger: #EF4444; 
-      --transfer: #F59E0B; 
-      --text-main: #0f172a; 
-      --text-secondary: #64748b; 
-      --border-color: #e2e8f0; 
+      --bg-main: #f1f5f9; --bg-surface: #ffffff; --primary: #3b82f6; 
+      --accent: #10B981; --danger: #EF4444; --transfer: #F59E0B; 
+      --text-main: #0f172a; --text-secondary: #64748b; --border-color: #e2e8f0; 
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg-main); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
 
-    body {
-      font-family: 'Outfit', sans-serif; background: var(--bg-main); color: var(--text-main);
-      height: 100vh; display: flex; overflow: hidden;
-    }
-
-    /* --- SIDEBAR --- */
-    .sidebar {
-      width: 280px; background: #0f172a; color: white;
-      display: flex; flex-direction: column; padding: 24px;
-    }
+    /* Sidebar */
+    .sidebar { width: 280px; background: #0f172a; color: white; display: flex; flex-direction: column; padding: 24px; }
     .brand { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 700; margin-bottom: 40px; }
     .brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #3b82f6, #60a5fa); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-    
-    .nav-item {
-      display: flex; align-items: center; gap: 12px; padding: 12px 16px;
-      color: #94a3b8; border-radius: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; margin-bottom: 8px;
-    }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #94a3b8; border-radius: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; margin-bottom: 8px; }
     .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
     .nav-item.active { background: var(--primary); color: white; }
-    
     .agent-profile { margin-top: auto; display: flex; align-items: center; gap: 12px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
     .avatar { width: 40px; height: 40px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-weight: bold; }
     .status-indicator { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); margin-left: auto; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
 
-    /* --- MAIN CONTENT --- */
+    /* Main Content */
     .main-content { flex: 1; display: flex; flex-direction: column; padding: 32px; overflow-y: auto; }
-    
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
     .header h1 { font-size: 1.8rem; font-weight: 700; }
     .system-status { display: flex; align-items: center; gap: 8px; background: white; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
     
     .dashboard-grid { display: grid; grid-template-columns: 1fr 350px; gap: 24px; height: 100%; }
 
-    /* Central Call Area */
+    /* Center Panel */
     .call-panel {
       background: var(--bg-surface); border-radius: 24px; border: 1px solid var(--border-color);
       box-shadow: 0 10px 30px rgba(0,0,0,0.03); display: flex; flex-direction: column;
-      align-items: center; justify-content: center; position: relative; overflow: hidden;
+      position: relative; overflow: hidden;
     }
 
-    .idle-state { text-align: center; color: var(--text-secondary); }
-    .idle-state span { font-size: 48px; opacity: 0.5; margin-bottom: 16px; display: block; }
+    /* Queue UI */
+    .queue-ui { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+    .queue-header { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .queue-count { background: #e2e8f0; color: #475569; padding: 2px 10px; border-radius: 12px; font-size: 0.9rem; }
     
-    /* Incoming / Active Call UI */
-    .call-ui { display: none; flex-direction: column; align-items: center; text-align: center; width: 100%; padding: 40px; z-index: 2; }
+    .queue-list { display: flex; flex-direction: column; gap: 12px; flex: 1; overflow-y: auto; }
+    .empty-queue { text-align: center; color: var(--text-secondary); margin: auto; padding: 40px; }
+    .empty-queue span { font-size: 48px; opacity: 0.3; margin-bottom: 16px; display: block; }
+    
+    .queue-item {
+      display: flex; align-items: center; justify-content: space-between; padding: 16px;
+      border: 1px solid var(--border-color); border-radius: 16px; background: #f8fafc;
+      transition: all 0.2s; border-left: 4px solid var(--transfer);
+    }
+    .queue-item:hover { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .caller-info { display: flex; align-items: center; gap: 16px; }
+    .caller-icon { width: 44px; height: 44px; background: #fef3c7; color: #d97706; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .caller-details h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .caller-details p { font-size: 0.85rem; color: var(--text-secondary); }
+    
+    .btn-pick-up {
+      background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 20px;
+      font-weight: 600; font-family: inherit; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .btn-pick-up:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+
+    /* Active Call UI */
+    .call-ui { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; height: 100%; padding: 40px; }
     .call-ui.active { display: flex; }
-
-    .caller-avatar {
-      width: 120px; height: 120px; border-radius: 50%; background: #f1f5f9;
-      display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
-      font-size: 48px; color: var(--text-secondary); border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-      position: relative;
-    }
-
-    /* Ringing Animation */
-    .ringing-pulse {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      border-radius: 50%; border: 3px solid var(--transfer); opacity: 0; z-index: -1;
-    }
-    .state-ringing .ringing-pulse { animation: pulseOut 1.5s infinite; }
-    @keyframes pulseOut { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.8); opacity: 0; border-width: 1px; } }
-
+    .caller-avatar { width: 120px; height: 120px; border-radius: 50%; background: #dcfce7; color: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 48px; border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
     .caller-name { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
     .call-duration { font-size: 1rem; color: var(--text-secondary); font-weight: 500; font-variant-numeric: tabular-nums; margin-bottom: 40px; }
-
     .action-buttons { display: flex; gap: 24px; }
-    
-    .btn {
-      width: 64px; height: 64px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.2s; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
+    .btn { width: 64px; height: 64px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     .btn:hover { transform: translateY(-3px); }
-    .btn:active { transform: translateY(0); }
-    
-    .btn-accept { background: var(--accent); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); }
     .btn-reject { background: var(--danger); box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4); }
     .btn-mute { background: #64748b; }
     .btn-mute.muted { background: var(--danger); }
 
-    /* Side Panel (Context) */
+    /* Context Panel */
     .context-panel { display: flex; flex-direction: column; gap: 24px; }
-    
-    .card {
-      background: var(--bg-surface); border-radius: 20px; padding: 24px;
-      border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-    }
+    .card { background: var(--bg-surface); border-radius: 20px; padding: 24px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
     .card-title { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--text-secondary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    
     .context-data { font-size: 0.95rem; line-height: 1.6; }
     .data-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
     .data-row:last-child { border-bottom: none; }
     .data-label { color: var(--text-secondary); }
     .data-value { font-weight: 600; text-align: right; }
-
     .ai-notes { background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.9rem; line-height: 1.5; color: #334155; }
-
   </style>
 </head>
 <body>
 
-  <!-- Audio element to play the customer's voice -->
   <audio id="remoteAudio" autoplay></audio>
 
-  <!-- Sidebar Navigation -->
+  <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-icon"><span class="material-symbols-rounded" style="color:white; font-size:20px;">headset_mic</span></div>
-      Rare Grade Tech
-    </div>
-    
+    <div class="brand"><div class="brand-icon"><span class="material-symbols-rounded" style="color:white; font-size:20px;">headset_mic</span></div> Rare Grade Tech</div>
     <nav>
       <div class="nav-item active"><span class="material-symbols-rounded">call</span> Live Console</div>
       <div class="nav-item"><span class="material-symbols-rounded">history</span> Call History</div>
-      <div class="nav-item"><span class="material-symbols-rounded">group</span> Customers</div>
-      <div class="nav-item"><span class="material-symbols-rounded">analytics</span> Analytics</div>
     </nav>
-
     <div class="agent-profile">
       <div class="avatar">KF</div>
-      <div>
-        <div style="font-weight: 600; font-size: 0.95rem;">Katlego Frans</div>
-        <div style="font-size: 0.8rem; color: #94a3b8;">Tier 1 Support</div>
-      </div>
+      <div><div style="font-weight: 600; font-size: 0.95rem;">Katlego Frans</div><div style="font-size: 0.8rem; color: #94a3b8;">Tier 1 Support</div></div>
       <div class="status-indicator"></div>
     </div>
   </aside>
 
-  <!-- Main Dashboard Area -->
+  <!-- Main Dashboard -->
   <main class="main-content">
     <header class="header">
       <h1>Agent Console</h1>
-      <div class="system-status" id="connectionStatus">
-        <span class="material-symbols-rounded" style="color: var(--transfer); font-size: 18px;">sensors</span>
-        Connecting to Server...
-      </div>
+      <div class="system-status" id="connectionStatus"><span class="material-symbols-rounded" style="color: var(--transfer); font-size: 18px;">sensors</span> Connecting...</div>
     </header>
 
     <div class="dashboard-grid">
-      
-      <!-- Center Call Panel -->
+      <!-- Call Panel -->
       <section class="call-panel" id="callPanel">
-        <!-- Idle State -->
-        <div class="idle-state" id="idleUI">
-          <span class="material-symbols-rounded">coffee</span>
-          <h2>Waiting for calls...</h2>
-          <p>You are online and ready to receive transfers.</p>
+        
+        <!-- Call Queue UI -->
+        <div class="queue-ui" id="queueUI">
+          <div class="queue-header">
+            Waiting Queue <span class="queue-count" id="queueCount">0 Calls</span>
+          </div>
+          <div class="queue-list" id="queueList">
+            <div class="empty-queue" id="emptyQueueMsg">
+              <span class="material-symbols-rounded">coffee</span>
+              <h2>No calls waiting</h2>
+              <p>You are online and ready to receive transfers.</p>
+            </div>
+            <!-- Queue items will be injected here -->
+          </div>
         </div>
 
-        <!-- Call Interface (Ringing & Active) -->
+        <!-- Active Call UI -->
         <div class="call-ui" id="callUI">
-          <div class="caller-avatar" id="callerAvatar">
-            <span class="material-symbols-rounded">person</span>
-            <div class="ringing-pulse"></div>
-            <div class="ringing-pulse" style="animation-delay: 0.5s"></div>
-          </div>
-          
-          <div class="caller-name">Customer Caller</div>
-          <div class="call-duration" id="callStatusText">Incoming Transfer...</div>
+          <div class="caller-avatar" id="callerAvatar"><span class="material-symbols-rounded">person</span></div>
+          <div class="caller-name" id="activeCallerName">Customer Caller</div>
+          <div class="call-duration" id="callStatusText">Connected • 0:00</div>
 
-          <!-- Controls when Ringing -->
-          <div class="action-buttons" id="ringingControls">
-            <button class="btn btn-reject" onclick="rejectCall()"><span class="material-symbols-rounded" style="font-size:28px;">close</span></button>
-            <button class="btn btn-accept" onclick="acceptCall()"><span class="material-symbols-rounded" style="font-size:28px;">call</span></button>
-          </div>
-
-          <!-- Controls when Call is Active -->
-          <div class="action-buttons" id="activeControls" style="display: none;">
-            <button class="btn btn-mute" id="muteBtn" onclick="toggleMute()"><span class="material-symbols-rounded" id="muteIcon" style="font-size:24px;">mic</span></button>
-            <button class="btn btn-reject" onclick="endCall()"><span class="material-symbols-rounded" style="font-size:28px;">call_end</span></button>
+          <div class="action-buttons">
+            <button class="btn btn-mute" id="muteBtn" onclick="toggleMute()"><span class="material-symbols-rounded" id="muteIcon">mic</span></button>
+            <button class="btn btn-reject" onclick="endCall()"><span class="material-symbols-rounded">call_end</span></button>
           </div>
         </div>
       </section>
 
-      <!-- Right Context Panel -->
+      <!-- Context Panel -->
       <aside class="context-panel">
         <div class="card">
-          <div class="card-title"><span class="material-symbols-rounded" style="font-size:18px;">info</span> Caller Details</div>
+          <div class="card-title"><span class="material-symbols-rounded" style="font-size:18px;">info</span> Active Caller</div>
           <div class="context-data">
-            <div class="data-row"><span class="data-label">Origin</span><span class="data-value">Website Widget</span></div>
-            <div class="data-row"><span class="data-label">Queue</span><span class="data-value">General Support</span></div>
-            <div class="data-row"><span class="data-label">Wait Time</span><span class="data-value" id="waitTimeDisplay">0:00</span></div>
+            <div class="data-row"><span class="data-label">Call ID</span><span class="data-value" id="ctxCallId">--</span></div>
+            <div class="data-row"><span class="data-label">Origin</span><span class="data-value">AI Transfer</span></div>
           </div>
         </div>
 
         <div class="card" style="flex: 1;">
           <div class="card-title"><span class="material-symbols-rounded" style="font-size:18px;">robot_2</span> AI Handoff Notes</div>
-          <div class="ai-notes" id="aiNotes">
-            <em>Notes will appear here when a call is transferred from the AI agent.</em>
-          </div>
+          <div class="ai-notes" id="aiNotes"><em>Notes will appear here when you accept a call.</em></div>
         </div>
       </aside>
 
@@ -221,67 +174,76 @@
   <script type="module">
     import { io } from "https://cdn.socket.io/4.7.2/socket.io.esm.min.js";
 
-    // --- DOM Elements ---
     const els = {
       status: document.getElementById('connectionStatus'),
-      idleUI: document.getElementById('idleUI'),
+      queueUI: document.getElementById('queueUI'),
+      queueList: document.getElementById('queueList'),
+      emptyQueueMsg: document.getElementById('emptyQueueMsg'),
+      queueCount: document.getElementById('queueCount'),
       callUI: document.getElementById('callUI'),
-      callPanel: document.getElementById('callPanel'),
-      callerAvatar: document.getElementById('callerAvatar'),
       callStatusText: document.getElementById('callStatusText'),
-      ringingControls: document.getElementById('ringingControls'),
-      activeControls: document.getElementById('activeControls'),
       muteBtn: document.getElementById('muteBtn'),
       muteIcon: document.getElementById('muteIcon'),
       remoteAudio: document.getElementById('remoteAudio'),
+      ctxCallId: document.getElementById('ctxCallId'),
       aiNotes: document.getElementById('aiNotes')
     };
 
-    // --- State Variables ---
     let socket;
     let peerConnection;
     let localStream;
     const rtcConfig = { 'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}] };
-    let pendingOffer = null;
+    
+    let activeCallId = null; 
+    let callQueue = new Map(); // Store all incoming offers here
+    
     let isMuted = false;
     let callTimer = null;
     let secondsActive = 0;
-
-    // Ringtone Setup
+    
     let ringAudioCtx = null;
     let ringInterval = null;
 
-    // --- Initialize Connection ---
+    // --- Init Socket ---
     function initSocket() {
-      // Connect to the local signaling server
       socket = io('http://localhost:3000');
 
       socket.on('connect', () => {
         els.status.innerHTML = `<span class="material-symbols-rounded" style="color: var(--accent); font-size: 18px;">cloud_done</span> System Online`;
       });
 
-      socket.on('disconnect', () => {
-        els.status.innerHTML = `<span class="material-symbols-rounded" style="color: var(--danger); font-size: 18px;">cloud_off</span> Disconnected`;
-      });
-
       // Listen for incoming call offer from Customer
-      socket.on('offer', async (offer) => {
-        console.log("Incoming call offer received.");
-        pendingOffer = offer;
-        showIncomingCallUI();
+      socket.on('offer', (data) => {
+        // Data should contain { callId, offer, socketId }
+        if (!data.callId) return;
+        
+        console.log("Incoming transfer detected:", data.callId);
+        callQueue.set(data.callId, data);
+        renderQueue();
+        if (callQueue.size === 1) startRingtone(); // Start ringing if this is the first call
       });
 
-      // Listen for network pathing from Customer
-      socket.on('ice-candidate', async (candidate) => {
-        if (peerConnection) {
-          try { await peerConnection.addIceCandidate(candidate); } 
-          catch (e) { console.error("Error adding ice candidate", e); }
+      // If another agent answers, the server broadcasts a cancel event so we remove it
+      socket.on('call-answered-elsewhere', (callId) => {
+        if (callQueue.has(callId)) {
+            callQueue.delete(callId);
+            renderQueue();
+            if (callQueue.size === 0) stopRingtone();
+        }
+      });
+
+      socket.on('ice-candidate', async (data) => {
+        // Only process ice candidates for the call we are actively handling
+        if (activeCallId && data.callId === activeCallId && peerConnection) {
+          try { await peerConnection.addIceCandidate(data.candidate); } 
+          catch (e) { console.error(e); }
         }
       });
     }
 
     // --- Ringtone Logic ---
     function startRingtone() {
+      if (ringInterval) return; // Already ringing
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       ringAudioCtx = new AudioContext();
       function playSingleRing() {
@@ -297,45 +259,121 @@
     }
     function stopRingtone() { if (ringInterval) clearInterval(ringInterval); if (ringAudioCtx && ringAudioCtx.state !== 'closed') ringAudioCtx.close(); ringAudioCtx = null; }
 
-    // --- UI State Management ---
-    function showIncomingCallUI() {
-      els.idleUI.style.display = 'none';
-      els.callUI.classList.add('active');
-      els.callPanel.classList.add('state-ringing');
+    // --- Queue UI Logic ---
+    function renderQueue() {
+      els.queueCount.innerText = `${callQueue.size} Call${callQueue.size !== 1 ? 's' : ''}`;
       
-      els.callStatusText.innerText = "Incoming Transfer...";
-      els.ringingControls.style.display = 'flex';
-      els.activeControls.style.display = 'none';
-      
-      // Simulate passing notes from AI
-      els.aiNotes.innerHTML = `<strong>Reason for transfer:</strong> Customer requested to speak to a human agent.<br><br><strong>Conversation Summary:</strong> Handled initial greeting smoothly. Customer bypassed triage.`;
+      // Clear current list except the empty message
+      Array.from(els.queueList.children).forEach(child => {
+          if (child.id !== 'emptyQueueMsg') child.remove();
+      });
 
-      startRingtone();
+      if (callQueue.size === 0) {
+          els.emptyQueueMsg.style.display = 'block';
+          return;
+      }
+
+      els.emptyQueueMsg.style.display = 'none';
+
+      // Build rows for each call
+      callQueue.forEach((callData, id) => {
+        const item = document.createElement('div');
+        item.className = 'queue-item';
+        item.innerHTML = `
+          <div class="caller-info">
+            <div class="caller-icon"><span class="material-symbols-rounded">phone_in_talk</span></div>
+            <div class="caller-details">
+              <h3>Customer Caller</h3>
+              <p>ID: ${id.substring(0,6).toUpperCase()} • Waiting for agent</p>
+            </div>
+          </div>
+          <button class="btn-pick-up" onclick="acceptCall('${id}')">
+            <span class="material-symbols-rounded" style="font-size:18px;">call</span> Accept
+          </button>
+        `;
+        els.queueList.appendChild(item);
+      });
+    }
+
+    // --- WebRTC Call Logic ---
+    async function acceptCall(callId) {
+      const callData = callQueue.get(callId);
+      if (!callData) return;
+
+      activeCallId = callId;
+      stopRingtone();
+
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        peerConnection = new RTCPeerConnection(rtcConfig);
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+        peerConnection.ontrack = event => { els.remoteAudio.srcObject = event.streams[0]; };
+        
+        peerConnection.onicecandidate = event => {
+          if (event.candidate) {
+            // Send candidate targeting the specific customer socket
+            socket.emit('ice-candidate', { candidate: event.candidate, to: callData.socketId, callId: activeCallId });
+          }
+        };
+
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(callData.offer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+
+        // Send Answer back to specific Customer
+        socket.emit('answer', { answer: answer, to: callData.socketId, callId: activeCallId });
+        
+        // Remove from our queue and transition UI
+        callQueue.delete(callId);
+        renderQueue();
+        showActiveCallUI();
+
+      } catch (error) {
+        console.error("Error accepting call:", error);
+        alert("Microphone access denied or WebRTC error.");
+        activeCallId = null;
+      }
     }
 
     function showActiveCallUI() {
-      els.callPanel.classList.remove('state-ringing');
-      els.ringingControls.style.display = 'none';
-      els.activeControls.style.display = 'flex';
-      els.callerAvatar.style.background = '#dcfce7'; // Light green
-      els.callerAvatar.style.color = 'var(--accent)';
+      els.queueUI.style.display = 'none';
+      els.callUI.classList.add('active');
       
+      els.ctxCallId.innerText = activeCallId.substring(0,6).toUpperCase();
+      els.aiNotes.innerHTML = `<strong>Reason for transfer:</strong> Customer requested human assistance.`;
+
       secondsActive = 0;
       updateTimerDisplay();
-      callTimer = setInterval(() => {
-        secondsActive++;
-        updateTimerDisplay();
-      }, 1000);
+      callTimer = setInterval(() => { secondsActive++; updateTimerDisplay(); }, 1000);
     }
 
-    function resetUI() {
-      els.idleUI.style.display = 'block';
-      els.callUI.classList.remove('active');
-      els.callPanel.classList.remove('state-ringing');
-      els.callerAvatar.style.background = '#f1f5f9';
-      els.callerAvatar.style.color = 'var(--text-secondary)';
-      els.aiNotes.innerHTML = `<em>Notes will appear here when a call is transferred from the AI agent.</em>`;
+    function endCall() {
+      if (peerConnection) { peerConnection.close(); peerConnection = null; }
+      if (localStream) { localStream.getTracks().forEach(track => track.stop()); localStream = null; }
+      els.remoteAudio.srcObject = null;
+      activeCallId = null;
+      
       if (callTimer) clearInterval(callTimer);
+      
+      els.callUI.classList.remove('active');
+      els.queueUI.style.display = 'flex';
+      els.ctxCallId.innerText = '--';
+      els.aiNotes.innerHTML = `<em>Notes will appear here when you accept a call.</em>`;
+      
+      // If there are still other calls waiting, resume ringing
+      if (callQueue.size > 0) startRingtone();
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      if (isMuted) {
+        els.muteBtn.classList.add('muted'); els.muteIcon.innerText = 'mic_off';
+        if(localStream) localStream.getAudioTracks()[0].enabled = false;
+      } else {
+        els.muteBtn.classList.remove('muted'); els.muteIcon.innerText = 'mic';
+        if(localStream) localStream.getAudioTracks()[0].enabled = true;
+      }
     }
 
     function updateTimerDisplay() {
@@ -344,85 +382,12 @@
       els.callStatusText.innerText = `Connected • ${mins}:${secs.toString().padStart(2, '0')}`;
     }
 
-    // --- WebRTC Actions ---
-    async function acceptCall() {
-      if (!pendingOffer) return;
-      stopRingtone();
-
-      try {
-        // 1. Get Agent's Microphone
-        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        
-        // 2. Setup Peer Connection
-        peerConnection = new RTCPeerConnection(rtcConfig);
-        
-        // 3. Add Agent's mic to connection
-        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-        // 4. Listen for Customer's audio
-        peerConnection.ontrack = event => {
-          els.remoteAudio.srcObject = event.streams[0];
-        };
-
-        // 5. Send pathing data
-        peerConnection.onicecandidate = event => {
-          if (event.candidate) socket.emit('ice-candidate', event.candidate);
-        };
-
-        // 6. Connect the pipes
-        await peerConnection.setRemoteDescription(new RTCSessionDescription(pendingOffer));
-        const answer = await peerConnection.createAnswer();
-        await peerConnection.setLocalDescription(answer);
-
-        // 7. Send Answer back to Customer
-        socket.emit('answer', answer);
-        
-        pendingOffer = null;
-        showActiveCallUI();
-
-      } catch (error) {
-        console.error("Error accepting call:", error);
-        alert("Microphone access denied or WebRTC error.");
-        rejectCall();
-      }
-    }
-
-    function endCall() {
-      if (peerConnection) { peerConnection.close(); peerConnection = null; }
-      if (localStream) { localStream.getTracks().forEach(track => track.stop()); localStream = null; }
-      els.remoteAudio.srcObject = null;
-      resetUI();
-      // Note: Ideally you'd emit a 'hangup' event to the customer here too
-    }
-
-    function rejectCall() {
-      stopRingtone();
-      pendingOffer = null;
-      resetUI();
-    }
-
-    function toggleMute() {
-      isMuted = !isMuted;
-      if (isMuted) {
-        els.muteBtn.classList.add('muted');
-        els.muteIcon.innerText = 'mic_off';
-        if(localStream) localStream.getAudioTracks()[0].enabled = false;
-      } else {
-        els.muteBtn.classList.remove('muted');
-        els.muteIcon.innerText = 'mic';
-        if(localStream) localStream.getAudioTracks()[0].enabled = true;
-      }
-    }
-
-    // --- Expose to Window for HTML buttons ---
+    // Expose for HTML buttons
     window.acceptCall = acceptCall;
-    window.rejectCall = rejectCall;
     window.endCall = endCall;
     window.toggleMute = toggleMute;
 
-    // Start
     initSocket();
-
   </script>
 </body>
 </html>
