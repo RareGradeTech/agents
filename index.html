@@ -27,6 +27,8 @@
         .chat-scroll::-webkit-scrollbar { width: 4px; }
         .chat-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .dark .chat-scroll::-webkit-scrollbar-thumb { background: #475569; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .msg-bubble { max-width: 80%; padding: 10px 14px; font-size: 0.875rem; line-height: 1.5; position: relative; word-break: break-word; }
         .msg-client { border-radius: 4px 16px 16px 16px; background: #f1f5f9; color: #0f172a; border: 1px solid #e2e8f0; }
@@ -86,15 +88,6 @@
         /* ── READ RECEIPTS ── */
         .read-tick { font-size: 10px; color: rgba(255,255,255,0.6); }
         .read-tick.seen { color: #93c5fd; }
-
-        /* ── CANNED RESPONSES ── */
-        #canned-dropdown { position: absolute; bottom: calc(100% + 8px); left: 0; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); z-index: 100; max-height: 240px; overflow-y: auto; }
-        .dark #canned-dropdown { background: #1e293b; border-color: #334155; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-        .canned-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; transition: background 0.12s; }
-        .dark .canned-item { border-bottom-color: #334155; }
-        .canned-item:hover { background: #eff6ff; }
-        .dark .canned-item:hover { background: rgba(37,99,235,0.12); }
-        .canned-item:last-child { border-bottom: none; }
 
         /* ── CLIENT INFO SIDEBAR ── */
         #client-sidebar { width: 280px; background: #fff; border-left: 1px solid #e2e8f0; overflow-y: auto; flex-shrink: 0; transition: width 0.25s ease, opacity 0.25s ease; }
@@ -362,10 +355,10 @@
                     </div>
 
                     <!-- Messages list -->
-                    <div id="messages-container" class="flex-1 overflow-y-auto chat-scroll p-4 md:p-6 space-y-4 hidden pb-36"></div>
+                    <div id="messages-container" class="flex-1 overflow-y-auto chat-scroll p-4 md:p-6 space-y-4 hidden"></div>
 
                     <!-- Typing indicator -->
-                    <div id="typing-indicator" class="hidden px-6 pb-1">
+                    <div id="typing-indicator" class="hidden px-6 pb-2 shrink-0">
                         <div class="flex items-center gap-2">
                             <div class="msg-bubble msg-client py-2 px-3 inline-flex items-center gap-1.5">
                                 <div class="typing-dots flex gap-1">
@@ -377,9 +370,13 @@
                     </div>
 
                     <!-- Input area -->
-                    <div id="chat-input-area" class="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 p-3 absolute bottom-0 left-0 right-0 hidden">
-                        <!-- Canned responses dropdown -->
-                        <div id="canned-dropdown" class="hidden"></div>
+                    <div id="chat-input-area" class="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 p-3 shrink-0 hidden flex-col">
+                        
+                        <!-- Agent Quick Replies -->
+                        <div id="agent-quick-replies" class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100 dark:border-slate-700 overflow-x-auto no-scrollbar">
+                            <div id="agent-qr-list" class="flex gap-2 flex-1"></div>
+                            <button onclick="closeAgentQuickReplies()" class="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700"><i class="fa-solid fa-xmark text-xs"></i></button>
+                        </div>
 
                         <!-- File preview -->
                         <div id="file-preview-area" class="hidden mb-2 flex items-center gap-2 p-2 bg-gray-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
@@ -401,7 +398,7 @@
                             <i class="fa-solid fa-lock text-xs"></i> Internal Note – not visible to client
                         </div>
 
-                        <div class="flex items-end gap-2 max-w-4xl mx-auto">
+                        <div class="flex items-end gap-2 max-w-4xl mx-auto w-full">
                             <!-- Toolbar -->
                             <div class="flex flex-col gap-1 shrink-0">
                                 <button class="toolbar-btn" id="btn-note-mode" onclick="toggleNoteMode()" data-tip="Internal note"><i class="fa-solid fa-lock text-xs"></i></button>
@@ -409,7 +406,6 @@
                                     <i class="fa-solid fa-paperclip text-xs"></i>
                                     <input type="file" id="file-input" accept="image/*,.pdf,.txt,.log,.csv" class="hidden" onchange="handleFileSelect(event)">
                                 </label>
-                                <button class="toolbar-btn" onclick="showCannedDropdown()" data-tip="Quick replies"><i class="fa-solid fa-bolt text-xs"></i></button>
                             </div>
 
                             <textarea id="message-input" rows="1"
@@ -516,6 +512,7 @@
     let clientInfoSidebarOpen = false;
     let selectedTransferAgent = null;
     let allEmployees    = {};
+    let agentQrClosed   = false;
 
     // DEFAULT CANNED RESPONSES
     let cannedResponses = JSON.parse(localStorage.getItem('cannedResponses') || 'null') || [
@@ -737,6 +734,7 @@
     async function openChat(chatId) {
         activeChatId = chatId;
         if (activeChatRef) activeChatRef.off();
+        if (window.currentStatusRef) window.currentStatusRef.off();
 
         if (window.innerWidth < 768) {
             document.getElementById('sidebar').classList.add('hidden');
@@ -747,6 +745,7 @@
         document.getElementById('chat-header').classList.remove('hidden');
         document.getElementById('messages-container').classList.remove('hidden');
         document.getElementById('chat-input-area').classList.remove('hidden');
+        document.getElementById('chat-input-area').style.display = 'flex';
 
         const snap = await db.ref(`live_support_chats/${chatId}`).once('value');
         const chatData = snap.val();
@@ -758,19 +757,24 @@
             await db.ref(`live_support_chats/${chatId}`).update({ agentId: currentAgent.id, agentName: currentAgent.name, status: 'active' });
         }
 
-        const isResolved = chatData.status === 'resolved';
-        document.getElementById('btn-resolve').style.display  = isResolved ? 'none' : '';
-        document.getElementById('btn-transfer').style.display = isResolved ? 'none' : '';
-        document.getElementById('chat-input-area').style.opacity = isResolved ? '0.5' : '1';
-        document.getElementById('message-input').disabled = isResolved;
+        // Live status sync if client ends it
+        const statusRef = db.ref(`live_support_chats/${chatId}/status`);
+        window.currentStatusRef = statusRef;
+        statusRef.on('value', (snap) => {
+            const isResolved = snap.val() === 'resolved';
+            document.getElementById('btn-resolve').style.display  = isResolved ? 'none' : '';
+            document.getElementById('btn-transfer').style.display = isResolved ? 'none' : '';
+            document.getElementById('chat-input-area').style.opacity = isResolved ? '0.5' : '1';
+            document.getElementById('message-input').disabled = isResolved;
+            if (isResolved) {
+                document.getElementById('agent-quick-replies').classList.add('hidden');
+            } else {
+                renderAgentQR();
+            }
+        });
 
-        // Load client info sidebar data
         loadClientInfo(chatData);
-
-        // Listen for typing indicator from client
         listenTyping(chatId);
-
-        // Mark agent has read the chat (for read receipts from client side)
         db.ref(`live_support_chats/${chatId}/agentRead`).set(true);
 
         const msgContainer = document.getElementById('messages-container');
@@ -783,7 +787,6 @@
             appendMessage(msg, msgId, chatData);
         });
 
-        // Listen for read receipts on agent messages
         listenReadReceipts(chatId);
     }
 
@@ -837,25 +840,17 @@
     }
 
     // ─────────────────────────────────────────
-    //  READ RECEIPTS
+    //  READ RECEIPTS & TYPING
     // ─────────────────────────────────────────
     function listenReadReceipts(chatId) {
         db.ref(`live_support_chats/${chatId}/clientRead`).on('value', (snap) => {
             if (!snap.val()) return;
-            const readTimestamp = snap.val();
-            // Mark all agent ticks as seen if message timestamp ≤ readTimestamp
             document.querySelectorAll('.read-tick').forEach(el => {
-                const msgId = el.dataset.msgId;
-                // We can't get timestamp from DOM alone, just mark all as seen when client reads
-                el.textContent = '✓✓';
-                el.classList.add('seen');
+                el.textContent = '✓✓'; el.classList.add('seen');
             });
         });
     }
 
-    // ─────────────────────────────────────────
-    //  TYPING INDICATOR
-    // ─────────────────────────────────────────
     function listenTyping(chatId) {
         db.ref(`live_support_chats/${chatId}/clientTyping`).on('value', (snap) => {
             const isTyping = snap.val() === true;
@@ -870,15 +865,9 @@
         });
     }
 
-    // Broadcast agent typing to Firebase
     let agentTypingRef = null;
     function onInputChange(el) {
         el.style.height = ''; el.style.height = el.scrollHeight + 'px';
-        // Canned responses detection
-        const val = el.value;
-        if (val.startsWith('/')) { showCannedDropdown(val.substring(1)); return; }
-        hideCannedDropdown();
-        // Typing signal
         if (!activeChatId) return;
         if (!agentTypingRef) agentTypingRef = db.ref(`live_support_chats/${activeChatId}/agentTyping`);
         agentTypingRef.set(true);
@@ -887,42 +876,32 @@
     }
 
     // ─────────────────────────────────────────
-    //  CANNED RESPONSES
+    //  CANNED RESPONSES & QUICK REPLIES
     // ─────────────────────────────────────────
-    function showCannedDropdown(filter = '') {
-        const dropdown = document.getElementById('canned-dropdown');
-        const filtered = filter ? cannedResponses.filter(r => r.title.toLowerCase().includes(filter.toLowerCase()) || r.body.toLowerCase().includes(filter.toLowerCase())) : cannedResponses;
-        if (filtered.length === 0) { hideCannedDropdown(); return; }
-        dropdown.innerHTML = filtered.map(r => `
-            <div class="canned-item" onclick="selectCanned(${r.id})">
-                <p class="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1.5">
-                    <i class="fa-solid fa-bolt text-[9px] text-blue-400"></i>${r.title}
-                </p>
-                <p class="text-[11px] text-gray-400 mt-0.5 truncate">${r.body}</p>
-            </div>`).join('');
-        dropdown.classList.remove('hidden');
+    function renderAgentQR() {
+        const wrap = document.getElementById('agent-quick-replies');
+        if (agentQrClosed || !cannedResponses.length) { wrap.classList.add('hidden'); return; }
+        const list = document.getElementById('agent-qr-list');
+        list.innerHTML = cannedResponses.map(r => `
+            <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-full text-xs font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap transition" 
+            onclick="insertCanned(${r.id})">${r.title}</button>
+        `).join('');
+        wrap.classList.remove('hidden');
     }
 
-    function hideCannedDropdown() {
-        document.getElementById('canned-dropdown').classList.add('hidden');
+    function closeAgentQuickReplies() {
+        agentQrClosed = true;
+        document.getElementById('agent-quick-replies').classList.add('hidden');
     }
 
-    function selectCanned(id) {
+    function insertCanned(id) {
         const r = cannedResponses.find(r => r.id === id);
         if (!r) return;
         const input = document.getElementById('message-input');
         input.value = r.body;
         input.style.height = ''; input.style.height = input.scrollHeight + 'px';
-        hideCannedDropdown();
         input.focus();
     }
-
-    // Close dropdown on outside click
-    document.addEventListener('click', (e) => {
-        const dd = document.getElementById('canned-dropdown');
-        const input = document.getElementById('message-input');
-        if (!dd.contains(e.target) && e.target !== input) hideCannedDropdown();
-    });
 
     function renderCannedMgr() {
         const list = document.getElementById('canned-mgr-list');
@@ -948,15 +927,17 @@
         document.getElementById('new-canned-title').value = '';
         document.getElementById('new-canned-body').value  = '';
         renderCannedMgr();
+        if(activeChatId) renderAgentQR();
     }
 
     function deleteCanned(id) {
         cannedResponses = cannedResponses.filter(r => r.id !== id);
         saveCanned(); renderCannedMgr();
+        if(activeChatId) renderAgentQR();
     }
 
     // ─────────────────────────────────────────
-    //  NOTE MODE
+    //  NOTE MODE & FILE UPLOAD
     // ─────────────────────────────────────────
     function toggleNoteMode() {
         isNoteMode = !isNoteMode;
@@ -965,21 +946,14 @@
         const banner = document.getElementById('note-mode-banner');
         const input  = document.getElementById('message-input');
         if (isNoteMode) {
-            btn.classList.add('active');
-            area.classList.add('note-mode');
-            banner.classList.remove('hidden');
+            btn.classList.add('active'); area.classList.add('note-mode'); banner.classList.remove('hidden');
             input.placeholder = 'Internal note (agents only)…';
         } else {
-            btn.classList.remove('active');
-            area.classList.remove('note-mode');
-            banner.classList.add('hidden');
+            btn.classList.remove('active'); area.classList.remove('note-mode'); banner.classList.add('hidden');
             input.placeholder = 'Type a reply…';
         }
     }
 
-    // ─────────────────────────────────────────
-    //  FILE UPLOAD
-    // ─────────────────────────────────────────
     function handleFileSelect(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -1024,9 +998,7 @@
         if (!activeChatId) return;
 
         input.value = ''; input.style.height = '';
-        hideCannedDropdown();
 
-        // Stop typing signal
         if (agentTypingRef) agentTypingRef.set(false);
         clearTimeout(typingTimeout);
 
@@ -1065,7 +1037,6 @@
             sender: 'system', text: '✓ Ticket resolved by agent.', timestamp: firebase.database.ServerValue.TIMESTAMP
         });
         isBusy = false;
-        openChat(activeChatId);
     }
 
     // ─────────────────────────────────────────
@@ -1108,29 +1079,23 @@
         const agent = allEmployees[selectedTransferAgent];
         if (!agent) return;
 
-        // Post internal note about transfer
         const ts = firebase.database.ServerValue.TIMESTAMP;
         if (note) {
             await db.ref(`live_support_chats/${activeChatId}/messages`).push({
                 sender: 'agent', type: 'note', text: `[Transfer Note to ${agent.name}]: ${note}`, timestamp: ts
             });
         }
-        // Post system message
         await db.ref(`live_support_chats/${activeChatId}/messages`).push({
             sender: 'system', text: `Chat transferred to ${agent.name}.`, timestamp: ts
         });
-
         await db.ref(`live_support_chats/${activeChatId}`).update({
-            agentId: selectedTransferAgent,
-            agentName: agent.name,
-            lastActivity: ts
+            agentId: selectedTransferAgent, agentName: agent.name, lastActivity: ts
         });
 
         closeTransferModal();
         isBusy = false;
         activeChatId = null;
         if (activeChatRef) { activeChatRef.off(); activeChatRef = null; }
-        // Return to empty state
         document.getElementById('empty-state').classList.remove('hidden');
         document.getElementById('messages-container').classList.add('hidden');
         document.getElementById('chat-header').classList.add('hidden');
@@ -1138,9 +1103,7 @@
         document.getElementById('client-sidebar').classList.add('collapsed');
     }
 
-    function closeTransferModal() {
-        document.getElementById('transfer-modal').classList.add('hidden');
-    }
+    function closeTransferModal() { document.getElementById('transfer-modal').classList.add('hidden'); }
 
     // ─────────────────────────────────────────
     //  CLIENT INFO SIDEBAR
@@ -1151,24 +1114,20 @@
         const btn = document.getElementById('btn-info');
         if (clientInfoSidebarOpen) {
             sidebar.classList.remove('collapsed');
-            btn.classList.add('bg-blue-100', 'text-blue-600');
-            btn.classList.remove('bg-gray-100', 'text-gray-600');
+            btn.classList.add('bg-blue-100', 'text-blue-600'); btn.classList.remove('bg-gray-100', 'text-gray-600');
         } else {
             sidebar.classList.add('collapsed');
-            btn.classList.remove('bg-blue-100', 'text-blue-600');
-            btn.classList.add('bg-gray-100', 'text-gray-600');
+            btn.classList.remove('bg-blue-100', 'text-blue-600'); btn.classList.add('bg-gray-100', 'text-gray-600');
         }
     }
 
     async function loadClientInfo(chatData) {
         const name   = chatData.clientName  || 'Client';
         const email  = chatData.clientEmail || chatData.email || '—';
-        const avatar = chatData.clientAvatar || avatarUrl(name);
         document.getElementById('info-name').textContent  = name;
         document.getElementById('info-email').textContent = email;
-        document.getElementById('info-avatar').src        = avatar;
+        document.getElementById('info-avatar').src        = chatData.clientAvatar || avatarUrl(name);
 
-        // Load from client profile (if exists)
         let profile = {};
         if (chatData.clientId) {
             const ps = await db.ref(`clients/${chatData.clientId}`).once('value');
@@ -1179,14 +1138,10 @@
         document.getElementById('info-location').textContent = profile.location || chatData.location || '—';
         document.getElementById('info-ltv').textContent      = profile.ltv      ? `$${profile.ltv}`  : '—';
 
-        // Previous tickets
         const allTicketsSnap = await db.ref('live_support_chats').orderByChild('clientEmail').equalTo(email).once('value');
         let prevTickets = [];
         if (allTicketsSnap.exists()) {
-            allTicketsSnap.forEach(c => {
-                const d = c.val();
-                if (c.key !== activeChatId) prevTickets.push({ id: c.key, ...d });
-            });
+            allTicketsSnap.forEach(c => { if (c.key !== activeChatId) prevTickets.push({ id: c.key, ...c.val() }); });
         }
         document.getElementById('info-ticket-count').textContent = prevTickets.length + 1;
         const tickContainer = document.getElementById('info-prev-tickets');
@@ -1203,7 +1158,6 @@
                 </div>`).join('');
         }
 
-        // Orders (stub from Firebase or clientData)
         let orders = profile.orders || chatData.orders || [];
         document.getElementById('info-order-count').textContent = orders.length || 0;
         const orderContainer = document.getElementById('info-orders');
@@ -1221,17 +1175,11 @@
         }
     }
 
-    // ─────────────────────────────────────────
-    //  LIGHTBOX
-    // ─────────────────────────────────────────
     function openLightbox(url) {
         document.getElementById('lightbox-img').src = url;
         document.getElementById('lightbox').classList.remove('hidden');
     }
 
-    // ─────────────────────────────────────────
-    //  MISC
-    // ─────────────────────────────────────────
     function logoutAgent() {
         if (currentAgent) db.ref(`employees/${currentAgent.id}`).update({ online: false });
         location.reload();
