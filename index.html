@@ -23,154 +23,129 @@
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'DM Sans', sans-serif; overflow: hidden; }
-        
+
         .chat-scroll::-webkit-scrollbar { width: 4px; }
         .chat-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .dark .chat-scroll::-webkit-scrollbar-thumb { background: #475569; }
 
-        .msg-bubble { max-width: 80%; padding: 10px 14px; font-size: 0.875rem; line-height: 1.5; position: relative; }
+        .msg-bubble { max-width: 80%; padding: 10px 14px; font-size: 0.875rem; line-height: 1.5; position: relative; word-break: break-word; }
         .msg-client { border-radius: 4px 16px 16px 16px; background: #f1f5f9; color: #0f172a; border: 1px solid #e2e8f0; }
         .dark .msg-client { background: #1e293b; color: #f8fafc; border-color: #334155; }
         .msg-agent { border-radius: 16px 4px 16px 16px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; }
         .msg-system { background: transparent; color: #94a3b8; font-size: 0.75rem; text-align: center; font-style: italic; border: none; padding: 4px 8px; }
+        .msg-note { border-radius: 8px; background: #fef3c7; color: #92400e; border: 1px dashed #fbbf24; font-size: 0.8rem; }
+        .dark .msg-note { background: rgba(251,191,36,0.1); color: #fcd34d; border-color: rgba(251,191,36,0.3); }
 
-        /* Spinner */
         .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 18px; height: 18px; animation: spin 0.8s linear infinite; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading .spinner { display: inline-block; }
         .loading .btn-text { display: none; }
 
-        /* ============================================
-           INCOMING REQUEST MODAL
-        ============================================ */
-        #request-modal-backdrop {
-            position: fixed; inset: 0; z-index: 9999;
-            display: flex; align-items: flex-end; justify-content: center;
-            padding-bottom: 24px;
-            pointer-events: none;
-        }
+        /* ── MODAL ── */
+        #request-modal-backdrop { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 24px; pointer-events: none; }
         #request-modal-backdrop.has-modal { pointer-events: all; }
-
-        .request-card {
-            width: 100%; max-width: 420px;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06);
-            overflow: hidden;
-            transform: translateY(120%) scale(0.92);
-            opacity: 0;
-            transition: transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-            pointer-events: all;
-        }
-        .dark .request-card {
-            background: #1e293b;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
-        }
-        .request-card.show {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-        }
-        .request-card.dismiss {
-            transform: translateY(120%) scale(0.92);
-            opacity: 0;
-            transition: transform 0.35s cubic-bezier(0.55, 0, 1, 0.45), opacity 0.25s ease;
-        }
-
-        .card-header-bar {
-            height: 5px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
-            background-size: 200% 100%;
-            animation: shimmer-bar 2.5s linear infinite;
-        }
-        @keyframes shimmer-bar {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 200% 0%; }
-        }
-
-        .pulse-ring {
-            position: absolute;
-            inset: -6px;
-            border-radius: 50%;
-            background: rgba(59, 130, 246, 0.15);
-            animation: pulse-ring 2s ease-out infinite;
-        }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.9); opacity: 1; }
-            100% { transform: scale(1.6); opacity: 0; }
-        }
-
-        /* Timer ring */
+        .request-card { width: 100%; max-width: 420px; background: #fff; border-radius: 20px; box-shadow: 0 32px 80px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06); overflow: hidden; transform: translateY(120%) scale(0.92); opacity: 0; transition: transform 0.48s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; pointer-events: all; }
+        .dark .request-card { background: #1e293b; box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06); }
+        .request-card.show { transform: translateY(0) scale(1); opacity: 1; }
+        .request-card.dismiss { transform: translateY(120%) scale(0.92); opacity: 0; transition: transform 0.35s cubic-bezier(0.55,0,1,0.45), opacity 0.25s ease; }
+        .card-header-bar { height: 5px; background: linear-gradient(90deg,#3b82f6,#8b5cf6,#ec4899); background-size: 200% 100%; animation: shimmer-bar 2.5s linear infinite; }
+        @keyframes shimmer-bar { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+        .pulse-ring { position: absolute; inset: -6px; border-radius: 50%; background: rgba(59,130,246,0.15); animation: pulse-ring 2s ease-out infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
         .timer-ring { transform: rotate(-90deg); }
-        .timer-ring circle {
-            fill: none; stroke-width: 3;
-            stroke-linecap: round;
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            transition: stroke-dashoffset 1s linear;
-        }
+        .timer-ring circle { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s linear; }
         .timer-ring .bg-circle { stroke: #e2e8f0; }
         .dark .timer-ring .bg-circle { stroke: #334155; }
         .timer-ring .progress-circle { stroke: #3b82f6; }
-
-        /* Accept / Reject buttons */
-        .btn-accept {
-            flex: 1;
-            padding: 13px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.875rem;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #fff;
-            border: none; cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .btn-accept:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45); }
+        .btn-accept { flex: 1; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 0.875rem; background: linear-gradient(135deg,#2563eb,#1d4ed8); color: #fff; border: none; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; box-shadow: 0 4px 16px rgba(37,99,235,0.35); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-accept:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(37,99,235,0.45); }
         .btn-accept:active { transform: scale(0.97); }
-
-        .btn-reject {
-            flex: 0 0 auto;
-            width: 50px; height: 50px;
-            border-radius: 12px;
-            background: #fee2e2;
-            color: #dc2626;
-            border: none; cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.15s ease, transform 0.15s ease;
-            display: flex; align-items: center; justify-content: center;
-        }
+        .btn-reject { flex: 0 0 auto; width: 50px; height: 50px; border-radius: 12px; background: #fee2e2; color: #dc2626; border: none; cursor: pointer; font-size: 1rem; transition: background 0.15s ease, transform 0.15s ease; display: flex; align-items: center; justify-content: center; }
         .btn-reject:hover { background: #fecaca; transform: translateY(-1px); }
         .btn-reject:active { transform: scale(0.95); }
         .dark .btn-reject { background: rgba(220,38,38,0.15); color: #f87171; }
         .dark .btn-reject:hover { background: rgba(220,38,38,0.25); }
 
-        /* Queue badge */
-        .queue-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            display: inline-block; margin-right: 4px;
-        }
-
-        /* Chat list item active */
         .chat-item { transition: all 0.15s ease; border-radius: 10px; border: 1px solid transparent; }
         .chat-item:hover { background: #f8fafc; border-color: #e2e8f0; }
         .dark .chat-item:hover { background: rgba(51,65,85,0.5); border-color: #334155; }
         .chat-item.active { background: #eff6ff; border-color: #bfdbfe; }
         .dark .chat-item.active { background: rgba(37,99,235,0.12); border-color: rgba(96,165,250,0.3); }
 
-        /* Notification shake */
-        @keyframes bell-shake {
-            0%,100% { transform: rotate(0); }
-            20% { transform: rotate(-15deg); }
-            40% { transform: rotate(15deg); }
-            60% { transform: rotate(-10deg); }
-            80% { transform: rotate(10deg); }
-        }
+        @keyframes bell-shake { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-15deg); } 40% { transform: rotate(15deg); } 60% { transform: rotate(-10deg); } 80% { transform: rotate(10deg); } }
         .bell-shake { animation: bell-shake 0.5s ease; }
+        @keyframes slide-up { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .slide-up { animation: slide-up 0.3s ease forwards; }
 
-        /* Slide in from bottom on load */
-        @keyframes slide-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .slide-up { animation: slide-up 0.4s ease forwards; }
+        /* ── TYPING INDICATOR ── */
+        .typing-dots span { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; animation: typing-bounce 1.2s infinite ease-in-out; }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing-bounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+        /* ── READ RECEIPTS ── */
+        .read-tick { font-size: 10px; color: rgba(255,255,255,0.6); }
+        .read-tick.seen { color: #93c5fd; }
+
+        /* ── CANNED RESPONSES ── */
+        #canned-dropdown { position: absolute; bottom: calc(100% + 8px); left: 0; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); z-index: 100; max-height: 240px; overflow-y: auto; }
+        .dark #canned-dropdown { background: #1e293b; border-color: #334155; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+        .canned-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; transition: background 0.12s; }
+        .dark .canned-item { border-bottom-color: #334155; }
+        .canned-item:hover { background: #eff6ff; }
+        .dark .canned-item:hover { background: rgba(37,99,235,0.12); }
+        .canned-item:last-child { border-bottom: none; }
+
+        /* ── CLIENT INFO SIDEBAR ── */
+        #client-sidebar { width: 280px; background: #fff; border-left: 1px solid #e2e8f0; overflow-y: auto; flex-shrink: 0; transition: width 0.25s ease, opacity 0.25s ease; }
+        .dark #client-sidebar { background: #1e293b; border-left-color: #334155; }
+        #client-sidebar.collapsed { width: 0; opacity: 0; pointer-events: none; }
+
+        /* ── TRANSFER MODAL ── */
+        #transfer-modal { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; padding: 16px; }
+        #transfer-modal.hidden { display: none; }
+
+        /* ── FILE UPLOAD PREVIEW ── */
+        .file-preview-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; border: 2px solid #e2e8f0; }
+        .dark .file-preview-thumb { border-color: #334155; }
+        .msg-image { max-width: 200px; border-radius: 10px; cursor: pointer; }
+
+        /* ── NOTE INPUT MODE ── */
+        .note-mode #message-input { background: #fef9e7 !important; border-color: #fbbf24 !important; color: #92400e !important; }
+        .dark .note-mode #message-input { background: rgba(251,191,36,0.08) !important; border-color: rgba(251,191,36,0.4) !important; color: #fcd34d !important; }
+
+        /* ── TOOLTIP ── */
+        [data-tip] { position: relative; }
+        [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; font-size: 10px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; pointer-events: none; z-index: 999; }
+
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        .fade-in { animation: fade-in 0.2s ease; }
+
+        /* ── INPUT TOOLBAR ── */
+        .toolbar-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; transition: background 0.12s, color 0.12s; font-size: 13px; border: none; background: transparent; }
+        .toolbar-btn:hover { background: #f1f5f9; color: #2563eb; }
+        .dark .toolbar-btn:hover { background: rgba(51,65,85,0.6); color: #60a5fa; }
+        .toolbar-btn.active { background: #eff6ff; color: #2563eb; }
+        .dark .toolbar-btn.active { background: rgba(37,99,235,0.15); color: #60a5fa; }
+
+        /* info sidebar sections */
+        .info-section { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; }
+        .dark .info-section { border-bottom-color: #334155; }
+        .info-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 8px; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 3px 0; }
+        .info-val { font-weight: 600; color: #1e293b; font-size: 12px; }
+        .dark .info-val { color: #f1f5f9; }
+
+        .ticket-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.12s; }
+        .dark .ticket-card { background: rgba(51,65,85,0.3); border-color: #334155; }
+        .ticket-card:hover { border-color: #93c5fd; }
+
+        /* pill input for transfer */
+        .agent-pill { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; border: 2px solid transparent; cursor: pointer; transition: all 0.12s; }
+        .agent-pill:hover { border-color: #bfdbfe; background: #eff6ff; }
+        .dark .agent-pill:hover { border-color: rgba(96,165,250,0.3); background: rgba(37,99,235,0.1); }
+        .agent-pill.selected { border-color: #2563eb; background: #eff6ff; }
+        .dark .agent-pill.selected { border-color: #60a5fa; background: rgba(37,99,235,0.15); }
     </style>
 </head>
 <body class="h-screen flex bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -198,14 +173,11 @@
         </div>
     </div>
 
-    <!-- ========== NEW REQUEST MODAL BACKDROP ========== -->
+    <!-- ========== NEW REQUEST MODAL ========== -->
     <div id="request-modal-backdrop" onclick="handleBackdropClick(event)">
         <div class="request-card" id="request-card">
-            <!-- animated top bar -->
             <div class="card-header-bar"></div>
-
             <div class="p-5">
-                <!-- Top row: icon + title + timer -->
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-3">
                         <div class="relative w-11 h-11 flex items-center justify-center">
@@ -219,20 +191,15 @@
                             <p class="text-xs text-gray-400 dark:text-gray-500" id="modal-time-ago">Just now</p>
                         </div>
                     </div>
-                    <!-- Timer -->
                     <div class="relative w-12 h-12 flex items-center justify-center">
                         <svg class="timer-ring absolute inset-0 w-full h-full" viewBox="0 0 36 36">
                             <circle class="bg-circle" cx="18" cy="18" r="15.9"/>
-                            <circle class="progress-circle" id="timer-circle" cx="18" cy="18" r="15.9" style="stroke-dasharray: 100; stroke-dashoffset: 0;"/>
+                            <circle class="progress-circle" id="timer-circle" cx="18" cy="18" r="15.9" style="stroke-dasharray:100;stroke-dashoffset:0;"/>
                         </svg>
                         <span id="timer-count" class="text-sm font-bold font-mono relative z-10 text-gray-700 dark:text-gray-300">30</span>
                     </div>
                 </div>
-
-                <!-- Divider -->
                 <div class="h-px bg-gray-100 dark:bg-slate-700 mb-4"></div>
-
-                <!-- Client Details -->
                 <div class="flex items-center gap-3 mb-4">
                     <img id="modal-avatar" src="" class="w-12 h-12 rounded-full border-2 border-white dark:border-slate-700 shadow object-cover">
                     <div class="flex-1 min-w-0">
@@ -241,32 +208,68 @@
                     </div>
                     <span class="shrink-0 px-2.5 py-1 bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 text-[10px] font-bold uppercase tracking-wider rounded-full">Waiting</span>
                 </div>
-
-                <!-- First message preview -->
                 <div class="bg-gray-50 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-700 rounded-xl p-3 mb-4">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                        <i class="fa-regular fa-comment-dots"></i> First Message
-                    </p>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><i class="fa-regular fa-comment-dots"></i> First Message</p>
                     <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug line-clamp-3" id="modal-first-msg">Loading…</p>
                 </div>
-
-                <!-- Meta row -->
-                <div class="flex gap-2 mb-4 flex-wrap" id="modal-meta">
-                    <!-- populated by JS -->
-                </div>
-
-                <!-- Action Buttons -->
+                <div class="flex gap-2 mb-4 flex-wrap" id="modal-meta"></div>
                 <div class="flex gap-2 items-center">
-                    <button class="btn-accept" onclick="acceptRequest()">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Accept Request</span>
-                    </button>
-                    <button class="btn-reject" title="Decline" onclick="rejectRequest()">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <button class="btn-accept" onclick="acceptRequest()"><i class="fa-solid fa-check"></i><span>Accept Request</span></button>
+                    <button class="btn-reject" title="Decline" onclick="rejectRequest()"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- ========== TRANSFER MODAL ========== -->
+    <div id="transfer-modal" class="hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-slate-700 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-gray-900 dark:text-gray-100">Transfer Chat</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">Select an agent and add a handoff note</p>
+                </div>
+                <button onclick="closeTransferModal()" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-4 max-h-96 overflow-y-auto">
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Available Agents</p>
+                    <div id="transfer-agent-list" class="space-y-1.5">
+                        <div class="text-xs text-gray-400 text-center py-4">Loading agents…</div>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Handoff Note <span class="text-gray-300">(visible to receiving agent)</span></p>
+                    <textarea id="transfer-note" rows="3" placeholder="Summarise the issue for the next agent…"
+                        class="w-full p-3 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-sm resize-none outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition dark:text-white"></textarea>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-100 dark:border-slate-700 flex gap-2">
+                <button onclick="closeTransferModal()" class="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 text-sm font-semibold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 transition">Cancel</button>
+                <button onclick="confirmTransfer()" id="confirm-transfer-btn" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition disabled:opacity-50" disabled>Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== CANNED RESPONSES MANAGER MODAL ========== -->
+    <div id="canned-mgr-modal" class="hidden fixed inset-0 z-9000 bg-black/50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg border border-gray-200 dark:border-slate-700 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 class="font-bold">Canned Responses</h3>
+                <button onclick="document.getElementById('canned-mgr-modal').classList.add('hidden')" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-3 max-h-80 overflow-y-auto" id="canned-mgr-list"></div>
+            <div class="p-4 border-t border-gray-100 dark:border-slate-700 space-y-2">
+                <input id="new-canned-title" placeholder="Shortcut name (e.g. screenshot)" class="w-full p-2.5 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:border-blue-500 transition dark:text-white">
+                <textarea id="new-canned-body" rows="2" placeholder="Response text…" class="w-full p-2.5 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-sm resize-none outline-none focus:border-blue-500 transition dark:text-white"></textarea>
+                <button onclick="addCannedResponse()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition">Add Response</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== IMAGE LIGHTBOX ========== -->
+    <div id="lightbox" class="hidden fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-zoom-out" onclick="this.classList.add('hidden')">
+        <img id="lightbox-img" src="" class="max-w-full max-h-full rounded-xl shadow-2xl">
     </div>
 
     <!-- ========== MAIN DASHBOARD ========== -->
@@ -284,24 +287,24 @@
                         </p>
                     </div>
                 </div>
-                <div class="flex gap-2 items-center">
-                    <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition">
+                <div class="flex gap-1 items-center">
+                    <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition" data-tip="Toggle theme">
                         <i class="fa-solid fa-moon text-sm"></i>
                     </button>
-                    <button onclick="logoutAgent()" class="w-8 h-8 rounded-lg flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                    <button onclick="document.getElementById('canned-mgr-modal').classList.remove('hidden'); renderCannedMgr()" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition" data-tip="Canned Responses">
+                        <i class="fa-solid fa-bolt text-sm"></i>
+                    </button>
+                    <button onclick="logoutAgent()" class="w-8 h-8 rounded-lg flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition" data-tip="Logout">
                         <i class="fa-solid fa-power-off text-sm"></i>
                     </button>
                 </div>
             </div>
-
             <div class="px-3 py-2 border-b border-gray-100 dark:border-slate-700/50">
                 <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Active Queue</p>
             </div>
-
             <div class="flex-1 overflow-y-auto chat-scroll p-2 space-y-0.5" id="chat-list">
                 <div class="p-6 text-center text-xs text-gray-400 italic">Syncing queue…</div>
             </div>
-
             <div class="p-3 border-t border-gray-200 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-900/50 flex items-center gap-3">
                 <div class="relative">
                     <img id="agent-avatar" src="" class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-700 shadow-sm object-cover">
@@ -315,46 +318,160 @@
         </aside>
 
         <!-- MAIN CHAT AREA -->
-        <main class="flex-1 bg-gray-50 dark:bg-slate-900 flex flex-col h-full relative" id="chat-main">
+        <main class="flex-1 bg-gray-50 dark:bg-slate-900 flex flex-col h-full relative min-w-0" id="chat-main">
             <button onclick="toggleMobileSidebar()" id="mobile-back-btn"
                 class="md:hidden absolute top-4 left-4 z-30 w-10 h-10 bg-white dark:bg-slate-800 rounded-full shadow border border-gray-200 dark:border-slate-700 flex items-center justify-center hidden">
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
 
-            <header id="chat-header" class="h-16 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex items-center px-6 pl-16 md:pl-6 shrink-0 hidden">
-                <div class="flex justify-between items-center w-full">
-                    <div>
-                        <h2 class="font-bold text-gray-800 dark:text-gray-100 text-base" id="current-client-name">—</h2>
+            <!-- Chat header -->
+            <header id="chat-header" class="h-16 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex items-center px-4 pl-16 md:pl-4 shrink-0 hidden">
+                <div class="flex justify-between items-center w-full gap-2">
+                    <div class="min-w-0">
+                        <h2 class="font-bold text-gray-800 dark:text-gray-100 text-base truncate" id="current-client-name">—</h2>
                         <p class="text-[11px] text-gray-400 font-mono" id="current-chat-status">—</p>
                     </div>
-                    <button onclick="resolveChat()" id="btn-resolve"
-                        class="text-xs font-bold px-3 py-2 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-check text-xs"></i> Resolve
-                    </button>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="openTransferModal()" id="btn-transfer"
+                            class="text-xs font-bold px-3 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition flex items-center gap-1.5" data-tip="Transfer Chat">
+                            <i class="fa-solid fa-share-nodes text-xs"></i><span class="hidden sm:inline">Transfer</span>
+                        </button>
+                        <button onclick="resolveChat()" id="btn-resolve"
+                            class="text-xs font-bold px-3 py-2 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-check text-xs"></i><span class="hidden sm:inline">Resolve</span>
+                        </button>
+                        <button onclick="toggleClientSidebar()" id="btn-info"
+                            class="text-xs font-bold px-3 py-2 bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition flex items-center gap-1.5" data-tip="Client Info">
+                            <i class="fa-solid fa-circle-info text-xs"></i><span class="hidden sm:inline">Info</span>
+                        </button>
+                    </div>
                 </div>
             </header>
 
-            <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-gray-300 dark:text-gray-700">
-                <div class="w-20 h-20 rounded-2xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center mb-4">
-                    <i class="fa-regular fa-comments text-3xl"></i>
+            <!-- Chat + client info row -->
+            <div class="flex flex-1 overflow-hidden">
+                <!-- Messages + input column -->
+                <div class="flex flex-col flex-1 min-w-0 overflow-hidden relative">
+                    <!-- Empty state -->
+                    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-gray-300 dark:text-gray-700">
+                        <div class="w-20 h-20 rounded-2xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+                            <i class="fa-regular fa-comments text-3xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-400 dark:text-gray-600">No chat selected</p>
+                        <p class="text-xs text-gray-300 dark:text-gray-700 mt-1">Pick a conversation from the queue</p>
+                    </div>
+
+                    <!-- Messages list -->
+                    <div id="messages-container" class="flex-1 overflow-y-auto chat-scroll p-4 md:p-6 space-y-4 hidden pb-36"></div>
+
+                    <!-- Typing indicator -->
+                    <div id="typing-indicator" class="hidden px-6 pb-1">
+                        <div class="flex items-center gap-2">
+                            <div class="msg-bubble msg-client py-2 px-3 inline-flex items-center gap-1.5">
+                                <div class="typing-dots flex gap-1">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <span class="text-xs text-gray-400" id="typing-label">Client is typing…</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input area -->
+                    <div id="chat-input-area" class="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 p-3 absolute bottom-0 left-0 right-0 hidden">
+                        <!-- Canned responses dropdown -->
+                        <div id="canned-dropdown" class="hidden"></div>
+
+                        <!-- File preview -->
+                        <div id="file-preview-area" class="hidden mb-2 flex items-center gap-2 p-2 bg-gray-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
+                            <img id="file-preview-thumb" src="" class="file-preview-thumb hidden">
+                            <div id="file-preview-icon" class="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 hidden">
+                                <i class="fa-solid fa-file text-lg"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 truncate" id="file-preview-name">file.png</p>
+                                <p class="text-[10px] text-gray-400" id="file-preview-size">0 KB</p>
+                            </div>
+                            <button onclick="clearFilePreview()" class="text-gray-400 hover:text-red-500 transition w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mode indicator -->
+                        <div id="note-mode-banner" class="hidden mb-2 flex items-center gap-2 text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                            <i class="fa-solid fa-lock text-xs"></i> Internal Note – not visible to client
+                        </div>
+
+                        <div class="flex items-end gap-2 max-w-4xl mx-auto">
+                            <!-- Toolbar -->
+                            <div class="flex flex-col gap-1 shrink-0">
+                                <button class="toolbar-btn" id="btn-note-mode" onclick="toggleNoteMode()" data-tip="Internal note"><i class="fa-solid fa-lock text-xs"></i></button>
+                                <label class="toolbar-btn cursor-pointer" data-tip="Attach file">
+                                    <i class="fa-solid fa-paperclip text-xs"></i>
+                                    <input type="file" id="file-input" accept="image/*,.pdf,.txt,.log,.csv" class="hidden" onchange="handleFileSelect(event)">
+                                </label>
+                                <button class="toolbar-btn" onclick="showCannedDropdown()" data-tip="Quick replies"><i class="fa-solid fa-bolt text-xs"></i></button>
+                            </div>
+
+                            <textarea id="message-input" rows="1"
+                                placeholder="Type a reply…"
+                                class="flex-1 p-3 bg-gray-100 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl resize-none outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition text-sm dark:text-white leading-relaxed"
+                                oninput="onInputChange(this)"
+                                onkeypress="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+                            <button onclick="sendMessage()"
+                                class="w-11 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-md transition active:scale-95 mb-px shrink-0">
+                                <i class="fa-solid fa-paper-plane text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-sm font-semibold text-gray-400 dark:text-gray-600">No chat selected</p>
-                <p class="text-xs text-gray-300 dark:text-gray-700 mt-1">Pick a conversation from the queue</p>
-            </div>
 
-            <div id="messages-container" class="flex-1 overflow-y-auto chat-scroll p-4 md:p-6 space-y-4 hidden pb-28"></div>
+                <!-- CLIENT INFO SIDEBAR -->
+                <div id="client-sidebar" class="collapsed chat-scroll">
+                    <!-- Header -->
+                    <div class="info-section">
+                        <div class="flex items-center gap-3 mb-3">
+                            <img id="info-avatar" src="" class="w-12 h-12 rounded-full border-2 border-white dark:border-slate-700 shadow object-cover">
+                            <div class="min-w-0">
+                                <p class="font-bold text-sm truncate text-gray-900 dark:text-gray-100" id="info-name">—</p>
+                                <p class="text-[11px] text-gray-400 truncate" id="info-email">—</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-2.5 text-center">
+                                <p class="text-lg font-bold text-blue-600 dark:text-blue-400" id="info-ticket-count">0</p>
+                                <p class="text-[10px] text-gray-400">Tickets</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-2.5 text-center">
+                                <p class="text-lg font-bold text-green-600 dark:text-green-400" id="info-order-count">0</p>
+                                <p class="text-[10px] text-gray-400">Orders</p>
+                            </div>
+                        </div>
+                    </div>
 
-            <div id="chat-input-area" class="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 p-4 absolute bottom-0 left-0 right-0 hidden">
-                <div class="flex items-end gap-2 max-w-4xl mx-auto">
-                    <textarea id="message-input" rows="1"
-                        placeholder="Type a reply…"
-                        class="flex-1 p-3 bg-gray-100 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl resize-none outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition text-sm dark:text-white leading-relaxed"
-                        oninput="this.style.height='';this.style.height=this.scrollHeight+'px'"
-                        onkeypress="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
-                    <button onclick="sendMessage()"
-                        class="w-11 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-md transition active:scale-95 mb-px shrink-0">
-                        <i class="fa-solid fa-paper-plane text-sm"></i>
-                    </button>
+                    <!-- Account Info -->
+                    <div class="info-section">
+                        <p class="info-label">Account Details</p>
+                        <div class="info-row"><span class="text-gray-400">Plan</span><span class="info-val" id="info-plan">—</span></div>
+                        <div class="info-row"><span class="text-gray-400">Joined</span><span class="info-val" id="info-joined">—</span></div>
+                        <div class="info-row"><span class="text-gray-400">Location</span><span class="info-val" id="info-location">—</span></div>
+                        <div class="info-row"><span class="text-gray-400">LTV</span><span class="info-val" id="info-ltv">—</span></div>
+                    </div>
+
+                    <!-- Previous Tickets -->
+                    <div class="info-section">
+                        <p class="info-label">Previous Tickets</p>
+                        <div id="info-prev-tickets">
+                            <p class="text-xs text-gray-400 italic">No previous tickets.</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="info-section">
+                        <p class="info-label">Recent Orders</p>
+                        <div id="info-orders">
+                            <p class="text-xs text-gray-400 italic">No orders found.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -363,140 +480,149 @@
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script>
-        // ─────────────────────────────────────────
-        //  FIREBASE INIT
-        // ─────────────────────────────────────────
-        const firebaseConfig = {
-            apiKey: "AIzaSyCh7Ute6LeSAxcNDEQwZg5m0cA4ujnLCfg",
-            authDomain: "test-17881.firebaseapp.com",
-            projectId: "test-17881",
-            storageBucket: "test-17881.firebasestorage.app",
-            messagingSenderId: "1057428047643",
-            appId: "1:1057428047643:web:f3801c0d933225a5cd35be",
-            databaseURL: "https://test-17881-default-rtdb.firebaseio.com"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    // ─────────────────────────────────────────
+    //  FIREBASE INIT
+    // ─────────────────────────────────────────
+    const firebaseConfig = {
+        apiKey: "AIzaSyCh7Ute6LeSAxcNDEQwZg5m0cA4ujnLCfg",
+        authDomain: "test-17881.firebaseapp.com",
+        projectId: "test-17881",
+        storageBucket: "test-17881.firebasestorage.app",
+        messagingSenderId: "1057428047643",
+        appId: "1:1057428047643:web:f3801c0d933225a5cd35be",
+        databaseURL: "https://test-17881-default-rtdb.firebaseio.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db      = firebase.database();
+    const storage = firebase.storage();
 
-        // ─────────────────────────────────────────
-        //  STATE
-        // ─────────────────────────────────────────
-        let currentAgent   = null;
-        let activeChatId   = null;
-        let activeChatRef  = null;
-        let isBusy         = false;
-        let seenChatIds    = new Set();   // chats we've already seen (to detect new ones)
-        let modalChatId    = null;        // which chat is currently shown in modal
-        let timerInterval  = null;
-        let timerSeconds   = 30;
-        let rejectedChats  = new Set();   // chats we explicitly rejected this session
+    // ─────────────────────────────────────────
+    //  STATE
+    // ─────────────────────────────────────────
+    let currentAgent    = null;
+    let activeChatId    = null;
+    let activeChatRef   = null;
+    let isBusy          = false;
+    let seenChatIds     = new Set();
+    let modalChatId     = null;
+    let timerInterval   = null;
+    let timerSeconds    = 30;
+    let rejectedChats   = new Set();
+    let isNoteMode      = false;
+    let pendingFile     = null;
+    let typingTimeout   = null;
+    let clientInfoSidebarOpen = false;
+    let selectedTransferAgent = null;
+    let allEmployees    = {};
 
-        // ─────────────────────────────────────────
-        //  THEME
-        // ─────────────────────────────────────────
-        function toggleTheme() { document.documentElement.classList.toggle('dark'); }
+    // DEFAULT CANNED RESPONSES
+    let cannedResponses = JSON.parse(localStorage.getItem('cannedResponses') || 'null') || [
+        { id: 1, title: 'Screenshot request',  body: 'Could you please send a screenshot of what you\'re seeing? That will help me assist you faster.' },
+        { id: 2, title: 'Looking into it',     body: 'Thanks for reaching out! I\'m looking into this for you right now, please give me a moment.' },
+        { id: 3, title: 'Escalate to team',    body: 'I\'m escalating this to our specialist team who will follow up with you within 24 hours.' },
+        { id: 4, title: 'Resolved follow-up',  body: 'I\'m glad we could resolve this for you! Is there anything else I can help with?' },
+        { id: 5, title: 'Check error log',     body: 'Could you please share your error log? You can usually find it in Settings > Support > Export Logs.' },
+    ];
 
-        // ─────────────────────────────────────────
-        //  LOGIN
-        // ─────────────────────────────────────────
-        async function authenticateAgent() {
-            const pinInput = document.getElementById('emp-pin-input').value.trim();
-            const btn      = document.getElementById('login-btn');
-            const err      = document.getElementById('login-error');
-            if (!pinInput) return;
-            err.classList.add('hidden');
-            btn.classList.add('loading');
-            try {
-                const snap = await db.ref('employees').orderByChild('employeeNumber').equalTo(pinInput).once('value');
-                if (snap.exists()) {
-                    const data = snap.val();
-                    const key  = Object.keys(data)[0];
-                    currentAgent = { ...data[key], id: key };
+    function saveCanned() { localStorage.setItem('cannedResponses', JSON.stringify(cannedResponses)); }
 
-                    document.getElementById('agent-name').innerText   = currentAgent.name;
-                    document.getElementById('agent-avatar').src        = currentAgent.profilePic || avatarUrl(currentAgent.name);
+    // ─────────────────────────────────────────
+    //  THEME
+    // ─────────────────────────────────────────
+    function toggleTheme() { document.documentElement.classList.toggle('dark'); }
 
-                    // Fade out login, show dashboard
-                    document.getElementById('login-overlay').classList.add('opacity-0', 'pointer-events-none');
-                    setTimeout(() => {
-                        document.getElementById('login-overlay').classList.add('hidden');
-                        document.getElementById('dashboard').classList.remove('hidden');
-                        setTimeout(() => document.getElementById('dashboard').classList.remove('opacity-0'), 50);
-                    }, 500);
+    // ─────────────────────────────────────────
+    //  LOGIN
+    // ─────────────────────────────────────────
+    async function authenticateAgent() {
+        const pinInput = document.getElementById('emp-pin-input').value.trim();
+        const btn = document.getElementById('login-btn');
+        const err = document.getElementById('login-error');
+        if (!pinInput) return;
+        err.classList.add('hidden');
+        btn.classList.add('loading');
+        try {
+            const snap = await db.ref('employees').orderByChild('employeeNumber').equalTo(pinInput).once('value');
+            if (snap.exists()) {
+                const data = snap.val();
+                const key  = Object.keys(data)[0];
+                currentAgent = { ...data[key], id: key };
+                document.getElementById('agent-name').innerText = currentAgent.name;
+                document.getElementById('agent-avatar').src     = currentAgent.profilePic || avatarUrl(currentAgent.name);
+                document.getElementById('login-overlay').classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    document.getElementById('login-overlay').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    setTimeout(() => document.getElementById('dashboard').classList.remove('opacity-0'), 50);
+                }, 500);
+                // mark agent online
+                db.ref(`employees/${currentAgent.id}`).update({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+                db.ref(`employees/${currentAgent.id}/online`).onDisconnect().set(false);
+                listenToQueue();
+                loadAllEmployees();
+            } else {
+                err.classList.remove('hidden');
+            }
+        } catch (e) { console.error(e); }
+        finally { btn.classList.remove('loading'); }
+    }
 
-                    listenToQueue();
-                } else {
-                    err.classList.remove('hidden');
-                }
-            } catch (e) { console.error(e); }
-            finally { btn.classList.remove('loading'); }
-        }
+    function avatarUrl(name) {
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2563eb&color=fff&size=128`;
+    }
 
-        function avatarUrl(name) {
-            return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2563eb&color=fff&size=128`;
-        }
+    async function loadAllEmployees() {
+        const snap = await db.ref('employees').once('value');
+        if (snap.exists()) snap.forEach(c => { allEmployees[c.key] = { ...c.val(), id: c.key }; });
+    }
 
-        // ─────────────────────────────────────────
-        //  QUEUE LISTENER
-        // ─────────────────────────────────────────
-        function listenToQueue() {
-            db.ref('live_support_chats').on('value', (snap) => {
-                const list = document.getElementById('chat-list');
-                list.innerHTML = '';
+    // ─────────────────────────────────────────
+    //  QUEUE LISTENER
+    // ─────────────────────────────────────────
+    function listenToQueue() {
+        db.ref('live_support_chats').on('value', (snap) => {
+            const list = document.getElementById('chat-list');
+            list.innerHTML = '';
+            if (!snap.exists()) {
+                list.innerHTML = '<div class="p-6 text-center text-xs text-gray-400 italic">No active requests.</div>';
+                return;
+            }
+            let chats = [];
+            snap.forEach(child => { chats.push({ id: child.key, ...child.val() }); });
 
-                if (!snap.exists()) {
-                    list.innerHTML = '<div class="p-6 text-center text-xs text-gray-400 italic">No active requests.</div>';
-                    return;
-                }
+            const myActiveChat = chats.find(c => c.agentId === currentAgent.id && c.status === 'active');
+            isBusy = !!myActiveChat;
+            updateWorkStatusUI(isBusy);
 
-                let chats = [];
-                snap.forEach(child => { chats.push({ id: child.key, ...child.val() }); });
+            if (!isBusy) {
+                const newPending = chats.find(c =>
+                    !c.agentId && c.status !== 'resolved' &&
+                    !seenChatIds.has(c.id) && !rejectedChats.has(c.id) && c.id !== modalChatId
+                );
+                if (newPending) { seenChatIds.add(newPending.id); showRequestModal(newPending); }
+            }
 
-                // Determine busy state
-                const myActiveChat = chats.find(c => c.agentId === currentAgent.id && c.status === 'active');
-                isBusy = !!myActiveChat;
-                updateWorkStatusUI(isBusy);
+            chats.forEach(c => { if (c.agentId || c.status === 'resolved') seenChatIds.add(c.id); });
 
-                // NEW CHAT DETECTION: unassigned, non-rejected, not yet seen, agent is free
-                if (!isBusy) {
-                    const newPending = chats.find(c =>
-                        !c.agentId &&
-                        c.status !== 'resolved' &&
-                        !seenChatIds.has(c.id) &&
-                        !rejectedChats.has(c.id) &&
-                        c.id !== modalChatId
-                    );
-                    if (newPending) {
-                        seenChatIds.add(newPending.id);
-                        showRequestModal(newPending);
-                    }
-                }
+            const visibleChats = chats.filter(chat => {
+                if (chat.agentId === currentAgent.id) return true;
+                if (!chat.agentId && chat.status !== 'resolved' && !isBusy) return true;
+                return false;
+            });
+            visibleChats.sort((a, b) => (b.lastActivity || 0) - (a.lastActivity || 0));
 
-                // Also mark all existing chats as seen so we don't re-popup old ones
-                chats.forEach(c => { if (c.agentId || c.status === 'resolved') seenChatIds.add(c.id); });
-
-                // Build sidebar list
-                const visibleChats = chats.filter(chat => {
-                    if (chat.agentId === currentAgent.id) return true;
-                    if (!chat.agentId && chat.status !== 'resolved' && !isBusy) return true;
-                    return false;
-                });
-                visibleChats.sort((a, b) => (b.lastActivity || 0) - (a.lastActivity || 0));
-
-                if (visibleChats.length === 0) {
-                    list.innerHTML = '<div class="p-6 text-center text-xs text-gray-400 italic">No chats in your queue.</div>';
-                    return;
-                }
-
+            if (visibleChats.length === 0) {
+                list.innerHTML = '<div class="p-6 text-center text-xs text-gray-400 italic">No chats in your queue.</div>';
+            } else {
                 visibleChats.forEach(chat => {
                     const isResolved = chat.status === 'resolved';
                     const isPending  = !chat.agentId;
                     let badgeHtml = '';
-                    if (isPending)      badgeHtml = '<span class="px-2 py-0.5 bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 text-[9px] rounded-full font-bold uppercase tracking-wide">Pending</span>';
+                    if (isPending)       badgeHtml = '<span class="px-2 py-0.5 bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 text-[9px] rounded-full font-bold uppercase tracking-wide">Pending</span>';
                     else if (isResolved) badgeHtml = '<span class="px-2 py-0.5 bg-gray-100 text-gray-500 dark:bg-slate-700 text-[9px] rounded-full font-bold uppercase tracking-wide">Resolved</span>';
                     else                badgeHtml = '<span class="px-2 py-0.5 bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400 text-[9px] rounded-full font-bold uppercase tracking-wide">Active</span>';
-
                     const isActive = activeChatId === chat.id;
                     list.innerHTML += `
                         <div onclick="openChat('${chat.id}')" class="chat-item p-3 cursor-pointer mb-0.5 ${isActive ? 'active' : ''}">
@@ -512,288 +638,609 @@
                             </div>
                         </div>`;
                 });
+            }
 
-                // If modal chat was accepted/rejected by another agent, close modal
-                if (modalChatId) {
-                    const modalChat = chats.find(c => c.id === modalChatId);
-                    if (modalChat && modalChat.agentId && modalChat.agentId !== currentAgent.id) {
-                        dismissModal(false); // silently dismiss
-                    }
-                }
-            });
+            if (modalChatId) {
+                const mc = chats.find(c => c.id === modalChatId);
+                if (mc && mc.agentId && mc.agentId !== currentAgent.id) dismissModal(false);
+            }
+        });
+    }
+
+    function updateWorkStatusUI(busy) {
+        const el  = document.getElementById('work-status');
+        const dot = document.getElementById('agent-status-dot');
+        if (busy) {
+            el.innerHTML = '<span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span> In Session';
+            el.className = 'text-[10px] text-red-500 font-semibold flex items-center gap-1';
+            dot.className = 'absolute bottom-0 right-0 w-3 h-3 bg-red-500 border-2 border-white dark:border-slate-900 rounded-full';
+        } else {
+            el.innerHTML = '<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Available';
+            el.className = 'text-[10px] text-green-500 font-semibold flex items-center gap-1';
+            dot.className = 'absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full';
+        }
+    }
+
+    // ─────────────────────────────────────────
+    //  MODAL
+    // ─────────────────────────────────────────
+    function showRequestModal(chatData) {
+        if (isBusy) return;
+        modalChatId = chatData.id;
+        document.getElementById('modal-client-name').textContent  = chatData.clientName || 'Anonymous';
+        document.getElementById('modal-client-email').textContent = chatData.clientEmail || chatData.email || '—';
+        document.getElementById('modal-avatar').src = chatData.clientAvatar || avatarUrl(chatData.clientName || 'C');
+        document.getElementById('modal-time-ago').textContent = 'Just now';
+        const msgs = chatData.messages;
+        let firstMsgText = '—';
+        if (msgs) { const keys = Object.keys(msgs); if (keys.length) { const fm = msgs[keys[0]]; if (fm && fm.text) firstMsgText = fm.text; } }
+        document.getElementById('modal-first-msg').textContent = firstMsgText;
+        const meta = document.getElementById('modal-meta');
+        meta.innerHTML = '';
+        const chips = [];
+        if (chatData.topic)    chips.push({ icon: 'fa-tag',     label: chatData.topic });
+        if (chatData.priority) chips.push({ icon: 'fa-fire',    label: chatData.priority });
+        if (chatData.platform) chips.push({ icon: 'fa-desktop', label: chatData.platform });
+        chips.push({ icon: 'fa-clock', label: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+        chips.forEach(chip => { meta.innerHTML += `<span class="inline-flex items-center gap-1.5 text-[10px] font-semibold bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 rounded-full px-2.5 py-1"><i class="fa-solid ${chip.icon} text-[9px]"></i>${chip.label}</span>`; });
+        const bell = document.getElementById('modal-bell-icon');
+        bell.classList.remove('bell-shake'); void bell.offsetWidth; bell.classList.add('bell-shake');
+        const backdrop = document.getElementById('request-modal-backdrop');
+        const card = document.getElementById('request-card');
+        backdrop.classList.add('has-modal');
+        requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('show')));
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval); timerSeconds = 30; updateTimerUI(30);
+        timerInterval = setInterval(() => { timerSeconds--; updateTimerUI(timerSeconds); if (timerSeconds <= 0) { clearInterval(timerInterval); rejectRequest(); } }, 1000);
+    }
+
+    function updateTimerUI(s) {
+        document.getElementById('timer-count').textContent = s;
+        const circle = document.getElementById('timer-circle');
+        circle.style.strokeDashoffset = ((30 - s) / 30) * 100;
+        circle.style.stroke = s > 15 ? '#3b82f6' : s > 7 ? '#f59e0b' : '#ef4444';
+    }
+
+    async function acceptRequest() {
+        if (!modalChatId) return;
+        clearInterval(timerInterval);
+        const chatId = modalChatId;
+        dismissModal(true);
+        await db.ref(`live_support_chats/${chatId}`).update({ agentId: currentAgent.id, agentName: currentAgent.name, status: 'active' });
+        openChat(chatId);
+    }
+
+    function rejectRequest() {
+        if (!modalChatId) return;
+        clearInterval(timerInterval);
+        rejectedChats.add(modalChatId);
+        dismissModal(false);
+    }
+
+    function dismissModal(accepted) {
+        const card = document.getElementById('request-card');
+        const backdrop = document.getElementById('request-modal-backdrop');
+        card.classList.remove('show'); card.classList.add('dismiss');
+        setTimeout(() => { card.classList.remove('dismiss'); backdrop.classList.remove('has-modal'); modalChatId = null; }, 380);
+    }
+
+    function handleBackdropClick(e) {
+        if (e.target === document.getElementById('request-modal-backdrop')) rejectRequest();
+    }
+
+    // ─────────────────────────────────────────
+    //  OPEN CHAT
+    // ─────────────────────────────────────────
+    async function openChat(chatId) {
+        activeChatId = chatId;
+        if (activeChatRef) activeChatRef.off();
+
+        if (window.innerWidth < 768) {
+            document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('mobile-back-btn').classList.remove('hidden');
         }
 
-        function updateWorkStatusUI(busy) {
-            const el  = document.getElementById('work-status');
-            const dot = document.getElementById('agent-status-dot');
-            if (busy) {
-                el.innerHTML  = '<span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span> In Session';
-                el.className  = 'text-[10px] text-red-500 font-semibold flex items-center gap-1';
-                dot.className = 'absolute bottom-0 right-0 w-3 h-3 bg-red-500 border-2 border-white dark:border-slate-900 rounded-full';
+        document.getElementById('empty-state').classList.add('hidden');
+        document.getElementById('chat-header').classList.remove('hidden');
+        document.getElementById('messages-container').classList.remove('hidden');
+        document.getElementById('chat-input-area').classList.remove('hidden');
+
+        const snap = await db.ref(`live_support_chats/${chatId}`).once('value');
+        const chatData = snap.val();
+
+        document.getElementById('current-client-name').innerText = chatData.clientName || 'Client';
+        document.getElementById('current-chat-status').innerText = `REF: ${chatId.substring(0, 8).toUpperCase()}`;
+
+        if (!chatData.agentId && chatData.status !== 'resolved') {
+            await db.ref(`live_support_chats/${chatId}`).update({ agentId: currentAgent.id, agentName: currentAgent.name, status: 'active' });
+        }
+
+        const isResolved = chatData.status === 'resolved';
+        document.getElementById('btn-resolve').style.display  = isResolved ? 'none' : '';
+        document.getElementById('btn-transfer').style.display = isResolved ? 'none' : '';
+        document.getElementById('chat-input-area').style.opacity = isResolved ? '0.5' : '1';
+        document.getElementById('message-input').disabled = isResolved;
+
+        // Load client info sidebar data
+        loadClientInfo(chatData);
+
+        // Listen for typing indicator from client
+        listenTyping(chatId);
+
+        // Mark agent has read the chat (for read receipts from client side)
+        db.ref(`live_support_chats/${chatId}/agentRead`).set(true);
+
+        const msgContainer = document.getElementById('messages-container');
+        msgContainer.innerHTML = '';
+
+        activeChatRef = db.ref(`live_support_chats/${chatId}/messages`);
+        activeChatRef.on('child_added', (msgSnap) => {
+            const msg = msgSnap.val();
+            const msgId = msgSnap.key;
+            appendMessage(msg, msgId, chatData);
+        });
+
+        // Listen for read receipts on agent messages
+        listenReadReceipts(chatId);
+    }
+
+    function appendMessage(msg, msgId, chatData) {
+        const msgContainer = document.getElementById('messages-container');
+        const isAgent  = msg.sender === 'agent';
+        const isSystem = msg.sender === 'system';
+        const isNote   = msg.type === 'note';
+        const time     = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const clientName = (chatData && chatData.clientName) || 'Client';
+
+        let innerContent = '';
+        if (msg.fileURL) {
+            if (msg.fileType && msg.fileType.startsWith('image/')) {
+                innerContent = `<img src="${msg.fileURL}" class="msg-image mt-1" onclick="openLightbox('${msg.fileURL}')" loading="lazy"><br>`;
             } else {
-                el.innerHTML  = '<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Available';
-                el.className  = 'text-[10px] text-green-500 font-semibold flex items-center gap-1';
-                dot.className = 'absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full';
+                innerContent = `<a href="${msg.fileURL}" target="_blank" class="flex items-center gap-2 underline text-sm mt-1"><i class="fa-solid fa-file text-xs"></i>${msg.fileName || 'attachment'}</a>`;
             }
         }
+        if (msg.text) innerContent += `<span>${msg.text}</span>`;
 
-        // ─────────────────────────────────────────
-        //  MODAL: SHOW
-        // ─────────────────────────────────────────
-        function showRequestModal(chatData) {
-            if (isBusy) return; // double-guard
+        let html = '';
+        if (isSystem) {
+            html = `<div class="flex justify-center slide-up"><div class="msg-bubble msg-system">${msg.text}</div></div>`;
+        } else if (isNote) {
+            html = `<div class="flex justify-end slide-up">
+                <div class="msg-bubble msg-note max-w-xs">
+                    <div class="flex items-center gap-1.5 mb-1 text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                        <i class="fa-solid fa-lock text-[9px]"></i> Internal Note
+                    </div>
+                    ${innerContent}
+                    <span class="text-[9px] block text-right mt-1 opacity-60">${time}</span>
+                </div>
+            </div>`;
+        } else {
+            const tickEl = isAgent ? `<span class="read-tick" id="tick-${msgId}" data-msg-id="${msgId}">✓</span>` : '';
+            html = `<div class="flex flex-col ${isAgent ? 'items-end' : 'items-start'} slide-up">
+                <span class="text-[10px] text-gray-400 mb-1 px-1 font-medium">${isAgent ? (currentAgent ? currentAgent.name : 'Agent') : clientName}</span>
+                <div class="msg-bubble ${isAgent ? 'msg-agent' : 'msg-client'}">
+                    ${innerContent}
+                    <div class="flex items-center justify-end gap-1 mt-1">
+                        <span class="text-[9px] opacity-60">${time}</span>
+                        ${tickEl}
+                    </div>
+                </div>
+            </div>`;
+        }
 
-            modalChatId = chatData.id;
+        msgContainer.insertAdjacentHTML('beforeend', html);
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+    }
 
-            // Populate modal fields
-            const clientName  = chatData.clientName || 'Anonymous';
-            const clientEmail = chatData.clientEmail || chatData.email || '—';
-            const clientAvatar = chatData.clientAvatar || avatarUrl(clientName);
-
-            document.getElementById('modal-client-name').textContent  = clientName;
-            document.getElementById('modal-client-email').textContent = clientEmail;
-            document.getElementById('modal-avatar').src               = clientAvatar;
-            document.getElementById('modal-time-ago').textContent     = 'Just now';
-
-            // First message
-            const msgs = chatData.messages;
-            let firstMsgText = '—';
-            if (msgs) {
-                const keys = Object.keys(msgs);
-                if (keys.length) {
-                    const firstMsg = msgs[keys[0]];
-                    if (firstMsg && firstMsg.text) firstMsgText = firstMsg.text;
-                }
-            }
-            document.getElementById('modal-first-msg').textContent = firstMsgText;
-
-            // Meta chips
-            const meta = document.getElementById('modal-meta');
-            meta.innerHTML = '';
-            const chips = [];
-            if (chatData.topic)    chips.push({ icon: 'fa-tag',       label: chatData.topic });
-            if (chatData.priority) chips.push({ icon: 'fa-fire',      label: chatData.priority });
-            if (chatData.platform) chips.push({ icon: 'fa-desktop',   label: chatData.platform });
-            chips.push({ icon: 'fa-clock', label: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-
-            chips.forEach(chip => {
-                meta.innerHTML += `
-                    <span class="inline-flex items-center gap-1.5 text-[10px] font-semibold bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 rounded-full px-2.5 py-1">
-                        <i class="fa-solid ${chip.icon} text-[9px]"></i>${chip.label}
-                    </span>`;
+    // ─────────────────────────────────────────
+    //  READ RECEIPTS
+    // ─────────────────────────────────────────
+    function listenReadReceipts(chatId) {
+        db.ref(`live_support_chats/${chatId}/clientRead`).on('value', (snap) => {
+            if (!snap.val()) return;
+            const readTimestamp = snap.val();
+            // Mark all agent ticks as seen if message timestamp ≤ readTimestamp
+            document.querySelectorAll('.read-tick').forEach(el => {
+                const msgId = el.dataset.msgId;
+                // We can't get timestamp from DOM alone, just mark all as seen when client reads
+                el.textContent = '✓✓';
+                el.classList.add('seen');
             });
+        });
+    }
 
-            // Shake bell
-            const bell = document.getElementById('modal-bell-icon');
-            bell.classList.remove('bell-shake');
-            void bell.offsetWidth;
-            bell.classList.add('bell-shake');
-
-            // Show backdrop + animate card in
-            const backdrop = document.getElementById('request-modal-backdrop');
-            const card     = document.getElementById('request-card');
-            backdrop.classList.add('has-modal');
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => { card.classList.add('show'); });
-            });
-
-            // Start countdown timer (30 seconds)
-            startTimer();
-        }
-
-        // ─────────────────────────────────────────
-        //  MODAL: TIMER
-        // ─────────────────────────────────────────
-        function startTimer() {
-            clearInterval(timerInterval);
-            timerSeconds = 30;
-            updateTimerUI(30);
-
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                updateTimerUI(timerSeconds);
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    rejectRequest(); // auto-dismiss on timeout
-                }
-            }, 1000);
-        }
-
-        function updateTimerUI(seconds) {
-            document.getElementById('timer-count').textContent = seconds;
-            const circle   = document.getElementById('timer-circle');
-            const progress = ((30 - seconds) / 30) * 100;
-            circle.style.strokeDashoffset = progress;
-            // Color shift: blue → orange → red
-            if (seconds > 15)     circle.style.stroke = '#3b82f6';
-            else if (seconds > 7) circle.style.stroke = '#f59e0b';
-            else                  circle.style.stroke = '#ef4444';
-        }
-
-        // ─────────────────────────────────────────
-        //  MODAL: ACCEPT
-        // ─────────────────────────────────────────
-        async function acceptRequest() {
-            if (!modalChatId) return;
-            clearInterval(timerInterval);
-            const chatId = modalChatId;
-            dismissModal(true);
-
-            // Claim the chat
-            await db.ref(`live_support_chats/${chatId}`).update({
-                agentId: currentAgent.id,
-                agentName: currentAgent.name,
-                status: 'active'
-            });
-
-            openChat(chatId);
-        }
-
-        // ─────────────────────────────────────────
-        //  MODAL: REJECT
-        // ─────────────────────────────────────────
-        function rejectRequest() {
-            if (!modalChatId) return;
-            clearInterval(timerInterval);
-            rejectedChats.add(modalChatId);
-            dismissModal(false);
-        }
-
-        function dismissModal(accepted) {
-            const card     = document.getElementById('request-card');
-            const backdrop = document.getElementById('request-modal-backdrop');
-            card.classList.remove('show');
-            card.classList.add('dismiss');
-            setTimeout(() => {
-                card.classList.remove('dismiss');
-                backdrop.classList.remove('has-modal');
-                modalChatId = null;
-            }, 380);
-        }
-
-        function handleBackdropClick(e) {
-            // Only close if clicking directly on backdrop (not card)
-            if (e.target === document.getElementById('request-modal-backdrop')) {
-                rejectRequest();
-            }
-        }
-
-        // ─────────────────────────────────────────
-        //  OPEN CHAT
-        // ─────────────────────────────────────────
-        async function openChat(chatId) {
-            activeChatId = chatId;
-
-            if (window.innerWidth < 768) {
-                document.getElementById('sidebar').classList.add('hidden');
-                document.getElementById('mobile-back-btn').classList.remove('hidden');
-            }
-
-            document.getElementById('empty-state').classList.add('hidden');
-            document.getElementById('chat-header').classList.remove('hidden');
-            document.getElementById('messages-container').classList.remove('hidden');
-            document.getElementById('chat-input-area').classList.remove('hidden');
-
-            const snap     = await db.ref(`live_support_chats/${chatId}`).once('value');
-            const chatData = snap.val();
-
-            document.getElementById('current-client-name').innerText = chatData.clientName || 'Client';
-            document.getElementById('current-chat-status').innerText = `REF: ${chatId.substring(0, 8).toUpperCase()}`;
-
-            // Claim if unassigned
-            if (!chatData.agentId && chatData.status !== 'resolved') {
-                await db.ref(`live_support_chats/${chatId}`).update({
-                    agentId:   currentAgent.id,
-                    agentName: currentAgent.name,
-                    status:    'active'
-                });
-            }
-
-            const btnResolve  = document.getElementById('btn-resolve');
-            const inputArea   = document.getElementById('chat-input-area');
-            const msgInput    = document.getElementById('message-input');
-
-            if (chatData.status === 'resolved') {
-                btnResolve.style.display  = 'none';
-                inputArea.style.opacity   = '0.5';
-                msgInput.disabled         = true;
-            } else {
-                btnResolve.style.display  = '';
-                inputArea.style.opacity   = '1';
-                msgInput.disabled         = false;
-            }
-
-            if (activeChatRef) activeChatRef.off();
-            activeChatRef = db.ref(`live_support_chats/${chatId}/messages`);
-            const msgContainer = document.getElementById('messages-container');
-            msgContainer.innerHTML = '';
-
-            activeChatRef.on('child_added', (msgSnap) => {
-                const msg    = msgSnap.val();
-                const isAgent  = msg.sender === 'agent';
-                const isSystem = msg.sender === 'system';
-                const time   = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                let html = '';
-                if (isSystem) {
-                    html = `<div class="flex justify-center"><div class="msg-bubble msg-system">${msg.text}</div></div>`;
-                } else {
-                    html = `
-                        <div class="flex flex-col ${isAgent ? 'items-end' : 'items-start'} slide-up">
-                            <span class="text-[10px] text-gray-400 mb-1 px-1 font-medium">${isAgent ? currentAgent.name : (chatData.clientName || 'Client')}</span>
-                            <div class="msg-bubble ${isAgent ? 'msg-agent' : 'msg-client'}">
-                                <span>${msg.text}</span>
-                                <span class="text-[9px] block text-right mt-1 opacity-60">${time}</span>
-                            </div>
-                        </div>`;
-                }
-                msgContainer.insertAdjacentHTML('beforeend', html);
+    // ─────────────────────────────────────────
+    //  TYPING INDICATOR
+    // ─────────────────────────────────────────
+    function listenTyping(chatId) {
+        db.ref(`live_support_chats/${chatId}/clientTyping`).on('value', (snap) => {
+            const isTyping = snap.val() === true;
+            const indicator = document.getElementById('typing-indicator');
+            if (isTyping) {
+                indicator.classList.remove('hidden');
+                const msgContainer = document.getElementById('messages-container');
                 msgContainer.scrollTop = msgContainer.scrollHeight;
-            });
+            } else {
+                indicator.classList.add('hidden');
+            }
+        });
+    }
+
+    // Broadcast agent typing to Firebase
+    let agentTypingRef = null;
+    function onInputChange(el) {
+        el.style.height = ''; el.style.height = el.scrollHeight + 'px';
+        // Canned responses detection
+        const val = el.value;
+        if (val.startsWith('/')) { showCannedDropdown(val.substring(1)); return; }
+        hideCannedDropdown();
+        // Typing signal
+        if (!activeChatId) return;
+        if (!agentTypingRef) agentTypingRef = db.ref(`live_support_chats/${activeChatId}/agentTyping`);
+        agentTypingRef.set(true);
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => { if (agentTypingRef) agentTypingRef.set(false); }, 2000);
+    }
+
+    // ─────────────────────────────────────────
+    //  CANNED RESPONSES
+    // ─────────────────────────────────────────
+    function showCannedDropdown(filter = '') {
+        const dropdown = document.getElementById('canned-dropdown');
+        const filtered = filter ? cannedResponses.filter(r => r.title.toLowerCase().includes(filter.toLowerCase()) || r.body.toLowerCase().includes(filter.toLowerCase())) : cannedResponses;
+        if (filtered.length === 0) { hideCannedDropdown(); return; }
+        dropdown.innerHTML = filtered.map(r => `
+            <div class="canned-item" onclick="selectCanned(${r.id})">
+                <p class="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-bolt text-[9px] text-blue-400"></i>${r.title}
+                </p>
+                <p class="text-[11px] text-gray-400 mt-0.5 truncate">${r.body}</p>
+            </div>`).join('');
+        dropdown.classList.remove('hidden');
+    }
+
+    function hideCannedDropdown() {
+        document.getElementById('canned-dropdown').classList.add('hidden');
+    }
+
+    function selectCanned(id) {
+        const r = cannedResponses.find(r => r.id === id);
+        if (!r) return;
+        const input = document.getElementById('message-input');
+        input.value = r.body;
+        input.style.height = ''; input.style.height = input.scrollHeight + 'px';
+        hideCannedDropdown();
+        input.focus();
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+        const dd = document.getElementById('canned-dropdown');
+        const input = document.getElementById('message-input');
+        if (!dd.contains(e.target) && e.target !== input) hideCannedDropdown();
+    });
+
+    function renderCannedMgr() {
+        const list = document.getElementById('canned-mgr-list');
+        list.innerHTML = cannedResponses.length ? cannedResponses.map(r => `
+            <div class="flex items-start gap-3 p-3 bg-gray-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold text-gray-700 dark:text-gray-300">${r.title}</p>
+                    <p class="text-[11px] text-gray-400 mt-0.5">${r.body}</p>
+                </div>
+                <button onclick="deleteCanned(${r.id})" class="text-red-400 hover:text-red-600 transition shrink-0 mt-0.5 w-6 h-6 flex items-center justify-center rounded hover:bg-red-50 dark:hover:bg-red-900/20">
+                    <i class="fa-solid fa-trash text-xs"></i>
+                </button>
+            </div>`).join('') : '<p class="text-xs text-gray-400 italic text-center py-2">No canned responses yet.</p>';
+    }
+
+    function addCannedResponse() {
+        const title = document.getElementById('new-canned-title').value.trim();
+        const body  = document.getElementById('new-canned-body').value.trim();
+        if (!title || !body) return;
+        const id = Date.now();
+        cannedResponses.push({ id, title, body });
+        saveCanned();
+        document.getElementById('new-canned-title').value = '';
+        document.getElementById('new-canned-body').value  = '';
+        renderCannedMgr();
+    }
+
+    function deleteCanned(id) {
+        cannedResponses = cannedResponses.filter(r => r.id !== id);
+        saveCanned(); renderCannedMgr();
+    }
+
+    // ─────────────────────────────────────────
+    //  NOTE MODE
+    // ─────────────────────────────────────────
+    function toggleNoteMode() {
+        isNoteMode = !isNoteMode;
+        const btn    = document.getElementById('btn-note-mode');
+        const area   = document.getElementById('chat-input-area');
+        const banner = document.getElementById('note-mode-banner');
+        const input  = document.getElementById('message-input');
+        if (isNoteMode) {
+            btn.classList.add('active');
+            area.classList.add('note-mode');
+            banner.classList.remove('hidden');
+            input.placeholder = 'Internal note (agents only)…';
+        } else {
+            btn.classList.remove('active');
+            area.classList.remove('note-mode');
+            banner.classList.add('hidden');
+            input.placeholder = 'Type a reply…';
+        }
+    }
+
+    // ─────────────────────────────────────────
+    //  FILE UPLOAD
+    // ─────────────────────────────────────────
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        pendingFile = file;
+        const previewArea = document.getElementById('file-preview-area');
+        const thumb = document.getElementById('file-preview-thumb');
+        const icon  = document.getElementById('file-preview-icon');
+        document.getElementById('file-preview-name').textContent = file.name;
+        document.getElementById('file-preview-size').textContent = (file.size / 1024).toFixed(1) + ' KB';
+        previewArea.classList.remove('hidden');
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = e => { thumb.src = e.target.result; thumb.classList.remove('hidden'); icon.classList.add('hidden'); };
+            reader.readAsDataURL(file);
+        } else {
+            thumb.classList.add('hidden'); icon.classList.remove('hidden');
+        }
+    }
+
+    function clearFilePreview() {
+        pendingFile = null;
+        document.getElementById('file-preview-area').classList.add('hidden');
+        document.getElementById('file-input').value = '';
+        document.getElementById('file-preview-thumb').classList.add('hidden');
+        document.getElementById('file-preview-icon').classList.add('hidden');
+    }
+
+    async function uploadFile(file) {
+        const path = `support_files/${activeChatId}/${Date.now()}_${file.name}`;
+        const ref  = storage.ref(path);
+        await ref.put(file);
+        return await ref.getDownloadURL();
+    }
+
+    // ─────────────────────────────────────────
+    //  SEND MESSAGE
+    // ─────────────────────────────────────────
+    async function sendMessage() {
+        const input = document.getElementById('message-input');
+        const text  = input.value.trim();
+        if (!text && !pendingFile) return;
+        if (!activeChatId) return;
+
+        input.value = ''; input.style.height = '';
+        hideCannedDropdown();
+
+        // Stop typing signal
+        if (agentTypingRef) agentTypingRef.set(false);
+        clearTimeout(typingTimeout);
+
+        const timestamp = firebase.database.ServerValue.TIMESTAMP;
+        let msgData = { sender: 'agent', text: text || '', timestamp };
+        if (isNoteMode) { msgData.type = 'note'; msgData.sender = 'agent'; }
+
+        if (pendingFile) {
+            const file = pendingFile;
+            clearFilePreview();
+            try {
+                const url = await uploadFile(file);
+                msgData.fileURL  = url;
+                msgData.fileName = file.name;
+                msgData.fileType = file.type;
+            } catch (e) { console.error('Upload failed', e); alert('File upload failed.'); return; }
         }
 
-        // ─────────────────────────────────────────
-        //  SEND MESSAGE
-        // ─────────────────────────────────────────
-        async function sendMessage() {
-            const input = document.getElementById('message-input');
-            const text  = input.value.trim();
-            if (!text || !activeChatId) return;
-            input.value        = '';
-            input.style.height = '';
-            const timestamp    = firebase.database.ServerValue.TIMESTAMP;
-            await db.ref(`live_support_chats/${activeChatId}/messages`).push({
-                sender: 'agent', text, timestamp
-            });
+        await db.ref(`live_support_chats/${activeChatId}/messages`).push(msgData);
+        if (!isNoteMode) {
             await db.ref(`live_support_chats/${activeChatId}`).update({
-                lastMessage: text, lastActivity: timestamp
+                lastMessage: text || `[${pendingFile ? 'file' : 'attachment'}]`,
+                lastActivity: timestamp
             });
         }
+        if (isNoteMode) toggleNoteMode();
+    }
 
-        // ─────────────────────────────────────────
-        //  RESOLVE CHAT
-        // ─────────────────────────────────────────
-        async function resolveChat() {
-            if (!activeChatId || !confirm('Mark this ticket as resolved?')) return;
-            await db.ref(`live_support_chats/${activeChatId}`).update({ status: 'resolved' });
+    // ─────────────────────────────────────────
+    //  RESOLVE
+    // ─────────────────────────────────────────
+    async function resolveChat() {
+        if (!activeChatId || !confirm('Mark this ticket as resolved?')) return;
+        await db.ref(`live_support_chats/${activeChatId}`).update({ status: 'resolved' });
+        await db.ref(`live_support_chats/${activeChatId}/messages`).push({
+            sender: 'system', text: '✓ Ticket resolved by agent.', timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+        isBusy = false;
+        openChat(activeChatId);
+    }
+
+    // ─────────────────────────────────────────
+    //  TRANSFER
+    // ─────────────────────────────────────────
+    function openTransferModal() {
+        if (!activeChatId) return;
+        selectedTransferAgent = null;
+        document.getElementById('confirm-transfer-btn').disabled = true;
+        document.getElementById('transfer-note').value = '';
+        document.getElementById('transfer-modal').classList.remove('hidden');
+
+        const list = document.getElementById('transfer-agent-list');
+        const agents = Object.values(allEmployees).filter(a => a.id !== currentAgent.id);
+        if (agents.length === 0) {
+            list.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">No other agents available.</p>';
+            return;
+        }
+        list.innerHTML = agents.map(a => `
+            <div class="agent-pill" id="pill-${a.id}" onclick="selectTransferAgent('${a.id}')">
+                <img src="${a.profilePic || avatarUrl(a.name)}" class="w-9 h-9 rounded-full object-cover border border-white dark:border-slate-700 shadow-sm">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate">${a.name}</p>
+                    <p class="text-[10px] text-gray-400">Support Technician</p>
+                </div>
+                <span class="w-2 h-2 rounded-full ${a.online ? 'bg-green-500' : 'bg-gray-300'}"></span>
+            </div>`).join('');
+    }
+
+    function selectTransferAgent(id) {
+        selectedTransferAgent = id;
+        document.querySelectorAll('.agent-pill').forEach(p => p.classList.remove('selected'));
+        document.getElementById(`pill-${id}`)?.classList.add('selected');
+        document.getElementById('confirm-transfer-btn').disabled = false;
+    }
+
+    async function confirmTransfer() {
+        if (!selectedTransferAgent || !activeChatId) return;
+        const note = document.getElementById('transfer-note').value.trim();
+        const agent = allEmployees[selectedTransferAgent];
+        if (!agent) return;
+
+        // Post internal note about transfer
+        const ts = firebase.database.ServerValue.TIMESTAMP;
+        if (note) {
             await db.ref(`live_support_chats/${activeChatId}/messages`).push({
-                sender: 'system',
-                text:   '✓ Ticket resolved by agent.',
-                timestamp: firebase.database.ServerValue.TIMESTAMP
+                sender: 'agent', type: 'note', text: `[Transfer Note to ${agent.name}]: ${note}`, timestamp: ts
             });
-            isBusy = false;
-            openChat(activeChatId);
+        }
+        // Post system message
+        await db.ref(`live_support_chats/${activeChatId}/messages`).push({
+            sender: 'system', text: `Chat transferred to ${agent.name}.`, timestamp: ts
+        });
+
+        await db.ref(`live_support_chats/${activeChatId}`).update({
+            agentId: selectedTransferAgent,
+            agentName: agent.name,
+            lastActivity: ts
+        });
+
+        closeTransferModal();
+        isBusy = false;
+        activeChatId = null;
+        if (activeChatRef) { activeChatRef.off(); activeChatRef = null; }
+        // Return to empty state
+        document.getElementById('empty-state').classList.remove('hidden');
+        document.getElementById('messages-container').classList.add('hidden');
+        document.getElementById('chat-header').classList.add('hidden');
+        document.getElementById('chat-input-area').classList.add('hidden');
+        document.getElementById('client-sidebar').classList.add('collapsed');
+    }
+
+    function closeTransferModal() {
+        document.getElementById('transfer-modal').classList.add('hidden');
+    }
+
+    // ─────────────────────────────────────────
+    //  CLIENT INFO SIDEBAR
+    // ─────────────────────────────────────────
+    function toggleClientSidebar() {
+        clientInfoSidebarOpen = !clientInfoSidebarOpen;
+        const sidebar = document.getElementById('client-sidebar');
+        const btn = document.getElementById('btn-info');
+        if (clientInfoSidebarOpen) {
+            sidebar.classList.remove('collapsed');
+            btn.classList.add('bg-blue-100', 'text-blue-600');
+            btn.classList.remove('bg-gray-100', 'text-gray-600');
+        } else {
+            sidebar.classList.add('collapsed');
+            btn.classList.remove('bg-blue-100', 'text-blue-600');
+            btn.classList.add('bg-gray-100', 'text-gray-600');
+        }
+    }
+
+    async function loadClientInfo(chatData) {
+        const name   = chatData.clientName  || 'Client';
+        const email  = chatData.clientEmail || chatData.email || '—';
+        const avatar = chatData.clientAvatar || avatarUrl(name);
+        document.getElementById('info-name').textContent  = name;
+        document.getElementById('info-email').textContent = email;
+        document.getElementById('info-avatar').src        = avatar;
+
+        // Load from client profile (if exists)
+        let profile = {};
+        if (chatData.clientId) {
+            const ps = await db.ref(`clients/${chatData.clientId}`).once('value');
+            if (ps.exists()) profile = ps.val();
+        }
+        document.getElementById('info-plan').textContent     = profile.plan     || chatData.plan     || 'Standard';
+        document.getElementById('info-joined').textContent   = profile.joined   || chatData.joined   || 'Unknown';
+        document.getElementById('info-location').textContent = profile.location || chatData.location || '—';
+        document.getElementById('info-ltv').textContent      = profile.ltv      ? `$${profile.ltv}`  : '—';
+
+        // Previous tickets
+        const allTicketsSnap = await db.ref('live_support_chats').orderByChild('clientEmail').equalTo(email).once('value');
+        let prevTickets = [];
+        if (allTicketsSnap.exists()) {
+            allTicketsSnap.forEach(c => {
+                const d = c.val();
+                if (c.key !== activeChatId) prevTickets.push({ id: c.key, ...d });
+            });
+        }
+        document.getElementById('info-ticket-count').textContent = prevTickets.length + 1;
+        const tickContainer = document.getElementById('info-prev-tickets');
+        if (prevTickets.length === 0) {
+            tickContainer.innerHTML = '<p class="text-xs text-gray-400 italic">No previous tickets.</p>';
+        } else {
+            tickContainer.innerHTML = prevTickets.slice(0, 5).map(t => `
+                <div class="ticket-card" onclick="openChat('${t.id}')">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[10px] font-mono text-gray-400">#${t.id.substring(0,8).toUpperCase()}</span>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${t.status === 'resolved' ? 'bg-gray-100 text-gray-400 dark:bg-slate-700' : 'bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400'}">${t.status || 'unknown'}</span>
+                    </div>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 truncate">${t.lastMessage || 'No message'}</p>
+                </div>`).join('');
         }
 
-        // ─────────────────────────────────────────
-        //  MISC
-        // ─────────────────────────────────────────
-        function logoutAgent() { location.reload(); }
-
-        function toggleMobileSidebar() {
-            document.getElementById('sidebar').classList.remove('hidden');
-            document.getElementById('mobile-back-btn').classList.add('hidden');
+        // Orders (stub from Firebase or clientData)
+        let orders = profile.orders || chatData.orders || [];
+        document.getElementById('info-order-count').textContent = orders.length || 0;
+        const orderContainer = document.getElementById('info-orders');
+        if (!orders.length) {
+            orderContainer.innerHTML = '<p class="text-xs text-gray-400 italic">No orders found.</p>';
+        } else {
+            orderContainer.innerHTML = orders.slice(0, 5).map(o => `
+                <div class="ticket-card">
+                    <div class="flex items-center justify-between mb-0.5">
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">${o.product || 'Order'}</span>
+                        <span class="text-xs font-bold text-blue-600">$${o.amount || '—'}</span>
+                    </div>
+                    <p class="text-[10px] text-gray-400">${o.date || ''} · ${o.status || ''}</p>
+                </div>`).join('');
         }
+    }
+
+    // ─────────────────────────────────────────
+    //  LIGHTBOX
+    // ─────────────────────────────────────────
+    function openLightbox(url) {
+        document.getElementById('lightbox-img').src = url;
+        document.getElementById('lightbox').classList.remove('hidden');
+    }
+
+    // ─────────────────────────────────────────
+    //  MISC
+    // ─────────────────────────────────────────
+    function logoutAgent() {
+        if (currentAgent) db.ref(`employees/${currentAgent.id}`).update({ online: false });
+        location.reload();
+    }
+
+    function toggleMobileSidebar() {
+        document.getElementById('sidebar').classList.remove('hidden');
+        document.getElementById('mobile-back-btn').classList.add('hidden');
+    }
     </script>
 </body>
 </html>
