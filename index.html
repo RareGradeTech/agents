@@ -1,297 +1,421 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rare Grade | Agent Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg-main: #f0f4f9; --bg-surface: #ffffff; --text-main: #1f1f1f; --text-dim: #444746; --border: #e3e3e3;
-      --accent: #0b57d0; --accent-light: #d3e3fd; --danger: #b3261e; --success: #146c2e; --warning: #b37400;
-    }
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
-    h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RareGrade Support Desk</title>
     
-    /* Login Overlay */
-    #loginOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-    .login-card { background: var(--bg-surface); padding: 40px; border-radius: 24px; width: 100%; max-width: 400px; box-shadow: 0 12px 40px rgba(0,0,0,0.1); text-align: center; }
-    .login-card h2 { margin-bottom: 8px; font-size: 1.5rem; }
-    .login-card p { color: var(--text-dim); margin-bottom: 24px; font-size: 0.95rem; }
-    .login-card input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 16px; font-family: 'Inter'; outline: none; transition: 0.2s; }
-    .login-card input:focus { border-color: var(--accent); }
-    .login-card button { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .login-card button:hover { background: #0842a0; }
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; overflow: hidden; }
+        
+        .chat-scroll::-webkit-scrollbar { width: 6px; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .chat-scroll::-webkit-scrollbar-thumb { background: #475569; }
 
-    /* Dashboard Layout */
-    .sidebar { width: 340px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-    .sidebar-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-    .sidebar-header .icon { width: 40px; height: 40px; background: var(--accent); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-    .sidebar-header h1 { font-size: 1.25rem; font-weight: 600; }
-    .sidebar-header p { font-size: 0.8rem; color: var(--text-dim); }
-    
-    .chat-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-    .chat-item { padding: 16px; border-radius: 16px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; background: var(--bg-surface); }
-    .chat-item:hover { background: var(--bg-main); }
-    .chat-item.active-selection { border-color: var(--accent); background: #f8fafd; }
-    .chat-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-    .chat-item-name { font-weight: 600; font-family: 'Outfit'; font-size: 1.05rem; }
-    .status-badge { font-size: 0.75rem; padding: 4px 8px; border-radius: 99px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-    .status-badge.queued { background: #fff3e0; color: var(--warning); }
-    .status-badge.active { background: #e6f4ea; color: var(--success); }
-    .status-badge.ended { background: #f1f3f4; color: var(--text-dim); }
-    .chat-item-context { font-size: 0.85rem; color: var(--text-dim); display: flex; align-items: center; gap: 4px; }
-    .chat-item-context .material-symbols-rounded { font-size: 16px; }
+        .msg-bubble { max-width: 80%; padding: 10px 14px; font-size: 0.9rem; line-height: 1.4; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .msg-client { border-radius: 12px 12px 12px 0; background-color: #f1f5f9; color: #0f172a; border: 1px solid #e2e8f0; }
+        .dark .msg-client { background-color: #1e293b; color: #f8fafc; border-color: #334155; }
+        .msg-agent { border-radius: 12px 12px 0 12px; background-color: #2563eb; color: #ffffff; }
 
-    /* Main Chat Area */
-    .main-area { flex: 1; display: flex; flex-direction: column; background: var(--bg-main); }
-    .no-chat-selected { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); }
-    .no-chat-selected .material-symbols-rounded { font-size: 64px; margin-bottom: 16px; opacity: 0.5; }
-    
-    .chat-window { flex: 1; display: flex; flex-direction: column; display: none; }
-    .chat-header { padding: 24px 32px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .client-info h2 { font-size: 1.4rem; margin-bottom: 4px; }
-    .client-info p { font-size: 0.9rem; color: var(--text-dim); }
-    .end-chat-btn { padding: 8px 16px; background: #fff; border: 1px solid var(--danger); color: var(--danger); border-radius: 8px; cursor: pointer; font-weight: 500; transition: 0.2s; }
-    .end-chat-btn:hover { background: var(--danger); color: white; }
-
-    .messages-container { flex: 1; overflow-y: auto; padding: 32px; display: flex; flex-direction: column; gap: 16px; }
-    .msg-bubble { padding: 14px 20px; border-radius: 20px; max-width: 60%; font-size: 0.95rem; line-height: 1.5; }
-    .msg-bubble.system { align-self: center; background: none; color: var(--text-dim); font-size: 0.8rem; text-align: center; }
-    .msg-bubble.user { align-self: flex-start; background: #fff; border: 1px solid var(--border); border-bottom-left-radius: 4px; } /* User is on left for agent */
-    .msg-bubble.agent { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; } /* Agent is on right */
-    
-    .input-area { padding: 24px 32px; background: var(--bg-surface); border-top: 1px solid var(--border); display: flex; gap: 16px; }
-    .chat-input { flex: 1; background: var(--bg-main); border: 1px solid transparent; border-radius: 99px; padding: 16px 24px; font-family: 'Inter'; font-size: 1rem; outline: none; transition: 0.2s; }
-    .chat-input:focus { border-color: var(--accent); background: #fff; }
-    .send-btn { width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: white; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-    .send-btn:hover { background: #0842a0; transform: scale(1.05); }
-    
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-thumb { background: #d1d1d1; border-radius: 4px; }
-  </style>
+        /* Loader */
+        .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading .spinner { display: inline-block; }
+        .loading .btn-text { display: none; }
+    </style>
 </head>
-<body>
+<body class="h-screen flex bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
-  <!-- Agent Login Overlay -->
-  <div id="loginOverlay">
-    <div class="login-card">
-      <div style="background: var(--accent); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; margin: 0 auto 16px;">
-        <span class="material-symbols-rounded" style="font-size: 28px;">support_agent</span>
-      </div>
-      <h2>Agent Login</h2>
-      <p>Enter your name to join the support queue.</p>
-      <input type="text" id="agentNameInput" placeholder="e.g. Sarah (Tier 1 Support)" onkeypress="if(event.key==='Enter') loginAgent()" />
-      <button onclick="loginAgent()">Go Online</button>
-    </div>
-  </div>
-
-  <!-- Sidebar Queue -->
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <div class="icon"><span class="material-symbols-rounded">admin_panel_settings</span></div>
-      <div>
-        <h1>Support Desk</h1>
-        <p id="agentStatusLabel">Offline</p>
-      </div>
-    </div>
-    <div class="chat-list" id="chatList">
-      <!-- Chat items will generate here -->
-    </div>
-  </div>
-
-  <!-- Main Chat Area -->
-  <div class="main-area">
-    <div class="no-chat-selected" id="noChatState">
-      <span class="material-symbols-rounded">forum</span>
-      <h2>Select a chat to begin</h2>
-      <p>New support requests will appear in the queue.</p>
-    </div>
-    
-    <div class="chat-window" id="chatWindow">
-      <div class="chat-header">
-        <div class="client-info">
-          <h2 id="headerClientName">Client Name</h2>
-          <p id="headerClientEmail">client@email.com</p>
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay" class="fixed inset-0 z-50 bg-gray-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4 transition-opacity duration-500">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-200 dark:border-slate-700 text-center">
+            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 dark:text-blue-400">
+                <i class="fa-solid fa-headset text-2xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold mb-2">Support Desk Login</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">Enter your employee PIN to access the live client chat queue.</p>
+            
+            <div class="space-y-4">
+                <input type="password" id="emp-pin-input" placeholder="Enter PIN (e.g. 12345)" class="w-full p-4 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-center text-xl tracking-widest font-mono focus:ring-2 focus:ring-blue-500 outline-none transition dark:text-white" inputmode="numeric" maxlength="6" onkeypress="if(event.key === 'Enter') authenticateAgent()">
+                <button id="login-btn" onclick="authenticateAgent()" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all shadow-md flex justify-center items-center gap-2 active:scale-95">
+                    <span class="btn-text">Join Workspace</span>
+                    <div class="spinner"></div>
+                </button>
+            </div>
+            <p id="login-error" class="text-red-500 text-sm mt-4 hidden font-medium">Invalid PIN. Please try again.</p>
         </div>
-        <button class="end-chat-btn" onclick="closeCurrentChat()">End Session</button>
-      </div>
-      <div class="messages-container" id="messagesContainer">
-        <!-- Messages populate here -->
-      </div>
-      <div class="input-area">
-        <input type="text" class="chat-input" id="chatInput" placeholder="Type your reply to the client..." onkeypress="if(event.key==='Enter') sendAgentMessage()" disabled />
-        <button class="send-btn" id="sendBtn" onclick="sendAgentMessage()" disabled><span class="material-symbols-rounded">send</span></button>
-      </div>
     </div>
-  </div>
 
-<script type="module">
-  // FIREBASE IMPORTS
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, onValue, onChildAdded, push, update, off } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-  // Firebase Init (Using the EXACT SAME config as your client)
-  const app = initializeApp({
-    apiKey:"AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
-    authDomain:"fire-b-a8878.firebaseapp.com",
-    projectId:"fire-b-a8878",
-    databaseURL:"https://fire-b-a8878-default-rtdb.firebaseio.com",
-    appId:"1:658673187627:web:6e4c29af661785f0afa36e"
-  });
-  
-  const db = getDatabase(app);
-
-  // App State
-  let myAgentName = "Agent";
-  let activeChatId = null;
-  let activeMessagesRef = null;
-  let messagesListener = null;
-
-  // DOM Elements
-  const els = {
-    loginOverlay: document.getElementById('loginOverlay'),
-    agentNameInput: document.getElementById('agentNameInput'),
-    agentStatusLabel: document.getElementById('agentStatusLabel'),
-    chatList: document.getElementById('chatList'),
-    noChatState: document.getElementById('noChatState'),
-    chatWindow: document.getElementById('chatWindow'),
-    headerClientName: document.getElementById('headerClientName'),
-    headerClientEmail: document.getElementById('headerClientEmail'),
-    messagesContainer: document.getElementById('messagesContainer'),
-    chatInput: document.getElementById('chatInput'),
-    sendBtn: document.getElementById('sendBtn')
-  };
-
-  // 1. Agent Login
-  window.loginAgent = () => {
-    const name = els.agentNameInput.value.trim();
-    if (!name) return alert("Please enter a name.");
-    
-    myAgentName = name;
-    els.loginOverlay.style.display = 'none';
-    els.agentStatusLabel.innerText = `Online as ${myAgentName}`;
-    
-    startListeningToQueue();
-  };
-
-  // 2. Listen to all chats in the Database
-  function startListeningToQueue() {
-    const chatsRef = ref(db, 'chats');
-    onValue(chatsRef, (snapshot) => {
-      els.chatList.innerHTML = ''; // Clear list
-      const chatsData = snapshot.val();
-      
-      if (!chatsData) return;
-
-      // Convert object to array and sort (newest queued at the top usually)
-      const chatArray = Object.values(chatsData).sort((a, b) => b.createdAt - a.createdAt);
-
-      chatArray.forEach(chat => {
-        // Build Sidebar Item
-        const chatItem = document.createElement('div');
-        chatItem.className = `chat-item ${activeChatId === chat.id ? 'active-selection' : ''}`;
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard" class="flex w-full h-full hidden opacity-0 transition-opacity duration-500">
         
-        let icon = chat.context.includes('AI') ? 'robot_2' : 'person';
-        
-        chatItem.innerHTML = `
-          <div class="chat-item-header">
-            <span class="chat-item-name">${chat.customerName || 'Unknown User'}</span>
-            <span class="status-badge ${chat.status}">${chat.status}</span>
-          </div>
-          <div class="chat-item-context">
-            <span class="material-symbols-rounded">${icon}</span> ${chat.context}
-          </div>
-        `;
-        
-        // On click, open the chat
-        chatItem.onclick = () => openChat(chat);
-        els.chatList.appendChild(chatItem);
-      });
-    });
-  }
+        <!-- SIDEBAR (Chat Queue) -->
+        <aside class="w-full md:w-80 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col shrink-0 h-full relative z-20 transition-transform" id="sidebar">
+            <div class="p-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50/50 dark:bg-slate-800">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded bg-blue-600 flex items-center justify-center text-white font-bold text-xs">RG</div>
+                    <div>
+                        <h2 class="font-bold text-sm leading-tight">Support Queue</h2>
+                        <p class="text-[10px] text-green-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Online</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="toggleTheme()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fa-solid fa-moon"></i></button>
+                    <button onclick="logoutAgent()" class="text-red-400 hover:text-red-600"><i class="fa-solid fa-power-off"></i></button>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto chat-scroll p-2 space-y-1" id="chat-list">
+                <!-- Chat list items injected here via JS -->
+                <div class="p-4 text-center text-xs text-gray-400 italic mt-10">Waiting for clients...</div>
+            </div>
+            
+            <!-- Agent Profile Tag -->
+            <div class="p-3 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 flex items-center gap-3">
+                <img id="agent-avatar" src="" class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-700 shadow-sm object-cover">
+                <div>
+                    <p class="text-xs font-bold" id="agent-name">Agent Name</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-wide">Support Technician</p>
+                </div>
+            </div>
+        </aside>
 
-  // 3. Open a specific chat
-  function openChat(chat) {
-    // If we are already listening to a chat, stop listening to avoid duplicates
-    if (activeMessagesRef && messagesListener) {
-      off(activeMessagesRef, 'child_added', messagesListener);
-    }
+        <!-- MAIN CHAT AREA -->
+        <main class="flex-1 bg-gray-50 dark:bg-slate-900 flex flex-col h-full relative" id="chat-main">
+            <!-- Mobile Sidebar Toggle Overlay -->
+            <button onclick="toggleMobileSidebar()" id="mobile-back-btn" class="md:hidden absolute top-4 left-4 z-30 w-10 h-10 bg-white dark:bg-slate-800 rounded-full shadow border border-gray-200 dark:border-slate-700 flex items-center justify-center hidden">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
 
-    activeChatId = chat.id;
-    els.noChatState.style.display = 'none';
-    els.chatWindow.style.display = 'flex';
-    
-    // Update Header
-    els.headerClientName.innerText = chat.customerName || 'Unknown User';
-    els.headerClientEmail.innerText = chat.customerEmail || 'No email provided';
-    els.messagesContainer.innerHTML = ''; // Clear old messages
-    
-    // Enable/Disable input based on status
-    const isActive = chat.status !== 'ended';
-    els.chatInput.disabled = !isActive;
-    els.sendBtn.disabled = !isActive;
-    if (isActive) els.chatInput.focus();
+            <!-- Chat Header -->
+            <header id="chat-header" class="h-16 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex items-center px-6 md:px-6 pl-16 md:pl-6 shrink-0 hidden">
+                <div class="flex justify-between items-center w-full">
+                    <div>
+                        <h2 class="font-bold text-gray-800 dark:text-gray-100" id="current-client-name">Select a chat</h2>
+                        <p class="text-xs text-gray-500" id="current-chat-status">--</p>
+                    </div>
+                    <button onclick="resolveChat()" id="btn-resolve" class="text-xs font-bold px-3 py-1.5 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-md hover:bg-green-200 transition">
+                        Mark Resolved
+                    </button>
+                </div>
+            </header>
 
-    // If chat is queued, set it to active and assign this agent
-    if (chat.status === 'queued') {
-      update(ref(db, `chats/${chat.id}`), {
-        status: 'active',
-        agentName: myAgentName
-      });
-    }
+            <!-- Empty State -->
+            <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-gray-400 dark:text-gray-600">
+                <i class="fa-regular fa-comments text-6xl mb-4 opacity-50"></i>
+                <p class="text-sm font-medium">Select a client chat from the queue to begin</p>
+            </div>
 
-    // 4. Listen for messages in THIS specific chat
-    activeMessagesRef = ref(db, `chats/${chat.id}/messages`);
-    messagesListener = onChildAdded(activeMessagesRef, (snapshot) => {
-      const msg = snapshot.val();
-      appendMessageUI(msg.text, msg.sender);
-    });
-    
-    // Re-render sidebar to update the selected background color
-    startListeningToQueue();
-  }
+            <!-- Chat Messages -->
+            <div id="messages-container" class="flex-1 overflow-y-auto chat-scroll p-4 md:p-6 space-y-4 hidden pb-24">
+                <!-- Messages injected here -->
+            </div>
 
-  // 5. Send Agent Message
-  window.sendAgentMessage = () => {
-    const text = els.chatInput.value.trim();
-    if (!text || !activeChatId) return;
+            <!-- Chat Input -->
+            <div id="chat-input-area" class="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 p-4 absolute bottom-0 left-0 right-0 hidden">
+                <div class="flex items-end gap-2 max-w-4xl mx-auto">
+                    <button class="p-3 text-gray-400 hover:text-blue-500 transition"><i class="fa-solid fa-paperclip"></i></button>
+                    <textarea id="message-input" rows="1" placeholder="Type a message to the client..." class="flex-1 p-3 bg-gray-100 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl resize-none outline-none focus:border-blue-500 transition text-sm dark:text-white" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'" onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
+                    <button onclick="sendMessage()" class="w-12 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-md transition active:scale-95 mb-[1px] shrink-0">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
 
-    // Push to database
-    push(ref(db, `chats/${activeChatId}/messages`), {
-      text: text,
-      sender: 'agent',
-      timestamp: Date.now()
-    });
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        // --- FIREBASE CONFIG ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCh7Ute6LeSAxcNDEQwZg5m0cA4ujnLCfg",
+            authDomain: "test-17881.firebaseapp.com",
+            projectId: "test-17881",
+            storageBucket: "test-17881.firebasestorage.app",
+            messagingSenderId: "1057428047643",
+            appId: "1:1057428047643:web:f3801c0d933225a5cd35be"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-    els.chatInput.value = '';
-  };
+        // --- STATE VARIABLES ---
+        let currentAgent = null;
+        let activeChatId = null;
+        let activeChatRef = null;
 
-  // 6. UI Message Append
-  function appendMessageUI(text, sender) {
-    const bubble = document.createElement('div');
-    bubble.className = `msg-bubble ${sender}`;
-    bubble.innerText = text;
-    els.messagesContainer.appendChild(bubble);
-    els.messagesContainer.scrollTop = els.messagesContainer.scrollHeight;
-  }
+        // --- THEME ---
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
 
-  // 7. End Chat manually
-  window.closeCurrentChat = () => {
-    if (!activeChatId) return;
-    if (confirm("Are you sure you want to end this session?")) {
-      update(ref(db, `chats/${activeChatId}`), {
-        status: 'ended'
-      });
-      els.chatInput.disabled = true;
-      els.sendBtn.disabled = true;
-      appendMessageUI("You have closed this chat session.", "system");
-    }
-  };
+        // --- AUTHENTICATION ---
+        async function authenticateAgent() {
+            const pinInput = document.getElementById('emp-pin-input').value.trim();
+            const btn = document.getElementById('login-btn');
+            const err = document.getElementById('login-error');
+            
+            if(!pinInput) return;
+            
+            btn.classList.add('loading');
+            err.classList.add('hidden');
 
-</script>
+            try {
+                const snap = await db.ref('employees').orderByChild('employeeNumber').equalTo(pinInput).once('value');
+                
+                if (snap.exists()) {
+                    const data = snap.val();
+                    const key = Object.keys(data)[0];
+                    currentAgent = { ...data[key], id: key };
+                    
+                    // Setup UI
+                    document.getElementById('agent-name').innerText = currentAgent.name || "Agent";
+                    document.getElementById('agent-avatar').src = currentAgent.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentAgent.name || 'A')}&background=2563eb&color=fff`;
+                    
+                    // Transitions
+                    document.getElementById('login-overlay').classList.add('opacity-0', 'pointer-events-none');
+                    setTimeout(() => {
+                        document.getElementById('login-overlay').classList.add('hidden');
+                        const dashboard = document.getElementById('dashboard');
+                        dashboard.classList.remove('hidden');
+                        setTimeout(() => dashboard.classList.remove('opacity-0'), 50);
+                    }, 500);
+
+                    listenToQueue();
+                } else {
+                    err.classList.remove('hidden');
+                }
+            } catch (e) {
+                console.error(e);
+                err.innerText = "Connection error. Try again.";
+                err.classList.remove('hidden');
+            } finally {
+                btn.classList.remove('loading');
+            }
+        }
+
+        function logoutAgent() {
+            currentAgent = null;
+            activeChatId = null;
+            if(activeChatRef) activeChatRef.off();
+            
+            document.getElementById('dashboard').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('dashboard').classList.add('hidden');
+                document.getElementById('login-overlay').classList.remove('hidden');
+                setTimeout(() => document.getElementById('login-overlay').classList.remove('opacity-0', 'pointer-events-none'), 50);
+                document.getElementById('emp-pin-input').value = '';
+                showEmptyState();
+            }, 500);
+        }
+
+        // --- QUEUE MANAGEMENT ---
+        function listenToQueue() {
+            // Listen to the live_support_chats node
+            db.ref('live_support_chats').on('value', (snap) => {
+                const list = document.getElementById('chat-list');
+                list.innerHTML = '';
+
+                if (!snap.exists()) {
+                    list.innerHTML = '<div class="p-4 text-center text-xs text-gray-400 italic mt-10">No active client requests.</div>';
+                    return;
+                }
+
+                let chats = [];
+                snap.forEach(child => { chats.push({ id: child.key, ...child.val() }); });
+                
+                // Sort: Pending first, then active, then resolved. Newest first.
+                chats.sort((a, b) => (b.lastActivity || 0) - (a.lastActivity || 0));
+
+                chats.forEach(chat => {
+                    const isResolved = chat.status === 'resolved';
+                    const isMine = chat.agentId === currentAgent.id;
+                    const isUnassigned = !chat.agentId;
+
+                    let statusBadge = '';
+                    if (isUnassigned) statusBadge = '<span class="px-2 py-0.5 bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 text-[9px] rounded font-bold uppercase">Pending</span>';
+                    else if (isResolved) statusBadge = '<span class="px-2 py-0.5 bg-gray-100 text-gray-500 dark:bg-slate-700 dark:text-gray-400 text-[9px] rounded font-bold uppercase">Resolved</span>';
+                    else if (isMine) statusBadge = '<span class="px-2 py-0.5 bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[9px] rounded font-bold uppercase">Your Chat</span>';
+                    else statusBadge = `<span class="px-2 py-0.5 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 text-[9px] rounded font-bold uppercase">With ${chat.agentName.split(' ')[0]}</span>`;
+
+                    const activeClass = activeChatId === chat.id ? 'bg-blue-50 border-blue-200 dark:bg-slate-700 dark:border-blue-500/50' : 'border-transparent hover:bg-gray-100 dark:hover:bg-slate-700/50';
+
+                    list.innerHTML += `
+                        <div onclick="openChat('${chat.id}')" class="p-3 border-b border-gray-100 dark:border-slate-700/50 cursor-pointer transition-colors rounded-lg mb-1 border ${activeClass}">
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-sm text-gray-800 dark:text-gray-200 truncate pr-2">${chat.clientName || 'Anonymous Client'}</h3>
+                                ${statusBadge}
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 truncate">${chat.lastMessage || 'New request...'}</p>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        // --- CHAT INTERFACE ---
+        async function openChat(chatId) {
+            activeChatId = chatId;
+            
+            // Update mobile UI
+            if(window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('mobile-back-btn').classList.remove('hidden');
+            }
+
+            // Hide empty state, show chat UI
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('chat-header').classList.remove('hidden');
+            document.getElementById('messages-container').classList.remove('hidden');
+            document.getElementById('chat-input-area').classList.remove('hidden');
+            
+            // Re-render sidebar to highlight active tab
+            listenToQueue(); // This is a bit lazy but works for re-rendering the active state
+
+            const snap = await db.ref(`live_support_chats/${chatId}`).once('value');
+            const chatData = snap.val();
+
+            document.getElementById('current-client-name').innerText = chatData.clientName || 'Anonymous Client';
+            document.getElementById('current-chat-status').innerText = `Ref: ${chatId.substring(0,8).toUpperCase()}`;
+
+            // If unassigned, assign to me
+            if (!chatData.agentId && chatData.status !== 'resolved') {
+                await db.ref(`live_support_chats/${chatId}`).update({
+                    agentId: currentAgent.id,
+                    agentName: currentAgent.name,
+                    status: 'active'
+                });
+            }
+
+            // Toggle Resolve button state
+            const btnResolve = document.getElementById('btn-resolve');
+            if (chatData.status === 'resolved') {
+                btnResolve.style.display = 'none';
+                document.getElementById('chat-input-area').style.opacity = '0.5';
+                document.getElementById('message-input').disabled = true;
+            } else {
+                btnResolve.style.display = 'block';
+                document.getElementById('chat-input-area').style.opacity = '1';
+                document.getElementById('message-input').disabled = false;
+            }
+
+            // Listen to messages
+            if (activeChatRef) activeChatRef.off();
+            activeChatRef = db.ref(`live_support_chats/${chatId}/messages`);
+            
+            const msgContainer = document.getElementById('messages-container');
+            msgContainer.innerHTML = '';
+
+            activeChatRef.on('child_added', (msgSnap) => {
+                const msg = msgSnap.val();
+                const isAgent = msg.sender === 'agent';
+                const timeString = new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const html = `
+                    <div class="flex flex-col ${isAgent ? 'items-end' : 'items-start'}">
+                        <span class="text-[10px] text-gray-400 mb-1 px-1">${isAgent ? currentAgent.name : (chatData.clientName || 'Client')}</span>
+                        <div class="msg-bubble ${isAgent ? 'msg-agent' : 'msg-client'}">
+                            <span>${msg.text}</span>
+                            <span class="text-[9px] block text-right mt-1 opacity-70">${timeString}</span>
+                        </div>
+                    </div>
+                `;
+                msgContainer.insertAdjacentHTML('beforeend', html);
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            });
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if(!text || !activeChatId) return;
+
+            input.value = '';
+            input.style.height = '';
+
+            const timestamp = firebase.database.ServerValue.TIMESTAMP;
+
+            // Push message
+            await db.ref(`live_support_chats/${activeChatId}/messages`).push({
+                sender: 'agent',
+                text: text,
+                timestamp: timestamp
+            });
+
+            // Update chat metadata
+            await db.ref(`live_support_chats/${activeChatId}`).update({
+                lastMessage: text,
+                lastActivity: timestamp
+            });
+        }
+
+        async function resolveChat() {
+            if(!activeChatId || !confirm("Are you sure you want to close this ticket?")) return;
+            
+            await db.ref(`live_support_chats/${activeChatId}`).update({ status: 'resolved' });
+            
+            // Add system message
+            await db.ref(`live_support_chats/${activeChatId}/messages`).push({
+                sender: 'system',
+                text: "Ticket has been marked as resolved by the agent.",
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+
+            openChat(activeChatId); // refresh view
+        }
+
+        function showEmptyState() {
+            document.getElementById('empty-state').classList.remove('hidden');
+            document.getElementById('chat-header').classList.add('hidden');
+            document.getElementById('messages-container').classList.add('hidden');
+            document.getElementById('chat-input-area').classList.add('hidden');
+        }
+
+        function toggleMobileSidebar() {
+            document.getElementById('sidebar').classList.remove('hidden');
+            document.getElementById('mobile-back-btn').classList.add('hidden');
+        }
+
+        // ==========================================
+        // UTILITY: GENERATE TEST CLIENT (For Katlego)
+        // Run generateTestClient() in your browser console to simulate a client starting a chat!
+        // ==========================================
+        window.generateTestClient = async function() {
+            const newChatRef = db.ref('live_support_chats').push();
+            const timestamp = firebase.database.ServerValue.TIMESTAMP;
+            
+            await newChatRef.set({
+                clientName: "Test Client " + Math.floor(Math.random()*100),
+                status: 'pending',
+                lastMessage: "Hi, I need help with my login.",
+                lastActivity: timestamp,
+                agentId: null
+            });
+
+            await db.ref(`live_support_chats/${newChatRef.key}/messages`).push({
+                sender: 'client',
+                text: "Hi, I need help with my login. It keeps saying 'Network Error'.",
+                timestamp: timestamp
+            });
+            console.log("Test client created!");
+        }
+
+    </script>
 </body>
 </html>
