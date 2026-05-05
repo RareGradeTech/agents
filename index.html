@@ -7,213 +7,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet"/>
   <style>
-    :root {
-      --bg-main: #f0f4f9;
-      --bg-surface: #ffffff;
-      --bg-sidebar: #1e1e2d;
-      --bg-sidebar-hover: #2a2a3c;
-      
-      --text-main: #1f1f1f;
-      --text-dim: #444746;
-      --text-light: #f8fafd;
-      --text-sidebar-dim: #a0a0b0;
-      
-      --border: #e3e3e3;
-      --border-dark: #3a3a4c;
-      
-      --accent: #0b57d0;
-      --accent-light: #d3e3fd;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      
-      --grad-gemini: linear-gradient(135deg, #4285f4, #9b72cb, #d96570);
-    }
-
+    /* ALL PREVIOUS DASHBOARD CSS STYLES REMAIN EXACTLY THE SAME */
+    :root { --bg-main: #f0f4f9; --bg-surface: #ffffff; --bg-sidebar: #1e1e2d; --bg-sidebar-hover: #2a2a3c; --text-main: #1f1f1f; --text-dim: #444746; --text-light: #f8fafd; --text-sidebar-dim: #a0a0b0; --border: #e3e3e3; --border-dark: #3a3a4c; --accent: #0b57d0; --accent-light: #d3e3fd; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --grad-gemini: linear-gradient(135deg, #4285f4, #9b72cb, #d96570); }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg-main);
-      color: var(--text-main);
-      height: 100vh;
-      display: flex;
-      overflow: hidden;
-    }
-
+    body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
     h1, h2, h3, .brand-font { font-family: 'Outfit', sans-serif; }
     .material-symbols-rounded { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-
-    /* ════════════════════════════════
-       SIDEBAR
-    ════════════════════════════════ */
-    .sidebar {
-      width: 320px;
-      background: var(--bg-sidebar);
-      color: var(--text-light);
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--border-dark);
-      flex-shrink: 0;
-    }
-
-    .sidebar-header {
-      padding: 24px;
-      border-bottom: 1px solid var(--border-dark);
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .brand-icon {
-      width: 36px; height: 36px; border-radius: 10px;
-      background: var(--grad-gemini); display: flex; align-items: center; justify-content: center;
-    }
+    .sidebar { width: 320px; background: var(--bg-sidebar); color: var(--text-light); display: flex; flex-direction: column; border-right: 1px solid var(--border-dark); flex-shrink: 0; }
+    .sidebar-header { padding: 24px; border-bottom: 1px solid var(--border-dark); }
+    .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .brand-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--grad-gemini); display: flex; align-items: center; justify-content: center; }
     .brand-title { font-size: 1.2rem; font-weight: 600; letter-spacing: 0.5px; }
-
-    .agent-status {
-      display: flex; align-items: center; justify-content: space-between;
-      background: var(--bg-sidebar-hover); padding: 12px 16px; border-radius: 12px;
-    }
-    .status-indicator {
-      display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 500;
-    }
+    .agent-status { display: flex; align-items: center; justify-content: space-between; background: var(--bg-sidebar-hover); padding: 12px 16px; border-radius: 12px; }
+    .status-indicator { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 500; }
     .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--success); }
-    
-    /* Toggle Switch */
-    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider {
-      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-      background-color: var(--border-dark); transition: .4s; border-radius: 34px;
-    }
-    .slider:before {
-      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
-      background-color: white; transition: .4s; border-radius: 50%;
-    }
-    input:checked + .slider { background-color: var(--success); }
-    input:checked + .slider:before { transform: translateX(20px); }
-
-    .sidebar-content {
-      flex: 1; overflow-y: auto; padding: 16px 0;
-    }
-    .sidebar-content::-webkit-scrollbar { width: 4px; }
-    .sidebar-content::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
-
-    .section-title {
-      font-size: 0.8rem; text-transform: uppercase; color: var(--text-sidebar-dim);
-      font-weight: 600; padding: 0 24px; margin-bottom: 12px; letter-spacing: 0.5px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .badge {
-      background: var(--accent); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;
-    }
-    .badge.warning { background: var(--warning); color: #fff; }
-
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; } .switch input { opacity: 0; width: 0; height: 0; } .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-dark); transition: .4s; border-radius: 34px; } .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } input:checked + .slider { background-color: var(--success); } input:checked + .slider:before { transform: translateX(20px); }
+    .sidebar-content { flex: 1; overflow-y: auto; padding: 16px 0; } .sidebar-content::-webkit-scrollbar { width: 4px; } .sidebar-content::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
+    .section-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-sidebar-dim); font-weight: 600; padding: 0 24px; margin-bottom: 12px; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+    .badge { background: var(--accent); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; } .badge.warning { background: var(--warning); color: #fff; }
     .chat-list { list-style: none; margin-bottom: 24px; }
-    .chat-item {
-      padding: 16px 24px; display: flex; flex-direction: column; gap: 6px;
-      cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent;
-    }
-    .chat-item:hover { background: var(--bg-sidebar-hover); }
-    .chat-item.active { background: var(--bg-sidebar-hover); border-left-color: var(--accent); }
-    
-    .chat-item-header { display: flex; justify-content: space-between; align-items: center; }
-    .chat-item-name { font-weight: 600; font-size: 0.95rem; }
-    .chat-item-time { font-size: 0.75rem; color: var(--text-sidebar-dim); }
-    .chat-item-preview { font-size: 0.85rem; color: var(--text-sidebar-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .btn-accept {
-      margin-top: 8px; background: var(--success); color: white; border: none; padding: 8px 12px;
-      border-radius: 8px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer;
-      font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
-    .btn-accept:hover { background: #059669; }
-
-    /* ════════════════════════════════
-       MAIN WORKSPACE
-    ════════════════════════════════ */
-    .workspace {
-      flex: 1; display: flex; flex-direction: column; background: var(--bg-main); position: relative;
-    }
-
-    /* Empty State */
-    .empty-state {
-      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; background: var(--bg-main); z-index: 10;
-    }
-    .empty-state .material-symbols-rounded { font-size: 64px; color: #cbd5e1; margin-bottom: 16px; }
-    .empty-state h2 { color: var(--text-dim); font-weight: 500; }
-
-    /* Active Chat Area */
-    .chat-header {
-      height: 80px; background: var(--bg-surface); border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
-    }
-    .chat-user-info { display: flex; align-items: center; gap: 16px; }
-    .avatar {
-      width: 44px; height: 44px; border-radius: 50%; background: var(--accent-light);
-      color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.2rem;
-    }
-    .user-details h2 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 2px; }
-    .user-details p { font-size: 0.85rem; color: var(--text-dim); display: flex; align-items: center; gap: 4px; }
-    
-    .chat-actions button {
-      background: var(--bg-main); border: 1px solid var(--border); color: var(--text-dim);
-      width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.2s;
-      display: inline-flex; align-items: center; justify-content: center; margin-left: 8px;
-    }
-    .chat-actions button:hover { background: #e2e8f0; color: var(--text-main); }
-    .chat-actions .btn-end { border-color: var(--danger); color: var(--danger); }
-    .chat-actions .btn-end:hover { background: var(--danger); color: white; }
-
-    .chat-history {
-      flex: 1; overflow-y: auto; padding: 32px; display: flex; flex-direction: column; gap: 16px;
-    }
-    .chat-history::-webkit-scrollbar { width: 6px; }
-    .chat-history::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-
-    .msg-wrap { display: flex; flex-direction: column; max-width: 70%; }
-    .msg-wrap.user { align-self: flex-start; }
-    .msg-wrap.agent { align-self: flex-end; align-items: flex-end; }
-    
-    .msg-sender { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; padding: 0 4px; }
-    .msg-bubble {
-      padding: 14px 20px; border-radius: 20px; font-size: 0.95rem; line-height: 1.5;
-    }
-    .msg-wrap.user .msg-bubble {
-      background: var(--bg-surface); border: 1px solid var(--border); border-bottom-left-radius: 4px;
-    }
-    .msg-wrap.agent .msg-bubble {
-      background: var(--accent); color: white; border-bottom-right-radius: 4px;
-    }
-    .msg-system {
-      align-self: center; background: #e2e8f0; color: var(--text-dim); font-size: 0.8rem;
-      padding: 6px 16px; border-radius: 16px; margin: 8px 0;
-    }
-
-    .chat-composer {
-      background: var(--bg-surface); border-top: 1px solid var(--border); padding: 20px 32px;
-    }
-    .input-wrapper {
-      display: flex; gap: 12px; background: var(--bg-main); border: 1px solid var(--border);
-      border-radius: 16px; padding: 8px 12px; align-items: flex-end; transition: border-color 0.2s;
-    }
-    .input-wrapper:focus-within { border-color: var(--accent); background: white; }
-    
-    .input-wrapper textarea {
-      flex: 1; border: none; background: transparent; resize: none; outline: none;
-      font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 8px; max-height: 120px;
-    }
-    .btn-send {
-      width: 44px; height: 44px; border-radius: 12px; background: var(--accent); color: white;
-      border: none; display: flex; align-items: center; justify-content: center; cursor: pointer;
-      transition: all 0.2s; flex-shrink: 0;
-    }
-    .btn-send:hover { background: #0842a0; }
-
+    .chat-item { padding: 16px 24px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; } .chat-item:hover { background: var(--bg-sidebar-hover); } .chat-item.active { background: var(--bg-sidebar-hover); border-left-color: var(--accent); }
+    .chat-item-header { display: flex; justify-content: space-between; align-items: center; } .chat-item-name { font-weight: 600; font-size: 0.95rem; } .chat-item-time { font-size: 0.75rem; color: var(--text-sidebar-dim); } .chat-item-preview { font-size: 0.85rem; color: var(--text-sidebar-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn-accept { margin-top: 8px; background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; } .btn-accept:hover { background: #059669; }
+    .workspace { flex: 1; display: flex; flex-direction: column; background: var(--bg-main); position: relative; }
+    .empty-state { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg-main); z-index: 10; } .empty-state .material-symbols-rounded { font-size: 64px; color: #cbd5e1; margin-bottom: 16px; } .empty-state h2 { color: var(--text-dim); font-weight: 500; }
+    .chat-header { height: 80px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; } .chat-user-info { display: flex; align-items: center; gap: 16px; } .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-light); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.2rem; } .user-details h2 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 2px; } .user-details p { font-size: 0.85rem; color: var(--text-dim); display: flex; align-items: center; gap: 4px; }
+    .chat-actions button { background: var(--bg-main); border: 1px solid var(--border); color: var(--text-dim); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; } .chat-actions button:hover { background: #e2e8f0; color: var(--text-main); } .chat-actions .btn-end { border-color: var(--danger); color: var(--danger); } .chat-actions .btn-end:hover { background: var(--danger); color: white; }
+    .chat-history { flex: 1; overflow-y: auto; padding: 32px; display: flex; flex-direction: column; gap: 16px; } .chat-history::-webkit-scrollbar { width: 6px; } .chat-history::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .msg-wrap { display: flex; flex-direction: column; max-width: 70%; } .msg-wrap.user { align-self: flex-start; } .msg-wrap.agent { align-self: flex-end; align-items: flex-end; } .msg-sender { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; padding: 0 4px; } .msg-bubble { padding: 14px 20px; border-radius: 20px; font-size: 0.95rem; line-height: 1.5; } .msg-wrap.user .msg-bubble { background: var(--bg-surface); border: 1px solid var(--border); border-bottom-left-radius: 4px; } .msg-wrap.agent .msg-bubble { background: var(--accent); color: white; border-bottom-right-radius: 4px; } .msg-system { align-self: center; background: #e2e8f0; color: var(--text-dim); font-size: 0.8rem; padding: 6px 16px; border-radius: 16px; margin: 8px 0; }
+    .chat-composer { background: var(--bg-surface); border-top: 1px solid var(--border); padding: 20px 32px; } .input-wrapper { display: flex; gap: 12px; background: var(--bg-main); border: 1px solid var(--border); border-radius: 16px; padding: 8px 12px; align-items: flex-end; transition: border-color 0.2s; } .input-wrapper:focus-within { border-color: var(--accent); background: white; } .input-wrapper textarea { flex: 1; border: none; background: transparent; resize: none; outline: none; font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 8px; max-height: 120px; } .btn-send { width: 44px; height: 44px; border-radius: 12px; background: var(--accent); color: white; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0; } .btn-send:hover { background: #0842a0; }
   </style>
 </head>
 <body>
@@ -241,22 +63,17 @@
       <div class="section-title">
         Incoming Queue <span class="badge warning" id="queueCount">0</span>
       </div>
-      <ul class="chat-list" id="queueList">
-        <!-- Queue items injected here -->
-      </ul>
+      <ul class="chat-list" id="queueList"></ul>
 
       <div class="section-title" style="margin-top: 24px;">
         Active Sessions <span class="badge" id="activeCount">0</span>
       </div>
-      <ul class="chat-list" id="activeList">
-        <!-- Active items injected here -->
-      </ul>
+      <ul class="chat-list" id="activeList"></ul>
     </div>
   </aside>
 
   <!-- WORKSPACE -->
   <main class="workspace">
-    
     <div class="empty-state" id="emptyState">
       <span class="material-symbols-rounded">forum</span>
       <h2>Select a chat to start responding</h2>
@@ -267,169 +84,200 @@
         <div class="chat-user-info">
           <div class="avatar" id="wuAvatar">U</div>
           <div class="user-details">
-            <h2 id="wuName">User-1234</h2>
-            <p><span class="material-symbols-rounded" style="font-size: 14px;">smartphone</span> App User | Technical Issue</p>
+            <h2 id="wuName">User Name</h2>
+            <p><span class="material-symbols-rounded" style="font-size: 14px;">smartphone</span> <span id="wuContext">Technical Issue</span></p>
           </div>
         </div>
         <div class="chat-actions">
-          <button title="View Context"><span class="material-symbols-rounded">info</span></button>
           <button class="btn-end" title="End Chat" onclick="endCurrentChat()"><span class="material-symbols-rounded">close</span></button>
         </div>
       </div>
 
-      <div class="chat-history" id="chatHistory">
-        <!-- Messages injected here -->
-      </div>
+      <div class="chat-history" id="chatHistory"></div>
 
       <div class="chat-composer">
         <div class="input-wrapper">
           <textarea id="replyInput" rows="1" placeholder="Type a reply..." onkeydown="handleEnter(event)"></textarea>
-          <button class="btn-send" onclick="sendReply()">
-            <span class="material-symbols-rounded">send</span>
-          </button>
+          <button class="btn-send" onclick="sendReply()"><span class="material-symbols-rounded">send</span></button>
         </div>
       </div>
     </div>
   </main>
 
-<script src="https://cdn.socket.io/4.7.2/socket.io.esm.min.js"></script>
-<script>
-  // 1. STATE MANAGEMENT
-  let isAvailable = true;
-  let activeChats = {}; // Stores chat objects by ID: { messages: [], name: '...', context: '...' }
-  let queuedChats = {};
-  let currentChatId = null;
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, onValue, onChildAdded, update, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-  // 2. SOCKET CONNECTION (Assuming Rare Grade backend)
-  // NOTE: Replace the URL with your actual backend URL when deployed
-  const socket = io('http://localhost:3000'); 
+  // Firebase Init (Matches client app)
+  const app = initializeApp({
+    apiKey:"AIzaSyBOyZ3As4GTuNvjemvPF_SpsC6m6vqtNhc",
+    authDomain:"fire-b-a8878.firebaseapp.com",
+    projectId:"fire-b-a8878",
+    databaseURL:"https://fire-b-a8878-default-rtdb.firebaseio.com",
+    appId:"1:658673187627:web:6e4c29af661785f0afa36e"
+  });
+  const db = getDatabase(app);
   
-  // Identify as an agent upon connection
-  socket.on('connect', () => {
-    socket.emit('register-agent', { name: "Agent Sarah" });
-    console.log("Connected to Rare Grade Signaling Server");
-  });
+  // State
+  let isAvailable = true;
+  const AGENT_NAME = "Agent Katlego";
+  let queuedChats = {};
+  let activeChats = {}; 
+  let currentChatId = null;
+  let activeListeners = {}; // Keep track of message listeners so we don't attach duplicates
 
-  // 3. LISTEN FOR INCOMING REQUESTS FROM CLIENT UI
-  socket.on('chat-queued', (data) => {
-    // data = { chatId: "room_123", context: "Transferred from AI", timestamp: ... }
-    if(!isAvailable) return;
-    
-    queuedChats[data.chatId] = {
-      id: data.chatId,
-      name: `User-${data.chatId.substring(0,4)}`,
-      context: data.context || "Live Support Request",
-      time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-    };
-    renderSidebar();
-    playNotificationSound();
-  });
+  // --- FIREBASE SYNC LOGIC ---
 
-  // 4. LISTEN FOR MESSAGES
-  socket.on('chat-message', (data) => {
-    // data = { chatId: "room_123", text: "Hello", sender: "user" }
-    const chat = activeChats[data.chatId];
-    if (chat) {
-      chat.messages.push({ text: data.text, sender: data.sender });
-      
-      // Update UI if this is the currently viewed chat
-      if (currentChatId === data.chatId) {
-        appendMessageUI(data.text, data.sender);
+  // Listen to ALL chats in the database
+  const chatsRef = ref(db, 'chats');
+  onValue(chatsRef, (snapshot) => {
+    const allChats = snapshot.val() || {};
+    queuedChats = {};
+    const newActiveChats = {};
+
+    let previousQueueCount = Object.keys(queuedChats).length;
+
+    for (const [id, chatData] of Object.entries(allChats)) {
+      if (chatData.status === 'queued') {
+        queuedChats[id] = chatData;
+      } 
+      else if (chatData.status === 'active' && chatData.agentName === AGENT_NAME) {
+        // Ensure local active chats state preserves message history we've already loaded
+        if (activeChats[id]) {
+          newActiveChats[id] = activeChats[id];
+        } else {
+          newActiveChats[id] = { ...chatData, messages: [] };
+          attachMessageListener(id); // Attach listener to new active chat
+        }
+      } 
+      else if (chatData.status === 'ended') {
+        // If an active chat was ended by the user
+        if (currentChatId === id) {
+          appendMessageUI("User has ended the chat.", "system");
+          delete activeChats[id];
+        }
       }
+    }
+
+    // Play sound if queue increased
+    const newQueueCount = Object.keys(queuedChats).length;
+    if (newQueueCount > previousQueueCount && isAvailable) {
+      playNotificationSound();
+    }
+
+    activeChats = newActiveChats;
+    renderSidebar();
+  });
+
+  // Attach a listener to a specific chat's messages node
+  function attachMessageListener(chatId) {
+    if (activeListeners[chatId]) return; // Already listening
+
+    const messagesRef = ref(db, `chats/${chatId}/messages`);
+    activeListeners[chatId] = onChildAdded(messagesRef, (snapshot) => {
+      const msg = snapshot.val();
       
-      // Update sidebar preview
-      chat.lastMessage = data.text;
-      renderSidebar();
-    }
-  });
+      // Store in local history array
+      if (activeChats[chatId]) {
+        activeChats[chatId].messages.push(msg);
+        activeChats[chatId].lastMessage = msg.text;
+        
+        // If this is the chat we are currently looking at, render it
+        if (currentChatId === chatId) {
+          appendMessageUI(msg.text, msg.sender);
+        }
+        
+        renderSidebar(); // Update preview text
+      }
+    });
+  }
 
-  socket.on('user-left', (data) => {
-    if(activeChats[data.chatId]) {
-      activeChats[data.chatId].messages.push({ text: "User has disconnected.", sender: "system" });
-      if(currentChatId === data.chatId) appendMessageUI("User has disconnected.", "system");
-    }
-  });
+  // --- AGENT ACTIONS ---
 
-
-  // 5. AGENT ACTIONS
-  function toggleStatus() {
+  window.toggleStatus = () => {
     isAvailable = document.getElementById('statusToggle').checked;
     document.getElementById('statusText').innerText = isAvailable ? "Available" : "Offline";
     document.getElementById('statusDot').style.background = isAvailable ? "var(--success)" : "var(--text-sidebar-dim)";
-    socket.emit('agent-status-update', { available: isAvailable });
-  }
+  };
 
-  function acceptChat(chatId) {
-    // Move from queue to active
-    const chat = queuedChats[chatId];
-    if(!chat) return;
-
-    chat.messages = [
-      { text: `Chat context: ${chat.context}`, sender: 'system' }
-    ];
-    activeChats[chatId] = chat;
-    delete queuedChats[chatId];
-
-    // Tell server we took this chat
-    socket.emit('accept-chat', { chatId: chatId });
+  window.acceptChat = (chatId) => {
+    if (!isAvailable) return alert("You are marked as offline.");
     
-    // Switch view
-    openChat(chatId);
-    renderSidebar();
-  }
+    // Update Firebase to mark chat as active and assign to this agent
+    const chatRef = ref(db, `chats/${chatId}`);
+    update(chatRef, {
+      status: 'active',
+      agentName: AGENT_NAME
+    });
 
-  function openChat(chatId) {
+    // The onValue listener above will catch this change, move it to activeChats, and attach the message listener.
+    setTimeout(() => { openChat(chatId); }, 200); 
+  };
+
+  window.openChat = (chatId) => {
     currentChatId = chatId;
     const chat = activeChats[chatId];
+    if(!chat) return;
     
     document.getElementById('emptyState').style.display = 'none';
     document.getElementById('activeWorkspace').style.display = 'flex';
     
     // Update Header
-    document.getElementById('wuName').innerText = chat.name;
-    document.getElementById('wuAvatar').innerText = chat.name.charAt(0);
+    document.getElementById('wuName').innerText = chat.customerName || `User-${chatId.substring(0,4)}`;
+    document.getElementById('wuAvatar').innerText = (chat.customerName || 'U').charAt(0);
+    document.getElementById('wuContext').innerText = chat.context || 'Support Request';
     
     // Render History
     const historyContainer = document.getElementById('chatHistory');
     historyContainer.innerHTML = '';
-    chat.messages.forEach(msg => appendMessageUI(msg.text, msg.sender));
+    
+    // System contextual message
+    appendMessageUI(`Chat context: ${chat.context}`, 'system');
+    
+    // Render existing messages
+    if (chat.messages) {
+      chat.messages.forEach(msg => appendMessageUI(msg.text, msg.sender));
+    }
     
     renderSidebar();
-    
-    // Focus input
     setTimeout(() => document.getElementById('replyInput').focus(), 100);
-  }
+  };
 
-  function endCurrentChat() {
+  window.endCurrentChat = () => {
     if(!currentChatId) return;
-    socket.emit('leave-chat', { chatId: currentChatId });
+    
+    // Update Firebase
+    const chatRef = ref(db, `chats/${currentChatId}`);
+    update(chatRef, { status: 'ended' });
+
     delete activeChats[currentChatId];
+    delete activeListeners[currentChatId];
     currentChatId = null;
     
     document.getElementById('emptyState').style.display = 'flex';
     document.getElementById('activeWorkspace').style.display = 'none';
     renderSidebar();
-  }
+  };
 
-  function sendReply() {
+  window.sendReply = () => {
     const input = document.getElementById('replyInput');
     const text = input.value.trim();
     if (!text || !currentChatId) return;
 
-    // Local UI update
-    activeChats[currentChatId].messages.push({ text: text, sender: 'agent' });
-    activeChats[currentChatId].lastMessage = text;
-    appendMessageUI(text, 'agent');
-    
-    // Send to server
-    socket.emit('chat-message', { chatId: currentChatId, text: text, sender: 'agent' });
+    // Push message to Firebase
+    const messagesRef = ref(db, `chats/${currentChatId}/messages`);
+    push(messagesRef, {
+      text: text,
+      sender: 'agent',
+      timestamp: Date.now()
+    });
     
     input.value = '';
     input.style.height = 'auto'; // reset textarea height
-    renderSidebar();
-  }
+  };
 
-  // 6. UI HELPERS
+  // --- UI HELPERS ---
+
   function appendMessageUI(text, sender) {
     const container = document.getElementById('chatHistory');
     
@@ -458,6 +306,11 @@
     container.scrollTop = container.scrollHeight;
   }
 
+  function formatTime(timestamp) {
+    if(!timestamp) return '';
+    return new Date(timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  }
+
   function renderSidebar() {
     const qList = document.getElementById('queueList');
     const aList = document.getElementById('activeList');
@@ -469,11 +322,13 @@
     
     qKeys.forEach(id => {
       const chat = queuedChats[id];
+      const time = formatTime(chat.createdAt);
+      const name = chat.customerName || `User-${id.substring(0,4)}`;
       qList.innerHTML += `
         <li class="chat-item">
           <div class="chat-item-header">
-            <span class="chat-item-name">${chat.name}</span>
-            <span class="chat-item-time">${chat.time}</span>
+            <span class="chat-item-name">${name}</span>
+            <span class="chat-item-time">${time}</span>
           </div>
           <div class="chat-item-preview">${chat.context}</div>
           <button class="btn-accept" onclick="acceptChat('${id}')">Accept Request</button>
@@ -490,11 +345,12 @@
       const chat = activeChats[id];
       const isActive = currentChatId === id ? 'active' : '';
       const preview = chat.lastMessage || "Chat started...";
+      const name = chat.customerName || `User-${id.substring(0,4)}`;
       
       aList.innerHTML += `
         <li class="chat-item ${isActive}" onclick="openChat('${id}')">
           <div class="chat-item-header">
-            <span class="chat-item-name">${chat.name}</span>
+            <span class="chat-item-name">${name}</span>
           </div>
           <div class="chat-item-preview">${preview}</div>
         </li>
@@ -502,24 +358,22 @@
     });
   }
 
-  function handleEnter(e) {
+  window.handleEnter = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendReply();
     }
-  }
+  };
   
   // Auto-resize textarea
   const tx = document.getElementById('replyInput');
   tx.setAttribute('style', 'height:' + (tx.scrollHeight) + 'px;overflow-y:hidden;');
-  tx.addEventListener("input", OnInput, false);
-  function OnInput() {
+  tx.addEventListener("input", function() {
     this.style.height = 'auto';
     this.style.height = (this.scrollHeight) + 'px';
-  }
+  }, false);
 
   function playNotificationSound() {
-    // Optional: Add a short beep for new queue items
     try {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = audioCtx.createOscillator();
@@ -528,16 +382,6 @@
       osc.start(); osc.stop(audioCtx.currentTime + 0.1);
     } catch(e){}
   }
-
-  // --- MOCK DATA GENERATOR FOR UI TESTING (Remove in production) ---
-  setTimeout(() => {
-    socket.emit('test-trigger'); // Just to suppress error if no backend
-    // Simulate incoming chat from the AI Transfer
-    queuedChats['room_alpha_99'] = {
-      id: 'room_alpha_99', name: 'Katlego F.', context: 'Transferred from AI (Issue with Huawei login)', time: '10:34 AM'
-    };
-    renderSidebar();
-  }, 2000);
 
 </script>
 </body>
