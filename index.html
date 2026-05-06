@@ -19,126 +19,217 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'DM Sans', sans-serif; overflow: hidden; }
 
-        .chat-scroll::-webkit-scrollbar { width: 4px; }
-        .chat-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .dark .chat-scroll::-webkit-scrollbar-thumb { background: #475569; }
+        /* ── SCROLLBARS ── */
+        .chat-scroll::-webkit-scrollbar { width: 3px; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
+        .dark .chat-scroll::-webkit-scrollbar-thumb { background: #334155; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .msg-bubble { max-width: 80%; padding: 10px 14px; font-size: 0.875rem; line-height: 1.5; position: relative; word-break: break-word; }
-        .msg-client { border-radius: 4px 16px 16px 16px; background: #f1f5f9; color: #0f172a; border: 1px solid #e2e8f0; }
-        .dark .msg-client { background: #1e293b; color: #f8fafc; border-color: #334155; }
-        .msg-agent { border-radius: 16px 4px 16px 16px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; }
-        .msg-system { background: transparent; color: #94a3b8; font-size: 0.75rem; text-align: center; font-style: italic; border: none; padding: 4px 8px; }
-        .msg-note { border-radius: 8px; background: #fef3c7; color: #92400e; border: 1px dashed #fbbf24; font-size: 0.8rem; }
-        .dark .msg-note { background: rgba(251,191,36,0.1); color: #fcd34d; border-color: rgba(251,191,36,0.3); }
+        /* ── MESSAGE BUBBLES ── */
+        .msg-bubble { max-width: 80%; padding: 10px 14px; font-size: 0.875rem; line-height: 1.55; position: relative; word-break: break-word; }
+        .msg-client { border-radius: 6px 18px 18px 18px; background: #f1f5f9; color: #0f172a; border: 1px solid #e8edf5; }
+        .dark .msg-client { background: #1e293b; color: #f8fafc; border-color: #2d3f55; }
+        .msg-agent { border-radius: 18px 6px 18px 18px; background: #2563eb; color: #fff; }
+        .msg-system { background: transparent; color: #94a3b8; font-size: 0.72rem; text-align: center; font-style: italic; border: none; padding: 3px 8px; }
+        .msg-note { border-radius: 10px; background: #fef3c7; color: #92400e; border: 1px dashed #fbbf24; font-size: 0.8rem; }
+        .dark .msg-note { background: rgba(251,191,36,0.08); color: #fcd34d; border-color: rgba(251,191,36,0.25); }
 
+        /* ── TEAM CHAT BUBBLES ── */
+        .tc-bubble-me { border-radius: 16px 4px 16px 16px; background: #2563eb; color: #fff; max-width: 78%; padding: 8px 13px; font-size: 0.82rem; line-height: 1.5; word-break: break-word; }
+        .tc-bubble-other { border-radius: 4px 16px 16px 16px; background: #f1f5f9; color: #0f172a; max-width: 78%; padding: 8px 13px; font-size: 0.82rem; line-height: 1.5; word-break: break-word; }
+        .dark .tc-bubble-other { background: #1e293b; color: #f1f5f9; }
+
+        /* ── SPINNER ── */
         .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 18px; height: 18px; animation: spin 0.8s linear infinite; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading .spinner { display: inline-block; }
         .loading .btn-text { display: none; }
 
         /* ── MODAL ── */
-        #request-modal-backdrop { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 24px; pointer-events: none; }
+        #request-modal-backdrop { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 28px; pointer-events: none; }
         #request-modal-backdrop.has-modal { pointer-events: all; }
-        .request-card { width: 100%; max-width: 420px; background: #fff; border-radius: 20px; box-shadow: 0 32px 80px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06); overflow: hidden; transform: translateY(120%) scale(0.92); opacity: 0; transition: transform 0.48s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; pointer-events: all; }
+        .request-card { width: 100%; max-width: 420px; background: #fff; border-radius: 24px; box-shadow: 0 32px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.05); overflow: hidden; transform: translateY(120%) scale(0.9); opacity: 0; transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; pointer-events: all; }
         .dark .request-card { background: #1e293b; box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06); }
         .request-card.show { transform: translateY(0) scale(1); opacity: 1; }
-        .request-card.dismiss { transform: translateY(120%) scale(0.92); opacity: 0; transition: transform 0.35s cubic-bezier(0.55,0,1,0.45), opacity 0.25s ease; }
-        .card-header-bar { height: 5px; background: linear-gradient(90deg,#3b82f6,#8b5cf6,#ec4899); background-size: 200% 100%; animation: shimmer-bar 2.5s linear infinite; }
-        @keyframes shimmer-bar { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
-        .pulse-ring { position: absolute; inset: -6px; border-radius: 50%; background: rgba(59,130,246,0.15); animation: pulse-ring 2s ease-out infinite; }
-        @keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
+        .request-card.dismiss { transform: translateY(130%) scale(0.88); opacity: 0; transition: transform 0.38s cubic-bezier(0.55,0,1,0.45), opacity 0.25s ease; }
+        .card-header-bar { height: 4px; background: linear-gradient(90deg,#3b82f6,#8b5cf6,#ec4899,#3b82f6); background-size: 300% 100%; animation: shimmer-bar 3s linear infinite; }
+        @keyframes shimmer-bar { 0% { background-position: 0% 0%; } 100% { background-position: 300% 0%; } }
+        .pulse-ring { position: absolute; inset: -6px; border-radius: 50%; background: rgba(59,130,246,0.12); animation: pulse-ring 2s ease-out infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.7); opacity: 0; } }
         .timer-ring { transform: rotate(-90deg); }
         .timer-ring circle { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1s linear; }
         .timer-ring .bg-circle { stroke: #e2e8f0; }
         .dark .timer-ring .bg-circle { stroke: #334155; }
         .timer-ring .progress-circle { stroke: #3b82f6; }
-        .btn-accept { flex: 1; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 0.875rem; background: linear-gradient(135deg,#2563eb,#1d4ed8); color: #fff; border: none; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; box-shadow: 0 4px 16px rgba(37,99,235,0.35); display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-accept:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(37,99,235,0.45); }
+        .btn-accept { flex: 1; padding: 13px; border-radius: 14px; font-weight: 700; font-size: 0.875rem; background: #2563eb; color: #fff; border: none; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s; box-shadow: 0 4px 18px rgba(37,99,235,0.32); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-accept:hover { transform: translateY(-1px); box-shadow: 0 8px 26px rgba(37,99,235,0.42); background: #1d4ed8; }
         .btn-accept:active { transform: scale(0.97); }
-        .btn-reject { flex: 0 0 auto; width: 50px; height: 50px; border-radius: 12px; background: #fee2e2; color: #dc2626; border: none; cursor: pointer; font-size: 1rem; transition: background 0.15s ease, transform 0.15s ease; display: flex; align-items: center; justify-content: center; }
+        .btn-reject { flex: 0 0 auto; width: 50px; height: 50px; border-radius: 14px; background: #fee2e2; color: #dc2626; border: none; cursor: pointer; font-size: 1rem; transition: background 0.15s ease, transform 0.15s ease; display: flex; align-items: center; justify-content: center; }
         .btn-reject:hover { background: #fecaca; transform: translateY(-1px); }
         .btn-reject:active { transform: scale(0.95); }
-        .dark .btn-reject { background: rgba(220,38,38,0.15); color: #f87171; }
-        .dark .btn-reject:hover { background: rgba(220,38,38,0.25); }
+        .dark .btn-reject { background: rgba(220,38,38,0.12); color: #f87171; }
+        .dark .btn-reject:hover { background: rgba(220,38,38,0.22); }
 
-        .chat-item { transition: all 0.15s ease; border-radius: 10px; border: 1px solid transparent; }
-        .chat-item:hover { background: #f8fafc; border-color: #e2e8f0; }
-        .dark .chat-item:hover { background: rgba(51,65,85,0.5); border-color: #334155; }
+        /* ── PILL CHAT ITEMS ── */
+        .chat-item { transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease; border-radius: 12px; border: 1px solid transparent; cursor: pointer; }
+        .chat-item:hover { background: #f8fafc; border-color: #e8edf5; transform: translateX(1px); }
+        .dark .chat-item:hover { background: rgba(51,65,85,0.45); border-color: #2d3f55; }
         .chat-item.active { background: #eff6ff; border-color: #bfdbfe; }
-        .dark .chat-item.active { background: rgba(37,99,235,0.12); border-color: rgba(96,165,250,0.3); }
+        .dark .chat-item.active { background: rgba(37,99,235,0.1); border-color: rgba(96,165,250,0.28); }
 
-        @keyframes bell-shake { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-15deg); } 40% { transform: rotate(15deg); } 60% { transform: rotate(-10deg); } 80% { transform: rotate(10deg); } }
+        /* ── ANIMATIONS ── */
+        @keyframes bell-shake { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-15deg); } 40% { transform: rotate(15deg); } 60% { transform: rotate(-8deg); } 80% { transform: rotate(8deg); } }
         .bell-shake { animation: bell-shake 0.5s ease; }
-        @keyframes slide-up { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .slide-up { animation: slide-up 0.3s ease forwards; }
+        @keyframes slide-up { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .slide-up { animation: slide-up 0.28s ease forwards; }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        .fade-in { animation: fade-in 0.2s ease; }
+        @keyframes pop-in { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .pop-in { animation: pop-in 0.2s cubic-bezier(0.34,1.4,0.64,1) forwards; }
 
         /* ── TYPING INDICATOR ── */
-        .typing-dots span { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; animation: typing-bounce 1.2s infinite ease-in-out; }
+        .typing-dots span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; animation: typing-bounce 1.2s infinite ease-in-out; }
         .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
         .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typing-bounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
+        @keyframes typing-bounce { 0%,60%,100% { transform: translateY(0); opacity: 0.35; } 30% { transform: translateY(-5px); opacity: 1; } }
 
         /* ── READ RECEIPTS ── */
-        .read-tick { font-size: 10px; color: rgba(255,255,255,0.6); }
+        .read-tick { font-size: 10px; color: rgba(255,255,255,0.5); }
         .read-tick.seen { color: #93c5fd; }
 
         /* ── CLIENT INFO SIDEBAR ── */
-        #client-sidebar { width: 280px; background: #fff; border-left: 1px solid #e2e8f0; overflow-y: auto; flex-shrink: 0; transition: width 0.25s ease, opacity 0.25s ease; }
-        .dark #client-sidebar { background: #1e293b; border-left-color: #334155; }
+        #client-sidebar { width: 280px; background: #fff; border-left: 1px solid #e8edf5; overflow-y: auto; flex-shrink: 0; transition: width 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.22s ease; }
+        .dark #client-sidebar { background: #1a2235; border-left-color: #2d3f55; }
         #client-sidebar.collapsed { width: 0; opacity: 0; pointer-events: none; }
 
         /* ── TRANSFER MODAL ── */
-        #transfer-modal { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; padding: 16px; }
+        #transfer-modal { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px); }
         #transfer-modal.hidden { display: none; }
 
-        /* ── FILE UPLOAD PREVIEW ── */
-        .file-preview-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; border: 2px solid #e2e8f0; }
+        /* ── FILE UPLOAD ── */
+        .file-preview-thumb { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; border: 2px solid #e2e8f0; }
         .dark .file-preview-thumb { border-color: #334155; }
-        .msg-image { max-width: 200px; border-radius: 10px; cursor: pointer; }
+        .msg-image { max-width: 200px; border-radius: 12px; cursor: pointer; transition: opacity 0.15s; }
+        .msg-image:hover { opacity: 0.9; }
 
-        /* ── NOTE INPUT MODE ── */
+        /* ── NOTE MODE ── */
         .note-mode #message-input { background: #fef9e7 !important; border-color: #fbbf24 !important; color: #92400e !important; }
-        .dark .note-mode #message-input { background: rgba(251,191,36,0.08) !important; border-color: rgba(251,191,36,0.4) !important; color: #fcd34d !important; }
+        .dark .note-mode #message-input { background: rgba(251,191,36,0.06) !important; border-color: rgba(251,191,36,0.35) !important; color: #fcd34d !important; }
 
         /* ── TOOLTIP ── */
         [data-tip] { position: relative; }
-        [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; font-size: 10px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; pointer-events: none; z-index: 999; }
-
-        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-        .fade-in { animation: fade-in 0.2s ease; }
+        [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%); background: #0f172a; color: #fff; font-size: 10px; padding: 4px 9px; border-radius: 8px; white-space: nowrap; pointer-events: none; z-index: 999; }
 
         /* ── INPUT TOOLBAR ── */
-        .toolbar-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; transition: background 0.12s, color 0.12s; font-size: 13px; border: none; background: transparent; }
-        .toolbar-btn:hover { background: #f1f5f9; color: #2563eb; }
-        .dark .toolbar-btn:hover { background: rgba(51,65,85,0.6); color: #60a5fa; }
+        .toolbar-btn { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; transition: background 0.12s, color 0.12s, transform 0.1s; font-size: 13px; border: none; background: transparent; }
+        .toolbar-btn:hover { background: #f1f5f9; color: #2563eb; transform: scale(1.08); }
+        .dark .toolbar-btn:hover { background: rgba(51,65,85,0.55); color: #60a5fa; }
         .toolbar-btn.active { background: #eff6ff; color: #2563eb; }
-        .dark .toolbar-btn.active { background: rgba(37,99,235,0.15); color: #60a5fa; }
+        .dark .toolbar-btn.active { background: rgba(37,99,235,0.14); color: #60a5fa; }
 
-        /* info sidebar sections */
+        /* ── INFO SIDEBAR ── */
         .info-section { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; }
-        .dark .info-section { border-bottom-color: #334155; }
-        .info-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 8px; }
+        .dark .info-section { border-bottom-color: #2d3f55; }
+        .info-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #94a3b8; margin-bottom: 8px; }
         .info-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 3px 0; }
         .info-val { font-weight: 600; color: #1e293b; font-size: 12px; }
         .dark .info-val { color: #f1f5f9; }
-
-        .ticket-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.12s; }
-        .dark .ticket-card { background: rgba(51,65,85,0.3); border-color: #334155; }
-        .ticket-card:hover { border-color: #93c5fd; }
-
-        /* pill input for transfer */
-        .agent-pill { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; border: 2px solid transparent; cursor: pointer; transition: all 0.12s; }
+        .ticket-card { background: #f8fafc; border: 1px solid #e8edf5; border-radius: 10px; padding: 10px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.12s, transform 0.12s; }
+        .dark .ticket-card { background: rgba(51,65,85,0.25); border-color: #2d3f55; }
+        .ticket-card:hover { border-color: #93c5fd; transform: translateX(1px); }
+        .agent-pill { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; transition: all 0.14s; }
         .agent-pill:hover { border-color: #bfdbfe; background: #eff6ff; }
-        .dark .agent-pill:hover { border-color: rgba(96,165,250,0.3); background: rgba(37,99,235,0.1); }
+        .dark .agent-pill:hover { border-color: rgba(96,165,250,0.28); background: rgba(37,99,235,0.09); }
         .agent-pill.selected { border-color: #2563eb; background: #eff6ff; }
-        .dark .agent-pill.selected { border-color: #60a5fa; background: rgba(37,99,235,0.15); }
+        .dark .agent-pill.selected { border-color: #60a5fa; background: rgba(37,99,235,0.14); }
+
+        /* ── PILL BUTTON STYLE ── */
+        .pill-btn { border-radius: 99px; font-size: 11px; font-weight: 700; padding: 6px 14px; transition: all 0.15s ease; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .pill-btn-blue { background: #2563eb; color: #fff; }
+        .pill-btn-blue:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        .pill-btn-green { background: #dcfce7; color: #15803d; }
+        .dark .pill-btn-green { background: rgba(22,163,74,0.15); color: #4ade80; }
+        .pill-btn-green:hover { background: #bbf7d0; }
+        .dark .pill-btn-green:hover { background: rgba(22,163,74,0.25); }
+        .pill-btn-purple { background: #f3e8ff; color: #7e22ce; }
+        .dark .pill-btn-purple { background: rgba(147,51,234,0.15); color: #c084fc; }
+        .pill-btn-purple:hover { background: #e9d5ff; }
+        .dark .pill-btn-purple:hover { background: rgba(147,51,234,0.25); }
+        .pill-btn-gray { background: #f1f5f9; color: #475569; }
+        .dark .pill-btn-gray { background: rgba(51,65,85,0.6); color: #94a3b8; }
+        .pill-btn-gray:hover { background: #e2e8f0; }
+        .dark .pill-btn-gray:hover { background: rgba(51,65,85,0.85); }
+        .pill-btn-red { background: #fee2e2; color: #dc2626; }
+        .pill-btn-red:hover { background: #fecaca; }
+        .dark .pill-btn-red { background: rgba(220,38,38,0.12); color: #f87171; }
+        .dark .pill-btn-red:hover { background: rgba(220,38,38,0.22); }
+
+        /* ── TEAM CHAT PANEL ── */
+        #team-chat-panel { position: fixed; right: 24px; bottom: 88px; width: 340px; height: 480px; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; z-index: 8000; transform: scale(0.88) translateY(20px); opacity: 0; pointer-events: none; transition: transform 0.32s cubic-bezier(0.34,1.4,0.64,1), opacity 0.22s ease; transform-origin: bottom right; }
+        .dark #team-chat-panel { background: #1a2235; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
+        #team-chat-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+
+        #team-chat-fab { position: fixed; right: 24px; bottom: 24px; width: 54px; height: 54px; border-radius: 99px; background: #1e293b; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; z-index: 8001; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: transform 0.2s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.2s ease, background 0.15s; }
+        .dark #team-chat-fab { background: #e2e8f0; color: #1e293b; }
+        #team-chat-fab:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(0,0,0,0.28); }
+        #team-chat-fab:active { transform: scale(0.96); }
+        #team-chat-fab .fab-icon-chat { transition: transform 0.2s ease, opacity 0.2s ease; }
+        #team-chat-fab .fab-icon-close { position: absolute; transform: rotate(90deg) scale(0.5); opacity: 0; transition: transform 0.2s ease, opacity 0.2s ease; }
+        #team-chat-fab.open .fab-icon-chat { transform: rotate(-90deg) scale(0.5); opacity: 0; }
+        #team-chat-fab.open .fab-icon-close { transform: rotate(0deg) scale(1); opacity: 1; }
+
+        #tc-unread-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 9px; font-weight: 800; min-width: 18px; height: 18px; border-radius: 99px; display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #fff; animation: pop-in 0.2s cubic-bezier(0.34,1.4,0.64,1); }
+        .dark #tc-unread-badge { border-color: #1a2235; }
+        #tc-unread-badge.hidden { display: none; }
+
+        .tc-panel-header { padding: 16px 16px 12px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+        .dark .tc-panel-header { border-bottom-color: #2d3f55; }
+        .tc-online-dot { width: 7px; height: 7px; border-radius: 99px; background: #22c55e; display: inline-block; }
+        .tc-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .tc-messages::-webkit-scrollbar { width: 2px; }
+        .tc-messages::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
+        .dark .tc-messages::-webkit-scrollbar-thumb { background: #334155; }
+        .tc-input-row { padding: 10px 12px; border-top: 1px solid #f1f5f9; display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+        .dark .tc-input-row { border-top-color: #2d3f55; }
+        .tc-input { flex: 1; padding: 8px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 99px; font-size: 13px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; font-family: 'DM Sans', sans-serif; color: #0f172a; }
+        .dark .tc-input { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+        .tc-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+        .tc-send-btn { width: 34px; height: 34px; border-radius: 99px; background: #2563eb; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: transform 0.15s ease, background 0.12s; flex-shrink: 0; }
+        .tc-send-btn:hover { background: #1d4ed8; transform: scale(1.08); }
+        .tc-send-btn:active { transform: scale(0.95); }
+        .tc-agent-row { display: flex; align-items: center; gap-8px; }
+        .tc-time { font-size: 9.5px; color: #94a3b8; margin-top: 3px; }
+        .tc-name { font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 3px; }
+        .dark .tc-name { color: #94a3b8; }
+        .tc-msg-wrap-me { display: flex; flex-direction: column; align-items: flex-end; }
+        .tc-msg-wrap-other { display: flex; flex-direction: column; align-items: flex-start; }
+        .tc-sender-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+        .tc-avatar { width: 24px; height: 24px; border-radius: 99px; object-fit: cover; border: 1.5px solid #e2e8f0; flex-shrink: 0; }
+        .dark .tc-avatar { border-color: #334155; }
+        .tc-online-list { padding: 0 14px 10px; }
+        .tc-online-agent { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12px; color: #475569; }
+        .dark .tc-online-agent { color: #94a3b8; }
+        .tc-online-agent span { font-weight: 600; color: #1e293b; }
+        .dark .tc-online-agent span { color: #e2e8f0; }
+
+        /* ── PILL STATUS BADGE ── */
+        .status-pill { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 99px; }
+        .status-pill-pending { background: #fff7ed; color: #c2410c; }
+        .status-pill-active { background: #f0fdf4; color: #15803d; }
+        .status-pill-resolved { background: #f8fafc; color: #64748b; }
+        .dark .status-pill-pending { background: rgba(194,65,12,0.15); color: #fb923c; }
+        .dark .status-pill-active { background: rgba(22,163,74,0.15); color: #4ade80; }
+        .dark .status-pill-resolved { background: rgba(51,65,85,0.5); color: #64748b; }
+
+        /* ── INPUT PILL STYLE ── */
+        #message-input { border-radius: 14px; }
+        .tc-divider { font-size: 10px; color: #94a3b8; text-align: center; padding: 4px 0; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
     </style>
 </head>
 <body class="h-screen flex bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -153,11 +244,11 @@
             <p class="text-sm text-gray-400 mb-7">Enter your employee PIN to join the queue.</p>
             <div class="space-y-3">
                 <input type="password" id="emp-pin-input" placeholder="Employee PIN"
-                    class="w-full p-4 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl text-center text-xl tracking-widest font-mono focus:ring-2 focus:ring-blue-500 outline-none transition dark:text-white"
+                    class="w-full p-4 bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-2xl text-center text-xl tracking-widest font-mono focus:ring-2 focus:ring-blue-500 outline-none transition dark:text-white"
                     inputmode="numeric" maxlength="6"
                     onkeypress="if(event.key==='Enter') authenticateAgent()">
                 <button id="login-btn" onclick="authenticateAgent()"
-                    class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all shadow-md flex justify-center items-center gap-2 active:scale-95">
+                    class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all shadow-md flex justify-center items-center gap-2 active:scale-95">
                     <span class="btn-text">Join Workspace</span>
                     <div class="spinner"></div>
                 </button>
@@ -199,7 +290,7 @@
                         <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base truncate" id="modal-client-name">—</h3>
                         <p class="text-xs text-gray-400 dark:text-gray-500 truncate" id="modal-client-email">—</p>
                     </div>
-                    <span class="shrink-0 px-2.5 py-1 bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 text-[10px] font-bold uppercase tracking-wider rounded-full">Waiting</span>
+                    <span class="shrink-0 status-pill status-pill-pending">Waiting</span>
                 </div>
                 <div class="bg-gray-50 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-700 rounded-xl p-3 mb-4">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><i class="fa-regular fa-comment-dots"></i> First Message</p>
@@ -216,7 +307,7 @@
 
     <!-- ========== TRANSFER MODAL ========== -->
     <div id="transfer-modal" class="hidden">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-slate-700 overflow-hidden pop-in">
             <div class="p-5 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
                 <div>
                     <h3 class="font-bold text-gray-900 dark:text-gray-100">Transfer Chat</h3>
@@ -239,14 +330,14 @@
             </div>
             <div class="p-4 border-t border-gray-100 dark:border-slate-700 flex gap-2">
                 <button onclick="closeTransferModal()" class="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 text-sm font-semibold text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 transition">Cancel</button>
-                <button onclick="confirmTransfer()" id="confirm-transfer-btn" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition disabled:opacity-50" disabled>Transfer</button>
+                <button onclick="confirmTransfer()" id="confirm-transfer-btn" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition disabled:opacity-40" disabled>Transfer</button>
             </div>
         </div>
     </div>
 
-    <!-- ========== CANNED RESPONSES MANAGER MODAL ========== -->
-    <div id="canned-mgr-modal" class="hidden fixed inset-0 z-9000 bg-black/50 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg border border-gray-200 dark:border-slate-700 overflow-hidden">
+    <!-- ========== CANNED RESPONSES MANAGER ========== -->
+    <div id="canned-mgr-modal" class="hidden fixed inset-0 z-[9000] bg-black/50 flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg border border-gray-200 dark:border-slate-700 overflow-hidden pop-in">
             <div class="p-5 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 class="font-bold">Canned Responses</h3>
                 <button onclick="document.getElementById('canned-mgr-modal').classList.add('hidden')" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-xmark"></i></button>
@@ -261,8 +352,50 @@
     </div>
 
     <!-- ========== IMAGE LIGHTBOX ========== -->
-    <div id="lightbox" class="hidden fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-zoom-out" onclick="this.classList.add('hidden')">
-        <img id="lightbox-img" src="" class="max-w-full max-h-full rounded-xl shadow-2xl">
+    <div id="lightbox" class="hidden fixed inset-0 z-[9999] bg-black/92 flex items-center justify-center cursor-zoom-out" onclick="this.classList.add('hidden')">
+        <img id="lightbox-img" src="" class="max-w-full max-h-full rounded-2xl shadow-2xl">
+    </div>
+
+    <!-- ========== TEAM CHAT FLOATING BUTTON ========== -->
+    <button id="team-chat-fab" onclick="toggleTeamChat()" title="Team Chat">
+        <i class="fa-solid fa-users fab-icon-chat"></i>
+        <i class="fa-solid fa-xmark fab-icon-close"></i>
+        <span id="tc-unread-badge" class="hidden">0</span>
+    </button>
+
+    <!-- ========== TEAM CHAT PANEL ========== -->
+    <div id="team-chat-panel">
+        <div class="tc-panel-header">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-slate-900 dark:bg-slate-100 flex items-center justify-center">
+                    <i class="fa-solid fa-users text-white dark:text-slate-900 text-xs"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-gray-900 dark:text-gray-100">Team Chat</p>
+                    <p class="text-[10px] text-gray-400 flex items-center gap-1.5"><span class="tc-online-dot"></span> <span id="tc-online-count">0 online</span></p>
+                </div>
+            </div>
+            <div class="flex items-center gap-1">
+                <button onclick="toggleTcOnlineList()" class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition text-xs" id="tc-members-btn" title="Members"><i class="fa-solid fa-user-group"></i></button>
+            </div>
+        </div>
+
+        <!-- Online agents list (collapsible) -->
+        <div id="tc-online-list" class="tc-online-list hidden border-b border-gray-100 dark:border-slate-700"></div>
+
+        <!-- Messages -->
+        <div class="tc-messages" id="tc-messages">
+            <div class="tc-divider">Team Chat</div>
+        </div>
+
+        <!-- Input -->
+        <div class="tc-input-row">
+            <input class="tc-input" id="tc-input" placeholder="Message the team…" maxlength="500"
+                onkeypress="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendTeamMessage();}">
+            <button class="tc-send-btn" onclick="sendTeamMessage()">
+                <i class="fa-solid fa-paper-plane" style="font-size:12px;"></i>
+            </button>
+        </div>
     </div>
 
     <!-- ========== MAIN DASHBOARD ========== -->
@@ -272,7 +405,9 @@
         <aside class="w-full md:w-80 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col shrink-0 h-full relative z-20" id="sidebar">
             <div class="p-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-xs tracking-tight">RG</div>
+                    <div class="w-8 h-8 rounded-xl bg-slate-900 dark:bg-slate-100 flex items-center justify-center">
+                        <span class="text-white dark:text-slate-900 font-black text-[10px] tracking-tight">RG</span>
+                    </div>
                     <div>
                         <h2 class="font-bold text-sm leading-tight tracking-tight">Support Queue</h2>
                         <p id="work-status" class="text-[10px] text-green-500 font-semibold flex items-center gap-1">
@@ -281,13 +416,13 @@
                     </div>
                 </div>
                 <div class="flex gap-1 items-center">
-                    <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition" data-tip="Toggle theme">
+                    <button onclick="toggleTheme()" class="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition" data-tip="Toggle theme">
                         <i class="fa-solid fa-moon text-sm"></i>
                     </button>
-                    <button onclick="document.getElementById('canned-mgr-modal').classList.remove('hidden'); renderCannedMgr()" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition" data-tip="Canned Responses">
+                    <button onclick="document.getElementById('canned-mgr-modal').classList.remove('hidden'); renderCannedMgr()" class="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition" data-tip="Canned Responses">
                         <i class="fa-solid fa-bolt text-sm"></i>
                     </button>
-                    <button onclick="logoutAgent()" class="w-8 h-8 rounded-lg flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition" data-tip="Logout">
+                    <button onclick="logoutAgent()" class="w-8 h-8 rounded-xl flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition" data-tip="Logout">
                         <i class="fa-solid fa-power-off text-sm"></i>
                     </button>
                 </div>
@@ -325,17 +460,14 @@
                         <p class="text-[11px] text-gray-400 font-mono" id="current-chat-status">—</p>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
-                        <button onclick="openTransferModal()" id="btn-transfer"
-                            class="text-xs font-bold px-3 py-2 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition flex items-center gap-1.5" data-tip="Transfer Chat">
-                            <i class="fa-solid fa-share-nodes text-xs"></i><span class="hidden sm:inline">Transfer</span>
+                        <button onclick="openTransferModal()" id="btn-transfer" class="pill-btn pill-btn-purple" data-tip="Transfer Chat">
+                            <i class="fa-solid fa-share-nodes text-[10px]"></i><span class="hidden sm:inline">Transfer</span>
                         </button>
-                        <button onclick="resolveChat()" id="btn-resolve"
-                            class="text-xs font-bold px-3 py-2 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-circle-check text-xs"></i><span class="hidden sm:inline">Resolve</span>
+                        <button onclick="resolveChat()" id="btn-resolve" class="pill-btn pill-btn-green">
+                            <i class="fa-solid fa-circle-check text-[10px]"></i><span class="hidden sm:inline">Resolve</span>
                         </button>
-                        <button onclick="toggleClientSidebar()" id="btn-info"
-                            class="text-xs font-bold px-3 py-2 bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition flex items-center gap-1.5" data-tip="Client Info">
-                            <i class="fa-solid fa-circle-info text-xs"></i><span class="hidden sm:inline">Info</span>
+                        <button onclick="toggleClientSidebar()" id="btn-info" class="pill-btn pill-btn-gray" data-tip="Client Info">
+                            <i class="fa-solid fa-circle-info text-[10px]"></i><span class="hidden sm:inline">Info</span>
                         </button>
                     </div>
                 </div>
@@ -375,13 +507,13 @@
                         <!-- Agent Quick Replies -->
                         <div id="agent-quick-replies" class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100 dark:border-slate-700 overflow-x-auto no-scrollbar">
                             <div id="agent-qr-list" class="flex gap-2 flex-1"></div>
-                            <button onclick="closeAgentQuickReplies()" class="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700"><i class="fa-solid fa-xmark text-xs"></i></button>
+                            <button onclick="closeAgentQuickReplies()" class="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 transition"><i class="fa-solid fa-xmark text-xs"></i></button>
                         </div>
 
                         <!-- File preview -->
                         <div id="file-preview-area" class="hidden mb-2 flex items-center gap-2 p-2 bg-gray-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
                             <img id="file-preview-thumb" src="" class="file-preview-thumb hidden">
-                            <div id="file-preview-icon" class="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 hidden">
+                            <div id="file-preview-icon" class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 hidden">
                                 <i class="fa-solid fa-file text-lg"></i>
                             </div>
                             <div class="flex-1 min-w-0">
@@ -399,7 +531,6 @@
                         </div>
 
                         <div class="flex items-end gap-2 max-w-4xl mx-auto w-full">
-                            <!-- Toolbar -->
                             <div class="flex flex-col gap-1 shrink-0">
                                 <button class="toolbar-btn" id="btn-note-mode" onclick="toggleNoteMode()" data-tip="Internal note"><i class="fa-solid fa-lock text-xs"></i></button>
                                 <label class="toolbar-btn cursor-pointer" data-tip="Attach file">
@@ -410,11 +541,11 @@
 
                             <textarea id="message-input" rows="1"
                                 placeholder="Type a reply…"
-                                class="flex-1 p-3 bg-gray-100 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl resize-none outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition text-sm dark:text-white leading-relaxed"
+                                class="flex-1 p-3 bg-gray-100 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 resize-none outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition text-sm dark:text-white leading-relaxed"
                                 oninput="onInputChange(this)"
                                 onkeypress="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
                             <button onclick="sendMessage()"
-                                class="w-11 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-md transition active:scale-95 mb-px shrink-0">
+                                class="w-10 h-10 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-md transition active:scale-95 mb-px shrink-0">
                                 <i class="fa-solid fa-paper-plane text-sm"></i>
                             </button>
                         </div>
@@ -423,7 +554,6 @@
 
                 <!-- CLIENT INFO SIDEBAR -->
                 <div id="client-sidebar" class="collapsed chat-scroll">
-                    <!-- Header -->
                     <div class="info-section">
                         <div class="flex items-center gap-3 mb-3">
                             <img id="info-avatar" src="" class="w-12 h-12 rounded-full border-2 border-white dark:border-slate-700 shadow object-cover">
@@ -443,8 +573,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Account Info -->
                     <div class="info-section">
                         <p class="info-label">Account Details</p>
                         <div class="info-row"><span class="text-gray-400">Plan</span><span class="info-val" id="info-plan">—</span></div>
@@ -452,21 +580,13 @@
                         <div class="info-row"><span class="text-gray-400">Location</span><span class="info-val" id="info-location">—</span></div>
                         <div class="info-row"><span class="text-gray-400">LTV</span><span class="info-val" id="info-ltv">—</span></div>
                     </div>
-
-                    <!-- Previous Tickets -->
                     <div class="info-section">
                         <p class="info-label">Previous Tickets</p>
-                        <div id="info-prev-tickets">
-                            <p class="text-xs text-gray-400 italic">No previous tickets.</p>
-                        </div>
+                        <div id="info-prev-tickets"><p class="text-xs text-gray-400 italic">No previous tickets.</p></div>
                     </div>
-
-                    <!-- Recent Orders -->
                     <div class="info-section">
                         <p class="info-label">Recent Orders</p>
-                        <div id="info-orders">
-                            <p class="text-xs text-gray-400 italic">No orders found.</p>
-                        </div>
+                        <div id="info-orders"><p class="text-xs text-gray-400 italic">No orders found.</p></div>
                     </div>
                 </div>
             </div>
@@ -514,6 +634,12 @@
     let allEmployees    = {};
     let agentQrClosed   = false;
 
+    // Team chat state
+    let teamChatOpen    = false;
+    let teamChatRef     = null;
+    let tcUnreadCount   = 0;
+    let tcOnlineListOpen = false;
+
     // DEFAULT CANNED RESPONSES
     let cannedResponses = JSON.parse(localStorage.getItem('cannedResponses') || 'null') || [
         { id: 1, title: 'Screenshot request',  body: 'Could you please send a screenshot of what you\'re seeing? That will help me assist you faster.' },
@@ -554,11 +680,11 @@
                     document.getElementById('dashboard').classList.remove('hidden');
                     setTimeout(() => document.getElementById('dashboard').classList.remove('opacity-0'), 50);
                 }, 500);
-                // mark agent online
                 db.ref(`employees/${currentAgent.id}`).update({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
                 db.ref(`employees/${currentAgent.id}/online`).onDisconnect().set(false);
                 listenToQueue();
                 loadAllEmployees();
+                initTeamChat();
             } else {
                 err.classList.remove('hidden');
             }
@@ -573,6 +699,7 @@
     async function loadAllEmployees() {
         const snap = await db.ref('employees').once('value');
         if (snap.exists()) snap.forEach(c => { allEmployees[c.key] = { ...c.val(), id: c.key }; });
+        renderTcOnlineList();
     }
 
     // ─────────────────────────────────────────
@@ -617,9 +744,9 @@
                     const isResolved = chat.status === 'resolved';
                     const isPending  = !chat.agentId;
                     let badgeHtml = '';
-                    if (isPending)       badgeHtml = '<span class="px-2 py-0.5 bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 text-[9px] rounded-full font-bold uppercase tracking-wide">Pending</span>';
-                    else if (isResolved) badgeHtml = '<span class="px-2 py-0.5 bg-gray-100 text-gray-500 dark:bg-slate-700 text-[9px] rounded-full font-bold uppercase tracking-wide">Resolved</span>';
-                    else                badgeHtml = '<span class="px-2 py-0.5 bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400 text-[9px] rounded-full font-bold uppercase tracking-wide">Active</span>';
+                    if (isPending)       badgeHtml = '<span class="status-pill status-pill-pending">Pending</span>';
+                    else if (isResolved) badgeHtml = '<span class="status-pill status-pill-resolved">Resolved</span>';
+                    else                badgeHtml = '<span class="status-pill status-pill-active">Active</span>';
                     const isActive = activeChatId === chat.id;
                     list.innerHTML += `
                         <div onclick="openChat('${chat.id}')" class="chat-item p-3 cursor-pointer mb-0.5 ${isActive ? 'active' : ''}">
@@ -721,7 +848,7 @@
         const card = document.getElementById('request-card');
         const backdrop = document.getElementById('request-modal-backdrop');
         card.classList.remove('show'); card.classList.add('dismiss');
-        setTimeout(() => { card.classList.remove('dismiss'); backdrop.classList.remove('has-modal'); modalChatId = null; }, 380);
+        setTimeout(() => { card.classList.remove('dismiss'); backdrop.classList.remove('has-modal'); modalChatId = null; }, 400);
     }
 
     function handleBackdropClick(e) {
@@ -757,7 +884,6 @@
             await db.ref(`live_support_chats/${chatId}`).update({ agentId: currentAgent.id, agentName: currentAgent.name, status: 'active' });
         }
 
-        // Live status sync if client ends it
         const statusRef = db.ref(`live_support_chats/${chatId}/status`);
         window.currentStatusRef = statusRef;
         statusRef.on('value', (snap) => {
@@ -857,8 +983,7 @@
             const indicator = document.getElementById('typing-indicator');
             if (isTyping) {
                 indicator.classList.remove('hidden');
-                const msgContainer = document.getElementById('messages-container');
-                msgContainer.scrollTop = msgContainer.scrollHeight;
+                document.getElementById('messages-container').scrollTop = document.getElementById('messages-container').scrollHeight;
             } else {
                 indicator.classList.add('hidden');
             }
@@ -1020,7 +1145,7 @@
         await db.ref(`live_support_chats/${activeChatId}/messages`).push(msgData);
         if (!isNoteMode) {
             await db.ref(`live_support_chats/${activeChatId}`).update({
-                lastMessage: text || `[${pendingFile ? 'file' : 'attachment'}]`,
+                lastMessage: text || `[attachment]`,
                 lastActivity: timestamp
             });
         }
@@ -1114,10 +1239,12 @@
         const btn = document.getElementById('btn-info');
         if (clientInfoSidebarOpen) {
             sidebar.classList.remove('collapsed');
-            btn.classList.add('bg-blue-100', 'text-blue-600'); btn.classList.remove('bg-gray-100', 'text-gray-600');
+            btn.classList.remove('pill-btn-gray');
+            btn.style.background = '#eff6ff'; btn.style.color = '#1d4ed8';
         } else {
             sidebar.classList.add('collapsed');
-            btn.classList.remove('bg-blue-100', 'text-blue-600'); btn.classList.add('bg-gray-100', 'text-gray-600');
+            btn.classList.add('pill-btn-gray');
+            btn.style.background = ''; btn.style.color = '';
         }
     }
 
@@ -1152,7 +1279,7 @@
                 <div class="ticket-card" onclick="openChat('${t.id}')">
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-[10px] font-mono text-gray-400">#${t.id.substring(0,8).toUpperCase()}</span>
-                        <span class="text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${t.status === 'resolved' ? 'bg-gray-100 text-gray-400 dark:bg-slate-700' : 'bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400'}">${t.status || 'unknown'}</span>
+                        <span class="status-pill ${t.status === 'resolved' ? 'status-pill-resolved' : 'status-pill-active'}">${t.status || 'unknown'}</span>
                     </div>
                     <p class="text-xs text-gray-600 dark:text-gray-400 truncate">${t.lastMessage || 'No message'}</p>
                 </div>`).join('');
@@ -1175,6 +1302,9 @@
         }
     }
 
+    // ─────────────────────────────────────────
+    //  LIGHTBOX / MISC
+    // ─────────────────────────────────────────
     function openLightbox(url) {
         document.getElementById('lightbox-img').src = url;
         document.getElementById('lightbox').classList.remove('hidden');
@@ -1188,6 +1318,136 @@
     function toggleMobileSidebar() {
         document.getElementById('sidebar').classList.remove('hidden');
         document.getElementById('mobile-back-btn').classList.add('hidden');
+    }
+
+    // ─────────────────────────────────────────
+    //  TEAM CHAT
+    // ─────────────────────────────────────────
+    function initTeamChat() {
+        teamChatRef = db.ref('team_chat');
+        teamChatRef.limitToLast(80).on('child_added', (snap) => {
+            const msg = snap.val();
+            appendTeamMessage(msg, snap.key);
+            if (!teamChatOpen && msg.senderId !== currentAgent.id) {
+                tcUnreadCount++;
+                updateTcBadge();
+            }
+        });
+
+        // listen for online employees
+        db.ref('employees').on('value', (snap) => {
+            if (!snap.exists()) return;
+            snap.forEach(c => { allEmployees[c.key] = { ...c.val(), id: c.key }; });
+            renderTcOnlineList();
+            updateOnlineCount();
+        });
+    }
+
+    function toggleTeamChat() {
+        teamChatOpen = !teamChatOpen;
+        const panel = document.getElementById('team-chat-panel');
+        const fab   = document.getElementById('team-chat-fab');
+        if (teamChatOpen) {
+            panel.classList.add('open');
+            fab.classList.add('open');
+            tcUnreadCount = 0;
+            updateTcBadge();
+            setTimeout(() => {
+                const msgs = document.getElementById('tc-messages');
+                msgs.scrollTop = msgs.scrollHeight;
+                document.getElementById('tc-input').focus();
+            }, 350);
+        } else {
+            panel.classList.remove('open');
+            fab.classList.remove('open');
+        }
+    }
+
+    function updateTcBadge() {
+        const badge = document.getElementById('tc-unread-badge');
+        if (tcUnreadCount > 0) {
+            badge.textContent = tcUnreadCount > 9 ? '9+' : tcUnreadCount;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
+
+    function updateOnlineCount() {
+        const online = Object.values(allEmployees).filter(a => a.online).length;
+        document.getElementById('tc-online-count').textContent = `${online} online`;
+    }
+
+    function renderTcOnlineList() {
+        if (!tcOnlineListOpen) return;
+        const container = document.getElementById('tc-online-list');
+        const onlineAgents = Object.values(allEmployees).filter(a => a.online);
+        container.innerHTML = onlineAgents.length === 0
+            ? '<p class="text-xs text-gray-400 italic px-4 py-3">No agents online.</p>'
+            : onlineAgents.map(a => `
+                <div class="tc-online-agent">
+                    <img src="${a.profilePic || avatarUrl(a.name)}" class="tc-avatar">
+                    <span class="tc-online-dot" style="flex-shrink:0;"></span>
+                    <span>${a.name}</span>
+                    ${a.id === (currentAgent && currentAgent.id) ? '<span class="text-[10px] text-gray-400 ml-auto">(you)</span>' : ''}
+                </div>`).join('');
+    }
+
+    function toggleTcOnlineList() {
+        tcOnlineListOpen = !tcOnlineListOpen;
+        const container = document.getElementById('tc-online-list');
+        const btn = document.getElementById('tc-members-btn');
+        if (tcOnlineListOpen) {
+            container.classList.remove('hidden');
+            renderTcOnlineList();
+            btn.style.color = '#2563eb';
+        } else {
+            container.classList.add('hidden');
+            btn.style.color = '';
+        }
+    }
+
+    function appendTeamMessage(msg, msgId) {
+        if (!currentAgent) return;
+        const isMe = msg.senderId === currentAgent.id;
+        const time  = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const container = document.getElementById('tc-messages');
+
+        const html = isMe
+            ? `<div class="tc-msg-wrap-me slide-up">
+                <div class="tc-bubble-me">${escapeHtml(msg.text)}</div>
+                <div class="tc-time">${time}</div>
+               </div>`
+            : `<div class="tc-msg-wrap-other slide-up">
+                <div class="tc-sender-row">
+                    <img src="${msg.senderAvatar || avatarUrl(msg.senderName || '?')}" class="tc-avatar">
+                    <span class="tc-name">${msg.senderName || 'Agent'}</span>
+                </div>
+                <div class="tc-bubble-other">${escapeHtml(msg.text)}</div>
+                <div class="tc-time">${time}</div>
+               </div>`;
+
+        container.insertAdjacentHTML('beforeend', html);
+        if (teamChatOpen) container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendTeamMessage() {
+        const input = document.getElementById('tc-input');
+        const text  = input.value.trim();
+        if (!text || !currentAgent) return;
+        input.value = '';
+        await db.ref('team_chat').push({
+            senderId:     currentAgent.id,
+            senderName:   currentAgent.name,
+            senderAvatar: currentAgent.profilePic || avatarUrl(currentAgent.name),
+            text,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
     </script>
 </body>
