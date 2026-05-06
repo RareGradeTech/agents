@@ -40,10 +40,30 @@
         .msg-note { border-radius: 10px; background: #fef3c7; color: #92400e; border: 1px dashed #fbbf24; font-size: 0.8rem; }
         .dark .msg-note { background: rgba(251,191,36,0.08); color: #fcd34d; border-color: rgba(251,191,36,0.25); }
 
+        /* ── QUOTE BAR ── */
+        .quote-bar { border-left: 3px solid rgba(255,255,255,0.5); padding: 4px 8px; margin-bottom: 6px; border-radius: 2px; font-size: 0.75rem; opacity: 0.82; background: rgba(255,255,255,0.08); border-radius: 4px; }
+        .quote-bar-client { border-left: 3px solid #2563eb; background: rgba(37,99,235,0.07); color: #475569; }
+        .dark .quote-bar-client { background: rgba(37,99,235,0.15); color: #94a3b8; }
+        .quote-bar-agent { border-left: 3px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); }
+
+        /* ── REPLY PREVIEW (input) ── */
+        #reply-preview { display: none; }
+        #reply-preview.active { display: flex; }
+
         /* ── TEAM CHAT BUBBLES ── */
         .tc-bubble-me { border-radius: 16px 4px 16px 16px; background: #2563eb; color: #fff; max-width: 78%; padding: 8px 13px; font-size: 0.82rem; line-height: 1.5; word-break: break-word; }
         .tc-bubble-other { border-radius: 4px 16px 16px 16px; background: #f1f5f9; color: #0f172a; max-width: 78%; padding: 8px 13px; font-size: 0.82rem; line-height: 1.5; word-break: break-word; }
         .dark .tc-bubble-other { background: #1e293b; color: #f1f5f9; }
+        .tc-bubble-dm { border-radius: 4px 16px 16px 16px; background: #f3e8ff; color: #7e22ce; max-width: 78%; padding: 8px 13px; font-size: 0.82rem; line-height: 1.5; word-break: break-word; border: 1px dashed #d8b4fe; }
+        .dark .tc-bubble-dm { background: rgba(147,51,234,0.15); color: #c084fc; border-color: rgba(216,180,254,0.3); }
+        .tc-bubble-dm-me { border-radius: 16px 4px 16px 16px; background: #7e22ce; color: #fff; max-width: 78%; padding: 8px 13px; font-size: 0.82rem; line-height: 1.5; word-break: break-word; }
+        .tc-quote { border-left: 2px solid rgba(255,255,255,0.4); padding: 3px 8px; margin-bottom: 5px; font-size: 0.73rem; opacity: 0.8; border-radius: 2px; background: rgba(255,255,255,0.08); }
+        .tc-quote-other { border-left: 2px solid #94a3b8; padding: 3px 8px; margin-bottom: 5px; font-size: 0.73rem; opacity: 0.8; border-radius: 2px; background: rgba(148,163,184,0.1); color: #64748b; }
+        .dark .tc-quote-other { color: #94a3b8; }
+
+        /* ── TC REPLY PREVIEW ── */
+        #tc-reply-preview { display: none; }
+        #tc-reply-preview.active { display: flex; }
 
         /* ── SPINNER ── */
         .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 18px; height: 18px; animation: spin 0.8s linear infinite; display: none; }
@@ -76,6 +96,34 @@
         .dark .btn-reject { background: rgba(220,38,38,0.12); color: #f87171; }
         .dark .btn-reject:hover { background: rgba(220,38,38,0.22); }
 
+        /* ── PRIORITY COLORS ── */
+        .priority-urgent { border-left: 3px solid #ef4444 !important; }
+        .priority-high    { border-left: 3px solid #f97316 !important; }
+        .priority-normal  { border-left: 3px solid #3b82f6 !important; }
+        .priority-low     { border-left: 3px solid #22c55e !important; }
+        .priority-badge-urgent { background:#fee2e2; color:#dc2626; }
+        .priority-badge-high   { background:#fff7ed; color:#c2410c; }
+        .priority-badge-normal { background:#eff6ff; color:#1d4ed8; }
+        .priority-badge-low    { background:#f0fdf4; color:#15803d; }
+        .dark .priority-badge-urgent { background:rgba(220,38,38,0.15); color:#f87171; }
+        .dark .priority-badge-high   { background:rgba(194,65,12,0.15); color:#fb923c; }
+        .dark .priority-badge-normal { background:rgba(37,99,235,0.15); color:#60a5fa; }
+        .dark .priority-badge-low    { background:rgba(22,163,74,0.15); color:#4ade80; }
+
+        /* ── TAG CHIPS ── */
+        .tag-bug        { background:#fee2e2; color:#dc2626; }
+        .tag-billing    { background:#fffbeb; color:#d97706; }
+        .tag-feature    { background:#eff6ff; color:#2563eb; }
+        .tag-account    { background:#f3e8ff; color:#7c3aed; }
+        .tag-shipping   { background:#ecfdf5; color:#059669; }
+        .tag-technical  { background:#f0f9ff; color:#0284c7; }
+        .dark .tag-bug      { background:rgba(220,38,38,0.15); color:#f87171; }
+        .dark .tag-billing  { background:rgba(217,119,6,0.15); color:#fbbf24; }
+        .dark .tag-feature  { background:rgba(37,99,235,0.15); color:#60a5fa; }
+        .dark .tag-account  { background:rgba(124,58,237,0.15); color:#c084fc; }
+        .dark .tag-shipping { background:rgba(5,150,105,0.15); color:#34d399; }
+        .dark .tag-technical{ background:rgba(2,132,199,0.15); color:#38bdf8; }
+
         /* ── PILL CHAT ITEMS ── */
         .chat-item { transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease; border-radius: 12px; border: 1px solid transparent; cursor: pointer; }
         .chat-item:hover { background: #f8fafc; border-color: #e8edf5; transform: translateX(1px); }
@@ -92,6 +140,8 @@
         .fade-in { animation: fade-in 0.2s ease; }
         @keyframes pop-in { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .pop-in { animation: pop-in 0.2s cubic-bezier(0.34,1.4,0.64,1) forwards; }
+        @keyframes notification-slide { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes notification-out { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
 
         /* ── TYPING INDICATOR ── */
         .typing-dots span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; animation: typing-bounce 1.2s infinite ease-in-out; }
@@ -169,9 +219,12 @@
         .pill-btn-red:hover { background: #fecaca; }
         .dark .pill-btn-red { background: rgba(220,38,38,0.12); color: #f87171; }
         .dark .pill-btn-red:hover { background: rgba(220,38,38,0.22); }
+        .pill-btn-orange { background: #fff7ed; color: #c2410c; }
+        .pill-btn-orange:hover { background: #ffedd5; }
+        .dark .pill-btn-orange { background: rgba(194,65,12,0.15); color: #fb923c; }
 
         /* ── TEAM CHAT PANEL ── */
-        #team-chat-panel { position: fixed; right: 24px; bottom: 88px; width: 340px; height: 480px; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; z-index: 8000; transform: scale(0.88) translateY(20px); opacity: 0; pointer-events: none; transition: transform 0.32s cubic-bezier(0.34,1.4,0.64,1), opacity 0.22s ease; transform-origin: bottom right; }
+        #team-chat-panel { position: fixed; right: 24px; bottom: 88px; width: 380px; height: 540px; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05); display: flex; flex-direction: column; overflow: hidden; z-index: 8000; transform: scale(0.88) translateY(20px); opacity: 0; pointer-events: none; transition: transform 0.32s cubic-bezier(0.34,1.4,0.64,1), opacity 0.22s ease; transform-origin: bottom right; }
         .dark #team-chat-panel { background: #1a2235; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
         #team-chat-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
 
@@ -188,22 +241,23 @@
         .dark #tc-unread-badge { border-color: #1a2235; }
         #tc-unread-badge.hidden { display: none; }
 
-        .tc-panel-header { padding: 16px 16px 12px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+        .tc-panel-header { padding: 14px 16px 10px; border-bottom: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
         .dark .tc-panel-header { border-bottom-color: #2d3f55; }
+        .tc-panel-header-row1 { display: flex; align-items: center; justify-content: space-between; }
         .tc-online-dot { width: 7px; height: 7px; border-radius: 99px; background: #22c55e; display: inline-block; }
         .tc-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
         .tc-messages::-webkit-scrollbar { width: 2px; }
         .tc-messages::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
         .dark .tc-messages::-webkit-scrollbar-thumb { background: #334155; }
-        .tc-input-row { padding: 10px 12px; border-top: 1px solid #f1f5f9; display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-        .dark .tc-input-row { border-top-color: #2d3f55; }
+        .tc-input-area { padding: 10px 12px; border-top: 1px solid #f1f5f9; flex-shrink: 0; }
+        .dark .tc-input-area { border-top-color: #2d3f55; }
+        .tc-input-row { display: flex; gap: 8px; align-items: center; }
         .tc-input { flex: 1; padding: 8px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 99px; font-size: 13px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; font-family: 'DM Sans', sans-serif; color: #0f172a; }
         .dark .tc-input { background: #0f172a; border-color: #334155; color: #f1f5f9; }
         .tc-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
         .tc-send-btn { width: 34px; height: 34px; border-radius: 99px; background: #2563eb; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: transform 0.15s ease, background 0.12s; flex-shrink: 0; }
         .tc-send-btn:hover { background: #1d4ed8; transform: scale(1.08); }
         .tc-send-btn:active { transform: scale(0.95); }
-        .tc-agent-row { display: flex; align-items: center; gap-8px; }
         .tc-time { font-size: 9.5px; color: #94a3b8; margin-top: 3px; }
         .tc-name { font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 3px; }
         .dark .tc-name { color: #94a3b8; }
@@ -217,6 +271,42 @@
         .dark .tc-online-agent { color: #94a3b8; }
         .tc-online-agent span { font-weight: 600; color: #1e293b; }
         .dark .tc-online-agent span { color: #e2e8f0; }
+        
+        /* ── DM TARGET ── */
+        #dm-target-bar { display: none; }
+        #dm-target-bar.active { display: flex; }
+        .dm-chip { display: inline-flex; align-items: center; gap: 5px; background: #f3e8ff; color: #7e22ce; border-radius: 99px; padding: 3px 10px 3px 5px; font-size: 11px; font-weight: 700; }
+        .dark .dm-chip { background: rgba(147,51,234,0.2); color: #c084fc; }
+        
+        /* ── AGENT SELECTOR DROPDOWN ── */
+        #tc-agent-selector { position: absolute; bottom: 100%; left: 0; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.14); z-index: 100; overflow: hidden; max-height: 220px; overflow-y: auto; }
+        .dark #tc-agent-selector { background: #1e293b; border-color: #334155; }
+        .tc-agent-opt { display: flex; align-items: center; gap: 10px; padding: 9px 14px; cursor: pointer; transition: background 0.12s; font-size: 13px; }
+        .tc-agent-opt:hover { background: #f8fafc; }
+        .dark .tc-agent-opt:hover { background: rgba(51,65,85,0.5); }
+        .tc-agent-opt .agent-opt-name { font-weight: 600; color: #1e293b; }
+        .dark .tc-agent-opt .agent-opt-name { color: #e2e8f0; }
+        .tc-agent-opt .agent-opt-status { font-size: 10px; color: #94a3b8; }
+        
+        /* ── MSG HOVER ACTIONS ── */
+        .msg-wrap { position: relative; }
+        .msg-actions { position: absolute; top: -8px; right: 0; display: none; gap: 3px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 3px 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 10; }
+        .dark .msg-actions { background: #1e293b; border-color: #334155; }
+        .msg-wrap:hover .msg-actions { display: flex; }
+        .msg-action-btn { width: 26px; height: 26px; border-radius: 7px; border: none; background: transparent; cursor: pointer; color: #64748b; font-size: 11px; display: flex; align-items: center; justify-content: center; transition: background 0.1s, color 0.1s; }
+        .msg-action-btn:hover { background: #f1f5f9; color: #2563eb; }
+        .dark .msg-action-btn:hover { background: rgba(51,65,85,0.5); color: #60a5fa; }
+        
+        /* ── TC MSG HOVER ── */
+        .tc-msg-wrap-me, .tc-msg-wrap-other { position: relative; }
+        .tc-msg-actions { position: absolute; top: 0; left: -70px; display: none; gap: 2px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 3px 5px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .dark .tc-msg-actions { background: #1e293b; border-color: #334155; }
+        .tc-msg-wrap-me:hover .tc-msg-actions,
+        .tc-msg-wrap-other:hover .tc-msg-actions { display: flex; }
+        .tc-msg-wrap-other .tc-msg-actions { left: auto; right: -70px; }
+        .tc-action-btn { width: 26px; height: 26px; border-radius: 7px; border: none; background: transparent; cursor: pointer; color: #64748b; font-size: 11px; display: flex; align-items: center; justify-content: center; transition: background 0.1s, color 0.1s; }
+        .tc-action-btn:hover { background: #f1f5f9; color: #2563eb; }
+        .dark .tc-action-btn:hover { background: rgba(51,65,85,0.5); color: #60a5fa; }
 
         /* ── PILL STATUS BADGE ── */
         .status-pill { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 99px; }
@@ -230,9 +320,58 @@
         /* ── INPUT PILL STYLE ── */
         #message-input { border-radius: 14px; }
         .tc-divider { font-size: 10px; color: #94a3b8; text-align: center; padding: 4px 0; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+
+        /* ── NOTIFICATIONS ── */
+        #notification-stack { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .notif-card { background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.06); padding: 12px 16px; min-width: 280px; max-width: 360px; pointer-events: all; animation: notification-slide 0.4s cubic-bezier(0.34,1.4,0.64,1) forwards; display: flex; gap: 12px; align-items: flex-start; }
+        .dark .notif-card { background: #1e293b; box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
+        .notif-card.dismissing { animation: notification-out 0.3s ease forwards; }
+        .notif-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+        .notif-body { flex: 1; min-width: 0; }
+        .notif-title { font-size: 12px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+        .dark .notif-title { color: #f1f5f9; }
+        .notif-text { font-size: 11px; color: #64748b; line-height: 1.4; }
+        .dark .notif-text { color: #94a3b8; }
+        .notif-close { width: 20px; height: 20px; border: none; background: none; cursor: pointer; color: #94a3b8; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 6px; transition: background 0.1s; }
+        .notif-close:hover { background: #f1f5f9; color: #64748b; }
+        .dark .notif-close:hover { background: rgba(51,65,85,0.5); }
+        .notif-progress { height: 2px; background: #e2e8f0; border-radius: 99px; margin-top: 8px; overflow: hidden; }
+        .dark .notif-progress { background: #334155; }
+        .notif-progress-bar { height: 100%; border-radius: 99px; transition: width linear; }
+
+        /* ── TAG DROPDOWN ── */
+        #tag-dropdown { position: absolute; bottom: 100%; left: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.12); z-index: 100; min-width: 200px; overflow: hidden; display: none; }
+        .dark #tag-dropdown { background: #1e293b; border-color: #334155; }
+        #tag-dropdown.open { display: block; }
+        .tag-opt { display: flex; align-items: center; gap: 10px; padding: 9px 14px; cursor: pointer; font-size: 13px; transition: background 0.1s; }
+        .tag-opt:hover { background: #f8fafc; }
+        .dark .tag-opt:hover { background: rgba(51,65,85,0.5); }
+        .tag-dot { width: 8px; height: 8px; border-radius: 99px; flex-shrink: 0; }
+
+        /* ── PRIORITY DROPDOWN ── */
+        #priority-dropdown { position: absolute; bottom: 100%; left: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.12); z-index: 100; min-width: 180px; overflow: hidden; display: none; }
+        .dark #priority-dropdown { background: #1e293b; border-color: #334155; }
+        #priority-dropdown.open { display: block; }
+        .priority-opt { display: flex; align-items: center; gap: 10px; padding: 9px 14px; cursor: pointer; font-size: 13px; transition: background 0.1s; }
+        .priority-opt:hover { background: #f8fafc; }
+        .dark .priority-opt:hover { background: rgba(51,65,85,0.5); }
+        .priority-dot { width: 8px; height: 8px; border-radius: 99px; flex-shrink: 0; }
+
+        /* ── SOUND SETTINGS ── */
+        #sound-settings-modal { position: fixed; inset: 0; z-index: 9500; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px); }
+        #sound-settings-modal.hidden { display: none; }
+        .toggle-switch { position: relative; width: 38px; height: 22px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; inset: 0; background: #cbd5e1; border-radius: 99px; cursor: pointer; transition: background 0.2s; }
+        .toggle-slider:before { content:''; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px; background: #fff; border-radius: 99px; transition: transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+        input:checked + .toggle-slider { background: #2563eb; }
+        input:checked + .toggle-slider:before { transform: translateX(16px); }
     </style>
 </head>
 <body class="h-screen flex bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- ========== NOTIFICATION STACK ========== -->
+    <div id="notification-stack"></div>
 
     <!-- ========== LOGIN OVERLAY ========== -->
     <div id="login-overlay" class="fixed inset-0 z-50 bg-gray-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4 transition-opacity duration-500">
@@ -351,6 +490,62 @@
         </div>
     </div>
 
+    <!-- ========== SOUND SETTINGS MODAL ========== -->
+    <div id="sound-settings-modal" class="hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm border border-gray-200 dark:border-slate-700 overflow-hidden pop-in">
+            <div class="p-5 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 class="font-bold">Sound & Notifications</h3>
+                <button onclick="closeSoundSettings()" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">New Request Sound</p>
+                        <p class="text-xs text-gray-400">Play sound for incoming chats</p>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" id="snd-new-request" checked onchange="saveSoundSettings()"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">New Message Sound</p>
+                        <p class="text-xs text-gray-400">Play sound for client messages</p>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" id="snd-new-message" checked onchange="saveSoundSettings()"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">Team Chat Sound</p>
+                        <p class="text-xs text-gray-400">Play sound for team messages</p>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" id="snd-team-chat" checked onchange="saveSoundSettings()"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">DM Mentions Sound</p>
+                        <p class="text-xs text-gray-400">Play sound when you're mentioned</p>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" id="snd-dm" checked onchange="saveSoundSettings()"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">Browser Notifications</p>
+                        <p class="text-xs text-gray-400">Show desktop notifications</p>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" id="notif-browser" onchange="requestBrowserNotifPermission()"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="pt-2 border-t border-gray-100 dark:border-slate-700">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Test Sounds</p>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="playSound('request')" class="pill-btn pill-btn-blue text-xs">🔔 Request</button>
+                        <button onclick="playSound('message')" class="pill-btn pill-btn-gray text-xs">💬 Message</button>
+                        <button onclick="playSound('team')" class="pill-btn pill-btn-purple text-xs">👥 Team</button>
+                        <button onclick="playSound('dm')" class="pill-btn pill-btn-orange text-xs">📩 DM</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ========== IMAGE LIGHTBOX ========== -->
     <div id="lightbox" class="hidden fixed inset-0 z-[9999] bg-black/92 flex items-center justify-center cursor-zoom-out" onclick="this.classList.add('hidden')">
         <img id="lightbox-img" src="" class="max-w-full max-h-full rounded-2xl shadow-2xl">
@@ -366,17 +561,29 @@
     <!-- ========== TEAM CHAT PANEL ========== -->
     <div id="team-chat-panel">
         <div class="tc-panel-header">
-            <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-xl bg-slate-900 dark:bg-slate-100 flex items-center justify-center">
-                    <i class="fa-solid fa-users text-white dark:text-slate-900 text-xs"></i>
+            <div class="tc-panel-header-row1">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-slate-900 dark:bg-slate-100 flex items-center justify-center">
+                        <i class="fa-solid fa-users text-white dark:text-slate-900 text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-gray-900 dark:text-gray-100">Team Chat</p>
+                        <p class="text-[10px] text-gray-400 flex items-center gap-1.5"><span class="tc-online-dot"></span> <span id="tc-online-count">0 online</span></p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-sm font-bold text-gray-900 dark:text-gray-100">Team Chat</p>
-                    <p class="text-[10px] text-gray-400 flex items-center gap-1.5"><span class="tc-online-dot"></span> <span id="tc-online-count">0 online</span></p>
+                <div class="flex items-center gap-1">
+                    <button onclick="toggleTcOnlineList()" class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition text-xs" id="tc-members-btn" title="Members"><i class="fa-solid fa-user-group"></i></button>
+                    <button onclick="openDmSelector()" class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition text-xs" title="Direct Message"><i class="fa-solid fa-at"></i></button>
                 </div>
             </div>
-            <div class="flex items-center gap-1">
-                <button onclick="toggleTcOnlineList()" class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition text-xs" id="tc-members-btn" title="Members"><i class="fa-solid fa-user-group"></i></button>
+            <!-- DM target bar -->
+            <div id="dm-target-bar" class="items-center gap-2 px-1">
+                <span class="dm-chip" id="dm-chip">
+                    <img id="dm-chip-avatar" src="" class="w-4 h-4 rounded-full">
+                    <span id="dm-chip-name">Agent</span>
+                </span>
+                <span class="text-xs text-gray-400 flex-1">Direct message</span>
+                <button onclick="clearDmTarget()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xs w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
 
@@ -389,12 +596,25 @@
         </div>
 
         <!-- Input -->
-        <div class="tc-input-row">
-            <input class="tc-input" id="tc-input" placeholder="Message the team…" maxlength="500"
-                onkeypress="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendTeamMessage();}">
-            <button class="tc-send-btn" onclick="sendTeamMessage()">
-                <i class="fa-solid fa-paper-plane" style="font-size:12px;"></i>
-            </button>
+        <div class="tc-input-area">
+            <!-- TC Reply preview -->
+            <div id="tc-reply-preview" class="items-center gap-2 mb-2 p-2 bg-gray-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
+                <div class="flex-1 min-w-0">
+                    <p class="text-[10px] font-bold text-gray-400 mb-0.5">Replying to</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 truncate" id="tc-reply-text">—</p>
+                </div>
+                <button onclick="clearTcReply()" class="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-xmark text-xs"></i></button>
+            </div>
+            <div class="tc-input-row" style="position:relative;">
+                <!-- Agent selector dropdown -->
+                <div id="tc-agent-selector" class="hidden"></div>
+                <input class="tc-input" id="tc-input" placeholder="Message the team… (@ to DM)" maxlength="500"
+                    oninput="handleTcInputChange(event)"
+                    onkeypress="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendTeamMessage();}">
+                <button class="tc-send-btn" onclick="sendTeamMessage()">
+                    <i class="fa-solid fa-paper-plane" style="font-size:12px;"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -421,6 +641,9 @@
                     </button>
                     <button onclick="document.getElementById('canned-mgr-modal').classList.remove('hidden'); renderCannedMgr()" class="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition" data-tip="Canned Responses">
                         <i class="fa-solid fa-bolt text-sm"></i>
+                    </button>
+                    <button onclick="openSoundSettings()" class="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition" data-tip="Sound & Notifications">
+                        <i class="fa-solid fa-bell text-sm"></i>
                     </button>
                     <button onclick="logoutAgent()" class="w-8 h-8 rounded-xl flex items-center justify-center text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition" data-tip="Logout">
                         <i class="fa-solid fa-power-off text-sm"></i>
@@ -453,13 +676,42 @@
             </button>
 
             <!-- Chat header -->
-            <header id="chat-header" class="h-16 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex items-center px-4 pl-16 md:pl-4 shrink-0 hidden">
-                <div class="flex justify-between items-center w-full gap-2">
+            <header id="chat-header" class="h-auto min-h-[64px] bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex items-center px-4 pl-16 md:pl-4 shrink-0 hidden py-2">
+                <div class="flex justify-between items-center w-full gap-2 flex-wrap">
                     <div class="min-w-0">
                         <h2 class="font-bold text-gray-800 dark:text-gray-100 text-base truncate" id="current-client-name">—</h2>
                         <p class="text-[11px] text-gray-400 font-mono" id="current-chat-status">—</p>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
+                    <!-- Tags & Priority display -->
+                    <div class="flex items-center gap-2 flex-wrap flex-1 justify-center min-w-0">
+                        <div id="active-tags-display" class="flex gap-1.5 flex-wrap"></div>
+                        <div id="active-priority-display"></div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0 flex-wrap">
+                        <!-- Tag button with dropdown -->
+                        <div class="relative" id="tag-btn-wrap">
+                            <button onclick="toggleTagDropdown()" class="pill-btn pill-btn-gray" data-tip="Add Tag">
+                                <i class="fa-solid fa-tag text-[10px]"></i><span class="hidden sm:inline">Tag</span>
+                            </button>
+                            <div id="tag-dropdown">
+                                <div class="p-2 border-b border-gray-100 dark:border-slate-700">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-2">Internal Tags</p>
+                                </div>
+                                <div id="tag-opts-list"></div>
+                            </div>
+                        </div>
+                        <!-- Priority button with dropdown -->
+                        <div class="relative" id="priority-btn-wrap">
+                            <button onclick="togglePriorityDropdown()" class="pill-btn pill-btn-gray" data-tip="Set Priority">
+                                <i class="fa-solid fa-fire text-[10px]"></i><span class="hidden sm:inline">Priority</span>
+                            </button>
+                            <div id="priority-dropdown">
+                                <div class="p-2 border-b border-gray-100 dark:border-slate-700">
+                                    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-2">Priority Level</p>
+                                </div>
+                                <div id="priority-opts-list"></div>
+                            </div>
+                        </div>
                         <button onclick="openTransferModal()" id="btn-transfer" class="pill-btn pill-btn-purple" data-tip="Transfer Chat">
                             <i class="fa-solid fa-share-nodes text-[10px]"></i><span class="hidden sm:inline">Transfer</span>
                         </button>
@@ -508,6 +760,15 @@
                         <div id="agent-quick-replies" class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100 dark:border-slate-700 overflow-x-auto no-scrollbar">
                             <div id="agent-qr-list" class="flex gap-2 flex-1"></div>
                             <button onclick="closeAgentQuickReplies()" class="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 transition"><i class="fa-solid fa-xmark text-xs"></i></button>
+                        </div>
+
+                        <!-- Reply Preview -->
+                        <div id="reply-preview" class="items-center gap-2 mb-2 p-2 bg-gray-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-[10px] font-bold text-gray-400 mb-0.5">Replying to <span id="reply-sender-name" class="text-blue-500">—</span></p>
+                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate" id="reply-msg-preview">—</p>
+                            </div>
+                            <button onclick="clearReply()" class="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-slate-700"><i class="fa-solid fa-xmark text-xs"></i></button>
                         </div>
 
                         <!-- File preview -->
@@ -615,6 +876,251 @@
     const storage = firebase.storage();
 
     // ─────────────────────────────────────────
+    //  AUDIO ENGINE (Web Audio API)
+    // ─────────────────────────────────────────
+    let audioCtx = null;
+    function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
+
+    function playTone(freq, duration, type = 'sine', gain = 0.18) {
+        try {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gn  = ctx.createGain();
+            osc.connect(gn); gn.connect(ctx.destination);
+            osc.type = type; osc.frequency.value = freq;
+            gn.gain.setValueAtTime(gain, ctx.currentTime);
+            gn.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+            osc.start(ctx.currentTime); osc.stop(ctx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    function playSound(type) {
+        const settings = getSoundSettings();
+        switch(type) {
+            case 'request':
+                if (!settings.newRequest) return;
+                playTone(880, 0.12, 'sine', 0.22);
+                setTimeout(() => playTone(1100, 0.18, 'sine', 0.22), 140);
+                setTimeout(() => playTone(1320, 0.28, 'sine', 0.2), 300);
+                break;
+            case 'message':
+                if (!settings.newMessage) return;
+                playTone(660, 0.08, 'sine', 0.15);
+                setTimeout(() => playTone(880, 0.14, 'sine', 0.13), 100);
+                break;
+            case 'team':
+                if (!settings.teamChat) return;
+                playTone(550, 0.1, 'triangle', 0.14);
+                setTimeout(() => playTone(700, 0.12, 'triangle', 0.12), 110);
+                break;
+            case 'dm':
+                if (!settings.dm) return;
+                playTone(800, 0.1, 'sine', 0.18);
+                setTimeout(() => playTone(1000, 0.08, 'sine', 0.16), 90);
+                setTimeout(() => playTone(800, 0.14, 'sine', 0.14), 180);
+                break;
+            case 'resolve':
+                playTone(523, 0.1, 'sine', 0.14);
+                setTimeout(() => playTone(659, 0.1, 'sine', 0.12), 120);
+                setTimeout(() => playTone(784, 0.22, 'sine', 0.12), 250);
+                break;
+        }
+    }
+
+    // ─────────────────────────────────────────
+    //  SOUND SETTINGS
+    // ─────────────────────────────────────────
+    function getSoundSettings() {
+        const raw = localStorage.getItem('soundSettings');
+        return raw ? JSON.parse(raw) : { newRequest: true, newMessage: true, teamChat: true, dm: true, browserNotif: false };
+    }
+    function saveSoundSettings() {
+        const settings = {
+            newRequest: document.getElementById('snd-new-request').checked,
+            newMessage: document.getElementById('snd-new-message').checked,
+            teamChat:   document.getElementById('snd-team-chat').checked,
+            dm:         document.getElementById('snd-dm').checked,
+            browserNotif: document.getElementById('notif-browser').checked
+        };
+        localStorage.setItem('soundSettings', JSON.stringify(settings));
+    }
+    function openSoundSettings() {
+        const s = getSoundSettings();
+        document.getElementById('snd-new-request').checked = s.newRequest;
+        document.getElementById('snd-new-message').checked = s.newMessage;
+        document.getElementById('snd-team-chat').checked   = s.teamChat;
+        document.getElementById('snd-dm').checked           = s.dm;
+        document.getElementById('notif-browser').checked    = s.browserNotif;
+        document.getElementById('sound-settings-modal').classList.remove('hidden');
+    }
+    function closeSoundSettings() { document.getElementById('sound-settings-modal').classList.add('hidden'); }
+
+    async function requestBrowserNotifPermission() {
+        if (!('Notification' in window)) return;
+        const result = await Notification.requestPermission();
+        document.getElementById('notif-browser').checked = result === 'granted';
+        saveSoundSettings();
+    }
+
+    function sendBrowserNotif(title, body, icon) {
+        const s = getSoundSettings();
+        if (!s.browserNotif) return;
+        if (!('Notification' in window) || Notification.permission !== 'granted') return;
+        if (document.hasFocus()) return; // only when tab not focused
+        new Notification(title, { body, icon: icon || '' });
+    }
+
+    // ─────────────────────────────────────────
+    //  IN-APP NOTIFICATIONS
+    // ─────────────────────────────────────────
+    function showNotification(type, title, text, duration = 5000) {
+        const stack = document.getElementById('notification-stack');
+        const id    = 'notif-' + Date.now();
+        const colors = {
+            info:    { bg:'#eff6ff', icon:'#2563eb', iconBg:'#dbeafe', fa:'fa-info-circle' },
+            success: { bg:'#f0fdf4', icon:'#16a34a', iconBg:'#dcfce7', fa:'fa-circle-check' },
+            warning: { bg:'#fffbeb', icon:'#d97706', iconBg:'#fef3c7', fa:'fa-triangle-exclamation' },
+            request: { bg:'#eff6ff', icon:'#2563eb', iconBg:'#dbeafe', fa:'fa-bell' },
+            dm:      { bg:'#faf5ff', icon:'#7c3aed', iconBg:'#f3e8ff', fa:'fa-at' },
+            team:    { bg:'#f0fdf4', icon:'#15803d', iconBg:'#dcfce7', fa:'fa-users' },
+            message: { bg:'#f0f9ff', icon:'#0284c7', iconBg:'#e0f2fe', fa:'fa-comment' }
+        };
+        const c = colors[type] || colors.info;
+        const el = document.createElement('div');
+        el.id = id;
+        el.className = 'notif-card';
+        el.style.background = c.bg;
+        el.innerHTML = `
+            <div class="notif-icon" style="background:${c.iconBg};color:${c.icon}"><i class="fa-solid ${c.fa}"></i></div>
+            <div class="notif-body">
+                <p class="notif-title">${escapeHtml(title)}</p>
+                <p class="notif-text">${escapeHtml(text)}</p>
+                <div class="notif-progress"><div class="notif-progress-bar" id="${id}-bar" style="background:${c.icon};width:100%;"></div></div>
+            </div>
+            <button class="notif-close" onclick="dismissNotification('${id}')"><i class="fa-solid fa-xmark"></i></button>`;
+        stack.appendChild(el);
+        // Progress bar
+        const bar = document.getElementById(id + '-bar');
+        requestAnimationFrame(() => {
+            bar.style.transition = `width ${duration}ms linear`;
+            bar.style.width = '0%';
+        });
+        const timer = setTimeout(() => dismissNotification(id), duration);
+        el._timer = timer;
+    }
+
+    function dismissNotification(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        clearTimeout(el._timer);
+        el.classList.add('dismissing');
+        setTimeout(() => el.remove(), 320);
+    }
+
+    // ─────────────────────────────────────────
+    //  TAGS CONFIG
+    // ─────────────────────────────────────────
+    const TAG_CONFIG = [
+        { id: 'bug',        label: 'Bug',             color: '#dc2626', dot: '#ef4444' },
+        { id: 'billing',    label: 'Billing',          color: '#d97706', dot: '#f59e0b' },
+        { id: 'feature',    label: 'Feature Request',  color: '#2563eb', dot: '#3b82f6' },
+        { id: 'account',    label: 'Account Issue',    color: '#7c3aed', dot: '#8b5cf6' },
+        { id: 'shipping',   label: 'Shipping',         color: '#059669', dot: '#10b981' },
+        { id: 'technical',  label: 'Technical',        color: '#0284c7', dot: '#0ea5e9' },
+    ];
+    const PRIORITY_CONFIG = [
+        { id: 'urgent', label: 'Urgent', color: '#ef4444', dot: '#ef4444' },
+        { id: 'high',   label: 'High',   color: '#f97316', dot: '#f97316' },
+        { id: 'normal', label: 'Normal', color: '#3b82f6', dot: '#3b82f6' },
+        { id: 'low',    label: 'Low',    color: '#22c55e', dot: '#22c55e' },
+    ];
+
+    let activeChatTags     = [];
+    let activeChatPriority = 'normal';
+
+    function renderTagOpts() {
+        const list = document.getElementById('tag-opts-list');
+        list.innerHTML = TAG_CONFIG.map(t => {
+            const isActive = activeChatTags.includes(t.id);
+            return `<div class="tag-opt" onclick="toggleTag('${t.id}')">
+                <div class="tag-dot" style="background:${t.dot}"></div>
+                <span class="flex-1 font-medium text-gray-700 dark:text-gray-300">${t.label}</span>
+                ${isActive ? '<i class="fa-solid fa-check text-xs" style="color:'+t.dot+'"></i>' : ''}
+            </div>`;
+        }).join('');
+    }
+    function renderPriorityOpts() {
+        const list = document.getElementById('priority-opts-list');
+        list.innerHTML = PRIORITY_CONFIG.map(p => {
+            const isActive = activeChatPriority === p.id;
+            return `<div class="priority-opt" onclick="setPriority('${p.id}')">
+                <div class="priority-dot" style="background:${p.dot}"></div>
+                <span class="flex-1 font-medium text-gray-700 dark:text-gray-300">${p.label}</span>
+                ${isActive ? '<i class="fa-solid fa-check text-xs" style="color:'+p.dot+'"></i>' : ''}
+            </div>`;
+        }).join('');
+    }
+
+    function toggleTagDropdown() {
+        const dd = document.getElementById('tag-dropdown');
+        const isOpen = dd.classList.contains('open');
+        closeAllDropdowns();
+        if (!isOpen) { renderTagOpts(); dd.classList.add('open'); }
+    }
+    function togglePriorityDropdown() {
+        const dd = document.getElementById('priority-dropdown');
+        const isOpen = dd.classList.contains('open');
+        closeAllDropdowns();
+        if (!isOpen) { renderPriorityOpts(); dd.classList.add('open'); }
+    }
+    function closeAllDropdowns() {
+        document.getElementById('tag-dropdown').classList.remove('open');
+        document.getElementById('priority-dropdown').classList.remove('open');
+    }
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#tag-btn-wrap')) document.getElementById('tag-dropdown').classList.remove('open');
+        if (!e.target.closest('#priority-btn-wrap')) document.getElementById('priority-dropdown').classList.remove('open');
+        if (!e.target.closest('#team-chat-panel')) document.getElementById('tc-agent-selector').classList.add('hidden');
+    });
+
+    async function toggleTag(tagId) {
+        if (!activeChatId) return;
+        const idx = activeChatTags.indexOf(tagId);
+        if (idx > -1) activeChatTags.splice(idx, 1);
+        else activeChatTags.push(tagId);
+        await db.ref(`live_support_chats/${activeChatId}`).update({ tags: activeChatTags });
+        renderTagOpts();
+        renderActiveTagsDisplay();
+    }
+
+    async function setPriority(priorityId) {
+        if (!activeChatId) return;
+        activeChatPriority = priorityId;
+        await db.ref(`live_support_chats/${activeChatId}`).update({ priority: priorityId });
+        renderPriorityOpts();
+        renderActivePriorityDisplay();
+        closeAllDropdowns();
+    }
+
+    function renderActiveTagsDisplay() {
+        const container = document.getElementById('active-tags-display');
+        container.innerHTML = activeChatTags.map(tid => {
+            const t = TAG_CONFIG.find(x => x.id === tid);
+            if (!t) return '';
+            return `<span class="status-pill tag-${t.id}" style="font-size:9px;">${t.label}</span>`;
+        }).join('');
+    }
+    function renderActivePriorityDisplay() {
+        const container = document.getElementById('active-priority-display');
+        const p = PRIORITY_CONFIG.find(x => x.id === activeChatPriority);
+        if (!p) { container.innerHTML = ''; return; }
+        container.innerHTML = `<span class="status-pill priority-badge-${p.id}" style="font-size:9px;"><span style="display:inline-block;width:6px;height:6px;border-radius:99px;background:${p.dot};margin-right:4px;"></span>${p.label}</span>`;
+    }
+
+    // ─────────────────────────────────────────
     //  STATE
     // ─────────────────────────────────────────
     let currentAgent    = null;
@@ -634,19 +1140,24 @@
     let allEmployees    = {};
     let agentQrClosed   = false;
 
+    // Reply state (main chat)
+    let replyToMsg      = null; // { id, sender, text }
+
     // Team chat state
     let teamChatOpen    = false;
     let teamChatRef     = null;
     let tcUnreadCount   = 0;
     let tcOnlineListOpen = false;
+    let tcReplyTo       = null; // { id, senderName, text }
+    let dmTarget        = null; // { id, name, avatar }
 
     // DEFAULT CANNED RESPONSES
     let cannedResponses = JSON.parse(localStorage.getItem('cannedResponses') || 'null') || [
-        { id: 1, title: 'Screenshot request',  body: 'Could you please send a screenshot of what you\'re seeing? That will help me assist you faster.' },
-        { id: 2, title: 'Looking into it',     body: 'Thanks for reaching out! I\'m looking into this for you right now, please give me a moment.' },
-        { id: 3, title: 'Escalate to team',    body: 'I\'m escalating this to our specialist team who will follow up with you within 24 hours.' },
-        { id: 4, title: 'Resolved follow-up',  body: 'I\'m glad we could resolve this for you! Is there anything else I can help with?' },
-        { id: 5, title: 'Check error log',     body: 'Could you please share your error log? You can usually find it in Settings > Support > Export Logs.' },
+        { id: 1, title: 'Screenshot request',  body: "Could you please send a screenshot of what you're seeing? That will help me assist you faster." },
+        { id: 2, title: 'Looking into it',     body: "Thanks for reaching out! I'm looking into this for you right now, please give me a moment." },
+        { id: 3, title: 'Escalate to team',    body: "I'm escalating this to our specialist team who will follow up with you within 24 hours." },
+        { id: 4, title: 'Resolved follow-up',  body: "I'm glad we could resolve this for you! Is there anything else I can help with?" },
+        { id: 5, title: 'Check error log',     body: "Could you please share your error log? You can usually find it in Settings > Support > Export Logs." },
     ];
 
     function saveCanned() { localStorage.setItem('cannedResponses', JSON.stringify(cannedResponses)); }
@@ -685,11 +1196,19 @@
                 listenToQueue();
                 loadAllEmployees();
                 initTeamChat();
+                loadSoundSettings();
             } else {
                 err.classList.remove('hidden');
             }
         } catch (e) { console.error(e); }
         finally { btn.classList.remove('loading'); }
+    }
+
+    function loadSoundSettings() {
+        const s = getSoundSettings();
+        if (s.browserNotif && 'Notification' in window && Notification.permission === 'granted') {
+            document.getElementById('notif-browser').checked = true;
+        }
     }
 
     function avatarUrl(name) {
@@ -725,7 +1244,13 @@
                     !c.agentId && c.status !== 'resolved' &&
                     !seenChatIds.has(c.id) && !rejectedChats.has(c.id) && c.id !== modalChatId
                 );
-                if (newPending) { seenChatIds.add(newPending.id); showRequestModal(newPending); }
+                if (newPending) {
+                    seenChatIds.add(newPending.id);
+                    showRequestModal(newPending);
+                    playSound('request');
+                    showNotification('request', 'New Support Request', `${newPending.clientName || 'Client'} is waiting`);
+                    sendBrowserNotif('New Support Request', newPending.clientName + ' is waiting', newPending.clientAvatar);
+                }
             }
 
             chats.forEach(c => { if (c.agentId || c.status === 'resolved') seenChatIds.add(c.id); });
@@ -743,13 +1268,20 @@
                 visibleChats.forEach(chat => {
                     const isResolved = chat.status === 'resolved';
                     const isPending  = !chat.agentId;
+                    const priority   = chat.priority || 'normal';
+                    const tags       = chat.tags || [];
                     let badgeHtml = '';
                     if (isPending)       badgeHtml = '<span class="status-pill status-pill-pending">Pending</span>';
                     else if (isResolved) badgeHtml = '<span class="status-pill status-pill-resolved">Resolved</span>';
                     else                badgeHtml = '<span class="status-pill status-pill-active">Active</span>';
                     const isActive = activeChatId === chat.id;
+                    const priorityClass = `priority-${priority}`;
+                    const tagsHtml = tags.slice(0,2).map(tid => {
+                        const t = TAG_CONFIG.find(x => x.id === tid);
+                        return t ? `<span class="status-pill tag-${t.id}" style="font-size:8px;padding:2px 6px;">${t.label}</span>` : '';
+                    }).join('');
                     list.innerHTML += `
-                        <div onclick="openChat('${chat.id}')" class="chat-item p-3 cursor-pointer mb-0.5 ${isActive ? 'active' : ''}">
+                        <div onclick="openChat('${chat.id}')" class="chat-item p-3 cursor-pointer mb-0.5 ${isActive ? 'active' : ''} ${priorityClass}">
                             <div class="flex items-start gap-2.5">
                                 <img src="${chat.clientAvatar || avatarUrl(chat.clientName || 'C')}" class="w-9 h-9 rounded-full object-cover shrink-0 mt-0.5">
                                 <div class="flex-1 min-w-0">
@@ -758,6 +1290,7 @@
                                         ${badgeHtml}
                                     </div>
                                     <p class="text-xs text-gray-400 truncate">${chat.lastMessage || 'New request…'}</p>
+                                    ${tagsHtml ? `<div class="flex gap-1 mt-1 flex-wrap">${tagsHtml}</div>` : ''}
                                 </div>
                             </div>
                         </div>`;
@@ -856,10 +1389,28 @@
     }
 
     // ─────────────────────────────────────────
+    //  REPLY (MAIN CHAT)
+    // ─────────────────────────────────────────
+    function setReplyTo(msgId, senderLabel, text) {
+        replyToMsg = { id: msgId, sender: senderLabel, text };
+        document.getElementById('reply-sender-name').textContent = senderLabel;
+        document.getElementById('reply-msg-preview').textContent = text.substring(0, 80) + (text.length > 80 ? '…' : '');
+        document.getElementById('reply-preview').classList.add('active');
+        document.getElementById('message-input').focus();
+    }
+    function clearReply() {
+        replyToMsg = null;
+        document.getElementById('reply-preview').classList.remove('active');
+    }
+
+    // ─────────────────────────────────────────
     //  OPEN CHAT
     // ─────────────────────────────────────────
     async function openChat(chatId) {
         activeChatId = chatId;
+        activeChatTags = [];
+        activeChatPriority = 'normal';
+        clearReply();
         if (activeChatRef) activeChatRef.off();
         if (window.currentStatusRef) window.currentStatusRef.off();
 
@@ -879,6 +1430,12 @@
 
         document.getElementById('current-client-name').innerText = chatData.clientName || 'Client';
         document.getElementById('current-chat-status').innerText = `REF: ${chatId.substring(0, 8).toUpperCase()}`;
+
+        // Load tags & priority
+        activeChatTags     = chatData.tags     || [];
+        activeChatPriority = chatData.priority || 'normal';
+        renderActiveTagsDisplay();
+        renderActivePriorityDisplay();
 
         if (!chatData.agentId && chatData.status !== 'resolved') {
             await db.ref(`live_support_chats/${chatId}`).update({ agentId: currentAgent.id, agentName: currentAgent.name, status: 'active' });
@@ -911,6 +1468,11 @@
             const msg = msgSnap.val();
             const msgId = msgSnap.key;
             appendMessage(msg, msgId, chatData);
+            // sound for incoming client message
+            if (msg.sender !== 'agent' && msg.sender !== 'system') {
+                playSound('message');
+                sendBrowserNotif(`${chatData.clientName || 'Client'}`, msg.text || '[attachment]', chatData.clientAvatar);
+            }
         });
 
         listenReadReceipts(chatId);
@@ -923,6 +1485,17 @@
         const isNote   = msg.type === 'note';
         const time     = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const clientName = (chatData && chatData.clientName) || 'Client';
+        const senderLabel = isAgent ? (currentAgent ? currentAgent.name : 'Agent') : clientName;
+
+        // Quote block (for replied messages)
+        let quoteHtml = '';
+        if (msg.replyTo) {
+            const quoteClass = isAgent ? 'quote-bar-agent' : 'quote-bar-client';
+            quoteHtml = `<div class="quote-bar ${quoteClass}">
+                <span class="font-bold text-[10px] block mb-0.5 opacity-70">${escapeHtml(msg.replyTo.sender)}</span>
+                ${escapeHtml(msg.replyTo.text.substring(0, 80))}${msg.replyTo.text.length > 80 ? '…' : ''}
+            </div>`;
+        }
 
         let innerContent = '';
         if (msg.fileURL) {
@@ -932,26 +1505,31 @@
                 innerContent = `<a href="${msg.fileURL}" target="_blank" class="flex items-center gap-2 underline text-sm mt-1"><i class="fa-solid fa-file text-xs"></i>${msg.fileName || 'attachment'}</a>`;
             }
         }
-        if (msg.text) innerContent += `<span>${msg.text}</span>`;
+        if (msg.text) innerContent += `<span>${escapeHtml(msg.text)}</span>`;
 
         let html = '';
         if (isSystem) {
-            html = `<div class="flex justify-center slide-up"><div class="msg-bubble msg-system">${msg.text}</div></div>`;
+            html = `<div class="flex justify-center slide-up"><div class="msg-bubble msg-system">${escapeHtml(msg.text)}</div></div>`;
         } else if (isNote) {
             html = `<div class="flex justify-end slide-up">
                 <div class="msg-bubble msg-note max-w-xs">
                     <div class="flex items-center gap-1.5 mb-1 text-[10px] font-bold text-amber-600 dark:text-amber-400">
                         <i class="fa-solid fa-lock text-[9px]"></i> Internal Note
                     </div>
-                    ${innerContent}
+                    ${quoteHtml}${innerContent}
                     <span class="text-[9px] block text-right mt-1 opacity-60">${time}</span>
                 </div>
             </div>`;
         } else {
             const tickEl = isAgent ? `<span class="read-tick" id="tick-${msgId}" data-msg-id="${msgId}">✓</span>` : '';
-            html = `<div class="flex flex-col ${isAgent ? 'items-end' : 'items-start'} slide-up">
-                <span class="text-[10px] text-gray-400 mb-1 px-1 font-medium">${isAgent ? (currentAgent ? currentAgent.name : 'Agent') : clientName}</span>
+            const rawText = msg.text || '';
+            html = `<div class="flex flex-col ${isAgent ? 'items-end' : 'items-start'} slide-up msg-wrap">
+                <div class="msg-actions">
+                    <button class="msg-action-btn" onclick="setReplyTo('${msgId}','${escapeHtml(senderLabel)}','${rawText.replace(/'/g,"\\'")}');" title="Reply"><i class="fa-solid fa-reply"></i></button>
+                </div>
+                <span class="text-[10px] text-gray-400 mb-1 px-1 font-medium">${escapeHtml(senderLabel)}</span>
                 <div class="msg-bubble ${isAgent ? 'msg-agent' : 'msg-client'}">
+                    ${quoteHtml}
                     ${innerContent}
                     <div class="flex items-center justify-end gap-1 mt-1">
                         <span class="text-[9px] opacity-60">${time}</span>
@@ -1131,6 +1709,12 @@
         let msgData = { sender: 'agent', text: text || '', timestamp };
         if (isNoteMode) { msgData.type = 'note'; msgData.sender = 'agent'; }
 
+        // Attach reply quote
+        if (replyToMsg) {
+            msgData.replyTo = { id: replyToMsg.id, sender: replyToMsg.sender, text: replyToMsg.text };
+            clearReply();
+        }
+
         if (pendingFile) {
             const file = pendingFile;
             clearFilePreview();
@@ -1161,6 +1745,8 @@
         await db.ref(`live_support_chats/${activeChatId}/messages`).push({
             sender: 'system', text: '✓ Ticket resolved by agent.', timestamp: firebase.database.ServerValue.TIMESTAMP
         });
+        playSound('resolve');
+        showNotification('success', 'Ticket Resolved', 'The chat has been marked as resolved.');
         isBusy = false;
     }
 
@@ -1321,20 +1907,39 @@
     }
 
     // ─────────────────────────────────────────
-    //  TEAM CHAT
+    //  TEAM CHAT – INIT
     // ─────────────────────────────────────────
     function initTeamChat() {
         teamChatRef = db.ref('team_chat');
         teamChatRef.limitToLast(80).on('child_added', (snap) => {
             const msg = snap.val();
+
+            // Only render if: it's a broadcast OR it's a DM involving me
+            const isForMe = !msg.dmTo || msg.dmTo === currentAgent.id || msg.senderId === currentAgent.id;
+            if (!isForMe) return;
+
             appendTeamMessage(msg, snap.key);
+
             if (!teamChatOpen && msg.senderId !== currentAgent.id) {
                 tcUnreadCount++;
                 updateTcBadge();
+                // DM gets louder sound + notification
+                if (msg.dmTo && msg.dmTo === currentAgent.id) {
+                    playSound('dm');
+                    showNotification('dm', `DM from ${msg.senderName}`, msg.text, 6000);
+                    sendBrowserNotif(`DM from ${msg.senderName}`, msg.text, msg.senderAvatar);
+                } else {
+                    playSound('team');
+                    showNotification('team', `${msg.senderName} in Team Chat`, msg.text, 4000);
+                }
+            } else if (teamChatOpen && msg.senderId !== currentAgent.id) {
+                if (msg.dmTo && msg.dmTo === currentAgent.id) {
+                    playSound('dm');
+                }
             }
         });
 
-        // listen for online employees
+        // Listen for online employees
         db.ref('employees').on('value', (snap) => {
             if (!snap.exists()) return;
             snap.forEach(c => { allEmployees[c.key] = { ...c.val(), id: c.key }; });
@@ -1343,6 +1948,9 @@
         });
     }
 
+    // ─────────────────────────────────────────
+    //  TEAM CHAT – UI
+    // ─────────────────────────────────────────
     function toggleTeamChat() {
         teamChatOpen = !teamChatOpen;
         const panel = document.getElementById('team-chat-panel');
@@ -1385,11 +1993,11 @@
         container.innerHTML = onlineAgents.length === 0
             ? '<p class="text-xs text-gray-400 italic px-4 py-3">No agents online.</p>'
             : onlineAgents.map(a => `
-                <div class="tc-online-agent">
+                <div class="tc-online-agent cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-700/50 rounded-xl px-2 transition" onclick="startDmWith('${a.id}')">
                     <img src="${a.profilePic || avatarUrl(a.name)}" class="tc-avatar">
                     <span class="tc-online-dot" style="flex-shrink:0;"></span>
-                    <span>${a.name}</span>
-                    ${a.id === (currentAgent && currentAgent.id) ? '<span class="text-[10px] text-gray-400 ml-auto">(you)</span>' : ''}
+                    <span>${escapeHtml(a.name)}</span>
+                    ${a.id === (currentAgent && currentAgent.id) ? '<span class="text-[10px] text-gray-400 ml-auto">(you)</span>' : '<span class="text-[10px] text-purple-500 ml-auto"><i class="fa-solid fa-at"></i></span>'}
                 </div>`).join('');
     }
 
@@ -1407,23 +2015,121 @@
         }
     }
 
+    // ─────────────────────────────────────────
+    //  TEAM CHAT – DM TARGET
+    // ─────────────────────────────────────────
+    function openDmSelector() {
+        const selector = document.getElementById('tc-agent-selector');
+        const otherAgents = Object.values(allEmployees).filter(a => a.id !== currentAgent.id);
+        if (otherAgents.length === 0) {
+            showNotification('warning', 'No agents available', 'No other agents are in the workspace.', 3000);
+            return;
+        }
+        selector.innerHTML = `<div class="p-2 border-b border-gray-100 dark:border-slate-700">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-2">Send direct message to…</p>
+        </div>` + otherAgents.map(a => `
+            <div class="tc-agent-opt" onclick="startDmWith('${a.id}')">
+                <img src="${a.profilePic || avatarUrl(a.name)}" class="tc-avatar">
+                <div>
+                    <p class="agent-opt-name">${escapeHtml(a.name)}</p>
+                    <p class="agent-opt-status">${a.online ? '🟢 Online' : '⚫ Offline'}</p>
+                </div>
+            </div>`).join('');
+        selector.classList.remove('hidden');
+    }
+
+    function startDmWith(agentId) {
+        const agent = allEmployees[agentId];
+        if (!agent || agentId === currentAgent.id) return;
+        dmTarget = { id: agentId, name: agent.name, avatar: agent.profilePic || avatarUrl(agent.name) };
+        document.getElementById('dm-chip-avatar').src  = dmTarget.avatar;
+        document.getElementById('dm-chip-name').textContent = dmTarget.name;
+        document.getElementById('dm-target-bar').classList.add('active');
+        document.getElementById('tc-agent-selector').classList.add('hidden');
+        document.getElementById('tc-online-list').classList.add('hidden');
+        tcOnlineListOpen = false;
+        document.getElementById('tc-members-btn').style.color = '';
+        document.getElementById('tc-input').placeholder = `Message ${dmTarget.name}…`;
+        document.getElementById('tc-input').focus();
+    }
+
+    function clearDmTarget() {
+        dmTarget = null;
+        document.getElementById('dm-target-bar').classList.remove('active');
+        document.getElementById('tc-input').placeholder = 'Message the team… (@ to DM)';
+    }
+
+    // ─────────────────────────────────────────
+    //  TEAM CHAT – INPUT HANDLER (@ mention)
+    // ─────────────────────────────────────────
+    function handleTcInputChange(event) {
+        const val = event.target.value;
+        const selector = document.getElementById('tc-agent-selector');
+        // Detect @ to trigger DM selector
+        if (val.endsWith('@') && !dmTarget) {
+            openDmSelector();
+        } else if (!val.includes('@')) {
+            selector.classList.add('hidden');
+        }
+    }
+
+    // ─────────────────────────────────────────
+    //  TEAM CHAT – REPLY
+    // ─────────────────────────────────────────
+    function setTcReplyTo(msgId, senderName, text) {
+        tcReplyTo = { id: msgId, senderName, text };
+        document.getElementById('tc-reply-text').textContent = `${senderName}: ${text.substring(0,60)}${text.length>60?'…':''}`;
+        document.getElementById('tc-reply-preview').classList.add('active');
+        document.getElementById('tc-input').focus();
+    }
+    function clearTcReply() {
+        tcReplyTo = null;
+        document.getElementById('tc-reply-preview').classList.remove('active');
+    }
+
+    // ─────────────────────────────────────────
+    //  TEAM CHAT – APPEND MESSAGE
+    // ─────────────────────────────────────────
     function appendTeamMessage(msg, msgId) {
         if (!currentAgent) return;
         const isMe = msg.senderId === currentAgent.id;
+        const isDm = !!msg.dmTo;
         const time  = new Date(msg.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const container = document.getElementById('tc-messages');
 
+        let quoteHtml = '';
+        if (msg.replyTo) {
+            const qClass = isMe ? 'tc-quote' : 'tc-quote-other';
+            quoteHtml = `<div class="${qClass}"><b>${escapeHtml(msg.replyTo.senderName)}:</b> ${escapeHtml(msg.replyTo.text.substring(0,60))}${msg.replyTo.text.length>60?'…':''}</div>`;
+        }
+
+        const dmLabel = isDm ? `<span class="text-[9px] font-bold opacity-70 ml-1">${isMe ? `→ ${escapeHtml(allEmployees[msg.dmTo]?.name || 'DM')}` : '📩 DM'}</span>` : '';
+
+        let bubbleClass = isMe ? 'tc-bubble-me' : 'tc-bubble-other';
+        if (isDm) bubbleClass = isMe ? 'tc-bubble-dm-me' : 'tc-bubble-dm';
+
+        const actionsMe = `<div class="tc-msg-actions">
+            <button class="tc-action-btn" onclick="setTcReplyTo('${msgId}','${escapeHtml(msg.senderName)}','${escapeHtml(msg.text).replace(/'/g,"\\'")}');" title="Reply"><i class="fa-solid fa-reply"></i></button>
+            <button class="tc-action-btn" onclick="startDmWith('${msg.senderId}')" title="DM"><i class="fa-solid fa-at"></i></button>
+        </div>`;
+        const actionsOther = `<div class="tc-msg-actions">
+            <button class="tc-action-btn" onclick="setTcReplyTo('${msgId}','${escapeHtml(msg.senderName)}','${escapeHtml(msg.text).replace(/'/g,"\\'")}');" title="Reply"><i class="fa-solid fa-reply"></i></button>
+            <button class="tc-action-btn" onclick="startDmWith('${msg.senderId}')" title="DM this agent"><i class="fa-solid fa-at"></i></button>
+        </div>`;
+
         const html = isMe
             ? `<div class="tc-msg-wrap-me slide-up">
-                <div class="tc-bubble-me">${escapeHtml(msg.text)}</div>
+                ${actionsMe}
+                <div class="${bubbleClass}">${quoteHtml}${escapeHtml(msg.text)}${dmLabel}</div>
                 <div class="tc-time">${time}</div>
                </div>`
             : `<div class="tc-msg-wrap-other slide-up">
                 <div class="tc-sender-row">
                     <img src="${msg.senderAvatar || avatarUrl(msg.senderName || '?')}" class="tc-avatar">
-                    <span class="tc-name">${msg.senderName || 'Agent'}</span>
+                    <span class="tc-name">${escapeHtml(msg.senderName || 'Agent')}</span>
                 </div>
-                <div class="tc-bubble-other">${escapeHtml(msg.text)}</div>
+                ${actionsOther}
+                <div class="${bubbleClass}">${quoteHtml}${escapeHtml(msg.text)}${dmLabel}</div>
                 <div class="tc-time">${time}</div>
                </div>`;
 
@@ -1431,23 +2137,49 @@
         if (teamChatOpen) container.scrollTop = container.scrollHeight;
     }
 
+    // ─────────────────────────────────────────
+    //  TEAM CHAT – SEND
+    // ─────────────────────────────────────────
     async function sendTeamMessage() {
         const input = document.getElementById('tc-input');
-        const text  = input.value.trim();
+        let text  = input.value.trim();
         if (!text || !currentAgent) return;
+
+        // Strip @ prefix if user typed @Name to DM
+        if (text.startsWith('@') && dmTarget) text = text.replace(/^@\S+\s*/, '').trim() || text;
+
         input.value = '';
-        await db.ref('team_chat').push({
+
+        const msgData = {
             senderId:     currentAgent.id,
             senderName:   currentAgent.name,
             senderAvatar: currentAgent.profilePic || avatarUrl(currentAgent.name),
             text,
             timestamp: firebase.database.ServerValue.TIMESTAMP
-        });
+        };
+
+        if (dmTarget) {
+            msgData.dmTo = dmTarget.id;
+            msgData.dmToName = dmTarget.name;
+        }
+
+        if (tcReplyTo) {
+            msgData.replyTo = { id: tcReplyTo.id, senderName: tcReplyTo.senderName, text: tcReplyTo.text };
+            clearTcReply();
+        }
+
+        await db.ref('team_chat').push(msgData);
+
+        // If DM, optionally clear after send
+        // clearDmTarget(); // uncomment to auto-clear DM after send
     }
 
+    // ─────────────────────────────────────────
+    //  UTILS
+    // ─────────────────────────────────────────
     function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
     </script>
 </body>
