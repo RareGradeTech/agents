@@ -3,51 +3,374 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Page</title>
+  <title>ATELIER • Fashion</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 font-sans">
-  <div class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@300;400;500&amp;display=swap');
     
-    <!-- Header -->
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900">Hello, World!</h1>
-        <p class="text-gray-500 mt-1">This is a simple HTML page</p>
+    .heading-font {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    
+    .fashion-card {
+      transition: all 0.3s ease;
+    }
+    
+    .fashion-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 0;
+      background-color: #000;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+  <!-- Navbar -->
+  <nav class="border-b">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-x-12">
+        <!-- Logo -->
+        <div class="flex items-center gap-x-2">
+          <i class="fa-solid fa-gem text-2xl"></i>
+          <h1 class="text-3xl font-bold tracking-tighter heading-font">ATELIER</h1>
+        </div>
+        
+        <!-- Menu -->
+        <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+          <a href="#" class="nav-link">Collections</a>
+          <a href="#" class="nav-link">Women</a>
+          <a href="#" class="nav-link">Men</a>
+          <a href="#" class="nav-link">New Arrivals</a>
+        </div>
       </div>
-      <button onclick="changeMessage()" 
-              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-        Click Me
-      </button>
-    </div>
 
-    <!-- Content -->
-    <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-4">Features</h2>
-      <ul class="space-y-3 text-gray-700">
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span> Clean and responsive design
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span> Includes Tailwind CSS
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="text-green-500">✓</span> Simple JavaScript interaction
-        </li>
-      </ul>
+      <div class="flex items-center gap-x-5">
+        <!-- Search -->
+        <div class="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 text-sm w-64">
+          <i class="fa-solid fa-search text-gray-400 mr-2"></i>
+          <input type="text" placeholder="Search products..." class="bg-transparent outline-none w-full text-sm">
+        </div>
+        
+        <!-- Icons -->
+        <button class="p-2 hover:bg-gray-100 rounded-full">
+          <i class="fa-regular fa-user text-lg"></i>
+        </button>
+        
+        <!-- Cart -->
+        <button onclick="showCart()" class="flex items-center gap-x-2 px-4 py-2 hover:bg-gray-100 rounded-full relative">
+          <i class="fa-solid fa-shopping-bag text-lg"></i>
+          <span id="cart-count" class="absolute -top-1 -right-1 bg-black text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">0</span>
+        </button>
+      </div>
     </div>
+  </nav>
 
-    <!-- Footer -->
-    <div class="mt-8 pt-4 border-t text-sm text-gray-500">
-      Made with simple HTML + Tailwind
+  <!-- Hero Section -->
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-8 items-center pt-12 pb-16">
+      <div>
+        <p class="uppercase tracking-[3px] text-sm font-medium text-gray-500">Spring 2025 Collection</p>
+        <h2 class="text-6xl md:text-7xl leading-none font-bold tracking-tighter mt-2 heading-font">
+          Timeless.<br>Elevated.<br>Effortless.
+        </h2>
+        <p class="mt-6 text-lg text-gray-600 max-w-md">
+          Discover our latest collection of refined essentials and statement pieces.
+        </p>
+        <div class="mt-8 flex gap-4">
+          <button onclick="document.getElementById('new-arrivals').scrollIntoView({ behavior: 'smooth' })" 
+                  class="px-8 py-3.5 bg-black text-white rounded-full font-medium hover:bg-gray-800 transition">
+            Shop Now
+          </button>
+          <button class="px-8 py-3.5 border border-gray-300 rounded-full font-medium hover:bg-gray-100 transition">
+            Watch Film
+          </button>
+        </div>
+      </div>
+      
+      <!-- Hero Image -->
+      <div class="relative">
+        <img src="https://picsum.photos/id/1011/800/900" 
+             class="rounded-3xl w-full object-cover h-[520px] shadow-xl" alt="Fashion Hero">
+        <div class="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-2xl text-sm">
+          <span class="font-medium">Featured in</span> <span class="font-semibold">Vogue</span>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- Categories -->
+  <div class="max-w-7xl mx-auto px-6 pb-12">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-2xl font-semibold tracking-tight">Shop by Category</h3>
+    </div>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="group relative overflow-hidden rounded-2xl cursor-pointer">
+        <img src="https://picsum.photos/id/1005/400/300" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" alt="Women">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+          <p class="font-semibold text-lg">Women</p>
+        </div>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl cursor-pointer">
+        <img src="https://picsum.photos/id/1006/400/300" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" alt="Men">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+          <p class="font-semibold text-lg">Men</p>
+        </div>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl cursor-pointer">
+        <img src="https://picsum.photos/id/1060/400/300" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" alt="Accessories">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+          <p class="font-semibold text-lg">Accessories</p>
+        </div>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl cursor-pointer">
+        <img src="https://picsum.photos/id/160/400/300" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" alt="Outerwear">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+          <p class="font-semibold text-lg">Outerwear</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Arrivals -->
+  <div id="new-arrivals" class="max-w-7xl mx-auto px-6 pb-16">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-2xl font-semibold tracking-tight">New Arrivals</h3>
+      <a href="#" class="text-sm font-medium flex items-center gap-x-1 hover:underline">
+        View All <i class="fa-solid fa-arrow-right ml-1"></i>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <!-- Product Cards -->
+      <div class="fashion-card bg-white border rounded-2xl overflow-hidden group">
+        <div class="relative">
+          <img src="https://picsum.photos/id/1009/300/320" class="w-full h-72 object-cover" alt="Oversized Blazer">
+          <button onclick="addToCart(this, 'Oversized Wool Blazer', 245)" 
+                  class="absolute bottom-4 right-4 bg-white px-3 py-1.5 text-xs font-medium rounded-full shadow hover:bg-black hover:text-white transition flex items-center gap-x-1">
+            <i class="fa-solid fa-plus text-[10px]"></i>
+            <span>Add</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <p class="font-medium">Oversized Wool Blazer</p>
+          <p class="text-gray-500 text-sm">Camel • Size S–XL</p>
+          <p class="font-semibold mt-2">$245</p>
+        </div>
+      </div>
+
+      <div class="fashion-card bg-white border rounded-2xl overflow-hidden group">
+        <div class="relative">
+          <img src="https://picsum.photos/id/1012/300/320" class="w-full h-72 object-cover" alt="Silk Dress">
+          <button onclick="addToCart(this, 'Silk Slip Dress', 165)" 
+                  class="absolute bottom-4 right-4 bg-white px-3 py-1.5 text-xs font-medium rounded-full shadow hover:bg-black hover:text-white transition flex items-center gap-x-1">
+            <i class="fa-solid fa-plus text-[10px]"></i>
+            <span>Add</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <p class="font-medium">Silk Slip Dress</p>
+          <p class="text-gray-500 text-sm">Black • Size XS–M</p>
+          <p class="font-semibold mt-2">$165</p>
+        </div>
+      </div>
+
+      <div class="fashion-card bg-white border rounded-2xl overflow-hidden group">
+        <div class="relative">
+          <img src="https://picsum.photos/id/1033/300/320" class="w-full h-72 object-cover" alt="Leather Jacket">
+          <button onclick="addToCart(this, 'Leather Biker Jacket', 380)" 
+                  class="absolute bottom-4 right-4 bg-white px-3 py-1.5 text-xs font-medium rounded-full shadow hover:bg-black hover:text-white transition flex items-center gap-x-1">
+            <i class="fa-solid fa-plus text-[10px]"></i>
+            <span>Add</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <p class="font-medium">Leather Biker Jacket</p>
+          <p class="text-gray-500 text-sm">Black • Size S–XL</p>
+          <p class="font-semibold mt-2">$380</p>
+        </div>
+      </div>
+
+      <div class="fashion-card bg-white border rounded-2xl overflow-hidden group">
+        <div class="relative">
+          <img src="https://picsum.photos/id/201/300/320" class="w-full h-72 object-cover" alt="Cashmere Sweater">
+          <button onclick="addToCart(this, 'Cashmere Turtleneck', 135)" 
+                  class="absolute bottom-4 right-4 bg-white px-3 py-1.5 text-xs font-medium rounded-full shadow hover:bg-black hover:text-white transition flex items-center gap-x-1">
+            <i class="fa-solid fa-plus text-[10px]"></i>
+            <span>Add</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <p class="font-medium">Cashmere Turtleneck</p>
+          <p class="text-gray-500 text-sm">Beige • Size S–XL</p>
+          <p class="font-semibold mt-2">$135</p>
+        </div>
+      </div>
+
+      <div class="fashion-card bg-white border rounded-2xl overflow-hidden group">
+        <div class="relative">
+          <img src="https://picsum.photos/id/29/300/320" class="w-full h-72 object-cover" alt="Wide Leg Trousers">
+          <button onclick="addToCart(this, 'Wide Leg Wool Trousers', 145)" 
+                  class="absolute bottom-4 right-4 bg-white px-3 py-1.5 text-xs font-medium rounded-full shadow hover:bg-black hover:text-white transition flex items-center gap-x-1">
+            <i class="fa-solid fa-plus text-[10px]"></i>
+            <span>Add</span>
+          </button>
+        </div>
+        <div class="p-4">
+          <p class="font-medium">Wide Leg Wool Trousers</p>
+          <p class="text-gray-500 text-sm">Charcoal • Size 26–32</p>
+          <p class="font-semibold mt-2">$145</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6 py-12 text-sm text-gray-600">
+      <div class="flex flex-col md:flex-row md:justify-between gap-y-8">
+        <div>
+          <div class="flex items-center gap-x-2 mb-2">
+            <i class="fa-solid fa-gem"></i>
+            <span class="font-bold text-black">ATELIER</span>
+          </div>
+          <p class="text-xs max-w-xs">Crafted with intention. Designed to last.</p>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-8">
+          <div>
+            <p class="font-medium text-black mb-3">Shop</p>
+            <div class="space-y-1.5 text-xs">
+              <p>New Arrivals</p>
+              <p>Collections</p>
+              <p>Sale</p>
+            </div>
+          </div>
+          <div>
+            <p class="font-medium text-black mb-3">Company</p>
+            <div class="space-y-1.5 text-xs">
+              <p>About Us</p>
+              <p>Journal</p>
+              <p>Sustainability</p>
+            </div>
+          </div>
+          <div>
+            <p class="font-medium text-black mb-3">Support</p>
+            <div class="space-y-1.5 text-xs">
+              <p>Shipping</p>
+              <p>Returns</p>
+              <p>Contact</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <script>
-    function changeMessage() {
-      const heading = document.querySelector('h1');
-      heading.textContent = 'Thanks for clicking!';
-      heading.classList.add('text-blue-600');
+    let cart = [];
+
+    function addToCart(button, name, price) {
+      cart.push({ name, price });
+      
+      // Update cart count
+      document.getElementById('cart-count').innerText = cart.length;
+      
+      // Visual feedback
+      const originalText = button.innerHTML;
+      button.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i> <span>Added</span>`;
+      button.style.backgroundColor = '#000';
+      button.style.color = 'white';
+      
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.style.backgroundColor = '';
+        button.style.color = '';
+      }, 1200);
+    }
+
+    function showCart() {
+      if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      let cartHTML = `<div class="p-6">`;
+      cartHTML += `<h3 class="text-xl font-semibold mb-4">Your Cart</h3>`;
+      
+      let total = 0;
+      
+      cart.forEach((item, index) => {
+        total += item.price;
+        cartHTML += `
+          <div class="flex justify-between items-center py-3 border-b">
+            <div>
+              <p class="font-medium">${item.name}</p>
+              <p class="text-sm text-gray-500">${item.price}</p>
+            </div>
+            <button onclick="removeFromCart(${index}, this)" class="text-red-500 text-sm">Remove</button>
+          </div>
+        `;
+      });
+      
+      cartHTML += `
+        <div class="flex justify-between items-center mt-6 font-semibold">
+          <span>Total</span>
+          <span>${total}</span>
+        </div>
+        <button class="mt-6 w-full bg-black text-white py-3 rounded-full font-medium">
+          Proceed to Checkout
+        </button>
+      </div>`;
+
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+      modal.innerHTML = `
+        <div class="bg-white rounded-2xl w-full max-w-md mx-4">
+          ${cartHTML}
+        </div>
+      `;
+      
+      modal.onclick = (e) => {
+        if (e.target === modal) modal.remove();
+      };
+      
+      document.body.appendChild(modal);
+    }
+
+    function removeFromCart(index, element) {
+      cart.splice(index, 1);
+      document.getElementById('cart-count').innerText = cart.length;
+      element.closest('.fixed').remove();
+      
+      // Reopen cart with updated items
+      if (cart.length > 0) {
+        setTimeout(() => {
+          showCart();
+        }, 300);
+      }
     }
   </script>
 </body>
